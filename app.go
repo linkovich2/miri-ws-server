@@ -6,8 +6,10 @@ MiniMiri Server
 
 package main
 
-import "github.com/jonathonharrell/miri/engine"
+import (
+  "github.com/jonathonharrell/miri-ws-server/engine"
+)
 
 func main() {
-	engine.Start()
+  engine.Start()
 }

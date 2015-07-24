@@ -4,7 +4,7 @@ import (
   "time"
   "fmt"
 
-  "github.com/jonathonharrell/miri/engine/dice"
+  "github.com/jonathonharrell/dice"
 )
 
 var TheWorld World
