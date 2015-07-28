@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"time"
 	"strings"
+	"fmt"
 )
 
 const (
@@ -54,6 +55,11 @@ func (c *connection) readPump() {
 	c.ws.SetPongHandler(func(string) error { c.ws.SetReadDeadline(time.Now().Add(pongWait)); return nil })
 	for {
 		_, message, err := c.ws.ReadMessage()
+
+		fmt.Println(string(message))
+		// this is where the incoming messages are passed to the hub. In our case, when a socket is connected it should be given a handler interface
+		// this handler should be able to pull from its incoming messages outside of the websocket class
+
 		if err != nil {
 			break
 		}
