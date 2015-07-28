@@ -4,8 +4,8 @@ import (
 	"github.com/gorilla/websocket"
 	"log"
 	"net/http"
-	"time"
 	"strings"
+	"time"
 )
 
 const (
@@ -104,7 +104,7 @@ func serveWs(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 		return
 	}
-	
+
 	c := &connection{send: make(chan []byte, 256), ws: ws}
 	h.register <- c
 	go c.writePump()
