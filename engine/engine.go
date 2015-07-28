@@ -5,7 +5,7 @@ import (
   "fmt"
 
   "github.com/jonathonharrell/dice"
-  "github.com/jonathonharrell/miri-ws-server/engine/websocket"
+  "github.com/jonathonharrell/miri-ws-server/websocket"
 )
 
 var TheWorld World
