@@ -2,10 +2,9 @@ package engine
 
 import (
 	"fmt"
-	"time"
-
 	"github.com/jonathonharrell/dice"
-	"github.com/jonathonharrell/miri-ws-server/engine/websocket"
+	"github.com/jonathonharrell/miri-ws-server/websocket"
+	"time"
 )
 
 var TheWorld World

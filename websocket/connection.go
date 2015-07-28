@@ -1,6 +1,7 @@
 package websocket
 
 import (
+	"fmt"
 	"github.com/gorilla/websocket"
 	"log"
 	"net/http"
@@ -26,7 +27,7 @@ var upgrader = websocket.Upgrader{
 	ReadBufferSize:  1024,
 	WriteBufferSize: 1024,
 	CheckOrigin: func(r *http.Request) bool {
-		if strings.Contains(r.Header.Get("Origin"), "localhost") {
+		if strings.Contains(r.Header.Get("Origin"), "9000") {
 			return true
 		} else {
 			return false
@@ -54,6 +55,11 @@ func (c *connection) readPump() {
 	c.ws.SetPongHandler(func(string) error { c.ws.SetReadDeadline(time.Now().Add(pongWait)); return nil })
 	for {
 		_, message, err := c.ws.ReadMessage()
+
+		fmt.Println(string(message))
+		// this is where the incoming messages are passed to the hub. In our case, when a socket is connected it should be given a handler interface
+		// this handler should be able to pull from its incoming messages outside of the websocket class
+
 		if err != nil {
 			break
 		}
