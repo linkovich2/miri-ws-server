@@ -26,7 +26,7 @@ var upgrader = websocket.Upgrader{
 	ReadBufferSize:  1024,
 	WriteBufferSize: 1024,
 	CheckOrigin: func(r *http.Request) bool {
-		if strings.Contains(r.Header.Get("Origin"), "localhost") {
+		if strings.Contains(r.Header.Get("Origin"), "9000") {
 			return true
 		} else {
 			return false
@@ -104,7 +104,7 @@ func serveWs(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 		return
 	}
-	
+
 	c := &connection{send: make(chan []byte, 256), ws: ws}
 	h.register <- c
 	go c.writePump()
