@@ -2,10 +2,12 @@ package websocket
 
 import (
 	"github.com/gorilla/websocket"
+	"stablelib.com/v1/uniuri"
 	"log"
 	"net/http"
 	"time"
 	"strings"
+	"fmt"
 )
 
 const (
@@ -35,6 +37,7 @@ var upgrader = websocket.Upgrader{
 type Connection struct {
 	WebSocket *websocket.Conn // The websocket connection.
 	Send chan []byte // Buffered channel of outbound messages.
+	ID   string
 }
 
 type Message struct {
@@ -105,7 +108,8 @@ func ServeWS(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	c := &Connection{Send: make(chan []byte, 256), WebSocket: ws}
+	c := &Connection{Send: make(chan []byte, 256), WebSocket: ws, ID: uniuri.New()}
+	fmt.Println(c.ID)
 	h.Register <- c
 	go c.WritePump()
 	c.ReadPump()
