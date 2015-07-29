@@ -33,11 +33,10 @@ var upgrader = websocket.Upgrader{
 
 // connection is an middleman between the websocket connection and the hub.
 type Connection struct {
-	// The websocket connection.
-	WebSocket *websocket.Conn
-
-	// Buffered channel of outbound messages.
-	Send chan []byte
+	WebSocket *websocket.Conn // The websocket connection.
+	Send chan []byte // Buffered channel of outbound messages.
+	Authenticated bool
+	IsAdmin bool
 }
 
 type Message struct {
@@ -108,7 +107,7 @@ func ServeWS(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	c := &Connection{Send: make(chan []byte, 256), WebSocket: ws}
+	c := &Connection{Send: make(chan []byte, 256), WebSocket: ws, Authenticated: false, IsAdmin: false}
 	h.Register <- c
 	go c.WritePump()
 	c.ReadPump()
