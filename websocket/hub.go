@@ -28,6 +28,15 @@ var h = Hub{
 	Register:    make(chan *Connection),
 	Unregister:  make(chan *Connection),
 	Connections: make(map[*Connection]bool),
+	OnConnect: func(c *Connection) {
+		// do nothing
+	},
+	OnMessage: func(m *Message) {
+		// do nothing
+	},
+	OnDisconnect: func(c *Connection) {
+		// do nothing
+	},
 }
 
 func (h *Hub) run() {
@@ -67,7 +76,7 @@ func (h *Hub) SetOnDisconnectCallback(callback func(c *Connection)) {
 
 // Send a message to a lot of connections
 func (h *Hub) Broadcast(msg []byte, targets []*Connection) {
-	for c := range targets {
+	for _, c := range targets {
 		c.Send <- msg
 	}
 }
