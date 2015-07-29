@@ -5,8 +5,8 @@ import (
 )
 
 type User struct {
-	Email          string
-	HashedPassword string
+	email          string
+	hashedPassword string
 	ID             int
 
 	// @todo: Future stuff
@@ -20,7 +20,7 @@ type User struct {
 }
 
 func CreateUser(email, password string) (User, error) {
-  return &User{email, HashPassword(password)}
+  return &User{email, hashPassword(password)}
 }
 
 func ValidatePassword(pw string) error {
@@ -35,7 +35,7 @@ func ValidateForgotPasswordToken(token string) {
 
 }
 
-func HashPassword(pw string) string {
+func hashPassword(pw string) string {
 	return bcrypt.GenerateFromPassword([]byte(pw), 10)
 }
 
