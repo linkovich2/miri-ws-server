@@ -8,7 +8,7 @@ import (
 
 var addr = flag.String("addr", ":8080", "http service address")
 
-func StartServer() {
+func StartServer() *hub {
 	flag.Parse()
 
 	go h.run()
@@ -18,4 +18,5 @@ func StartServer() {
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)
 	}
+	return &h
 }

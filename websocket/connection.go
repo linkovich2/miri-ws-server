@@ -39,7 +39,6 @@ var upgrader = websocket.Upgrader{
 type connection struct {
 	// The websocket connection.
 	ws *websocket.Conn
-
 	// Buffered channel of outbound messages.
 	send chan []byte
 }
@@ -84,14 +83,17 @@ func (c *connection) writePump() {
 		select {
 		case message, ok := <-c.send:
 			if !ok {
+				log.Println("writePump, !ok")
 				c.write(websocket.CloseMessage, []byte{})
 				return
 			}
 			if err := c.write(websocket.TextMessage, message); err != nil {
+				log.Println("writePump, err")
 				return
 			}
 		case <-ticker.C:
 			if err := c.write(websocket.PingMessage, []byte{}); err != nil {
+				log.Println("writePump, ticker.C")
 				return
 			}
 		}
@@ -114,5 +116,5 @@ func serveWs(w http.ResponseWriter, r *http.Request) {
 	c := &connection{send: make(chan []byte, 256), ws: ws}
 	h.register <- c
 	go c.writePump()
-	c.readPump()
+	go c.readPump()
 }

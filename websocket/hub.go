@@ -1,5 +1,9 @@
 package websocket
 
+import (
+	"log"
+)
+
 // hub maintains the set of active connections and broadcasts messages to the
 // connections.
 type hub struct {
@@ -23,12 +27,20 @@ var h = hub{
 	connections: make(map[*connection]bool),
 }
 
+func (h *hub) SetOnConnectCallback(callback func()) func() {
+	return func() {
+		/*TODO: Create a message handler to call inside this particular callback function
+		as to be used outside of the websocket package! */
+	}
+}
+
 func (h *hub) run() {
 	for {
 		select {
 		case c := <-h.register:
 			h.connections[c] = true
 		case c := <-h.unregister:
+			log.Println("player disconnected")
 			if _, ok := h.connections[c]; ok {
 				delete(h.connections, c)
 				close(c.send)
