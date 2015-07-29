@@ -6,22 +6,22 @@ import "fmt"
 // hub maintains the set of active connections and broadcasts messages to the
 // connections.
 type Hub struct {
-	Connections map[*Connection]bool // Registered connections.
-	Inbound chan *Message            // Inbound messages from the connections.
-	Register chan *Connection        // Register requests from the connections.
-	Unregister chan *Connection      // Unregister requests from connections.
-	OnConnect func(c *Connection)
-	OnMessage func(msg *Message)
+	Connections  map[*Connection]bool // Registered connections.
+	Inbound      chan *Message        // Inbound messages from the connections.
+	Register     chan *Connection     // Register requests from the connections.
+	Unregister   chan *Connection     // Unregister requests from connections.
+	OnConnect    func(c *Connection)
+	OnMessage    func(msg *Message)
 	OnDisconnect func(c *Connection)
 }
 
 var h = Hub{
-	Inbound:   make(chan *Message),
-	Register:    make(chan *Connection),
-	Unregister:  make(chan *Connection),
-	Connections: make(map[*Connection]bool),
-	OnConnect: func(c *Connection) {},
-	OnMessage: func(m *Message) {},
+	Inbound:      make(chan *Message),
+	Register:     make(chan *Connection),
+	Unregister:   make(chan *Connection),
+	Connections:  make(map[*Connection]bool),
+	OnConnect:    func(c *Connection) {},
+	OnMessage:    func(m *Message) {},
 	OnDisconnect: func(c *Connection) {},
 }
 
