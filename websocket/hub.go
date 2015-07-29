@@ -67,10 +67,12 @@ func (h *Hub) SetOnDisconnectCallback(callback func(c *Connection)) {
 
 // Send a message to a lot of connections
 func (h *Hub) Broadcast(msg []byte, targets []*Connection) {
-
+	for c := range targets {
+		c.Send <- msg
+	}
 }
 
 // Send a message to one connection
 func (h *Hub) Send(msg []byte, c *Connection) {
-
+  c.Send <- msg
 }
