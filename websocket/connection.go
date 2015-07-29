@@ -11,10 +11,10 @@ import (
 )
 
 const (
-	WRITE_WAIT = 10 * time.Second      // Time allowed to write a message to the peer.
-	PONG_WAIT = 60 * time.Second       // Time allowed to read the next pong message from the peer.
-	PING_PERIOD = (PONG_WAIT * 9) / 10 // Send pings to peer with this period. Must be less than pongWait.
-	MAX_MESSAGE_SIZE = 512             // Maximum message size allowed from peer.
+	writeWait = 10 * time.Second     // Time allowed to write a message to the peer.
+	pongWait = 60 * time.Second      // Time allowed to read the next pong message from the peer.
+	pingPeriod = (pongWait * 9) / 10 // Send pings to peer with this period. Must be less than pongWait.
+	maxMessageSize = 512             // Maximum message size allowed from peer.
 )
 
 var upgrader = websocket.Upgrader{
@@ -35,8 +35,8 @@ var upgrader = websocket.Upgrader{
 
 // connection is an middleman between the websocket connection and the hub.
 type Connection struct {
-	WebSocket *websocket.Conn // The websocket connection.
-	Send chan []byte // Buffered channel of outbound messages.
+	webSocket *websocket.Conn // The websocket connection.
+	send chan []byte // Buffered channel of outbound messages.
 	ID   string
 }
 
@@ -46,57 +46,57 @@ type Message struct {
 }
 
 // ReadPump pumps messages from the websocket connection to the hub.
-func (c *Connection) ReadPump() {
+func (c *Connection) readPump() {
 	defer func() {
-		h.Unregister <- c
-		c.WebSocket.Close()
+		h.unregister <- c
+		c.webSocket.Close()
 	}()
-	c.WebSocket.SetReadLimit(MAX_MESSAGE_SIZE)
-	c.WebSocket.SetReadDeadline(time.Now().Add(PONG_WAIT))
-	c.WebSocket.SetPongHandler(func(string) error { c.WebSocket.SetReadDeadline(time.Now().Add(PONG_WAIT)); return nil })
+	c.webSocket.SetReadLimit(maxMessageSize)
+	c.webSocket.SetReadDeadline(time.Now().Add(pongWait))
+	c.webSocket.SetPongHandler(func(string) error { c.webSocket.SetReadDeadline(time.Now().Add(pongWait)); return nil })
 	for {
-		_, message, err := c.WebSocket.ReadMessage()
+		_, message, err := c.webSocket.ReadMessage()
 
 		if err != nil {
 			break
 		}
-		h.Inbound <- &Message{message, c}
+		h.inbound <- &Message{message, c}
 	}
 }
 
 // Write writes a message with the given message type and payload.
-func (c *Connection) Write(mt int, payload []byte) error {
-	c.WebSocket.SetWriteDeadline(time.Now().Add(WRITE_WAIT))
-	return c.WebSocket.WriteMessage(mt, payload)
+func (c *Connection) write(mt int, payload []byte) error {
+	c.webSocket.SetWriteDeadline(time.Now().Add(writeWait))
+	return c.webSocket.WriteMessage(mt, payload)
 }
 
 // WritePump pumps messages from the hub to the websocket connection.
-func (c *Connection) WritePump() {
-	ticker := time.NewTicker(PING_PERIOD)
+func (c *Connection) writePump() {
+	ticker := time.NewTicker(pingPeriod)
 	defer func() {
 		ticker.Stop()
-		c.WebSocket.Close()
+		c.webSocket.Close()
 	}()
 	for {
 		select {
-		case message, ok := <-c.Send:
+		case message, ok := <-c.send:
 			if !ok {
-				c.Write(websocket.CloseMessage, []byte{})
+				c.write(websocket.CloseMessage, []byte{})
 				return
 			}
-			if err := c.Write(websocket.TextMessage, message); err != nil {
+			if err := c.write(websocket.TextMessage, message); err != nil {
 				return
 			}
 		case <-ticker.C:
-			if err := c.Write(websocket.PingMessage, []byte{}); err != nil {
+			if err := c.write(websocket.PingMessage, []byte{}); err != nil {
 				return
 			}
 		}
 	}
 }
 
-// serverWs handles websocket requests from the peer.
-func ServeWS(w http.ResponseWriter, r *http.Request) {
+// serveWs handles websocket requests from the peer.
+func serveWs(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "GET" {
 		http.Error(w, "Method not allowed", 405)
 		return
@@ -108,9 +108,9 @@ func ServeWS(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	c := &Connection{Send: make(chan []byte, 256), WebSocket: ws, ID: uniuri.New()}
+	c := &Connection{send: make(chan []byte, 256), webSocket: ws, ID: uniuri.New()}
 	fmt.Println(c.ID)
-	h.Register <- c
-	go c.WritePump()
-	c.ReadPump()
+	h.register <- c
+	go c.writePump()
+	c.readPump()
 }
