@@ -19,7 +19,7 @@ type Hub struct {
 	Unregister chan *Connection
 
 	OnConnect func(c *Connection)
-	OnMessage func(c *Connection)
+	OnMessage func(msg *Message)
 	OnDisconnect func(c *Connection)
 }
 
@@ -44,8 +44,8 @@ func (h *Hub) run() {
 			}
 		case m := <-h.Inbound:
 			// handle message
-			// h.OnMessage(m)
 			fmt.Println(string(m.Payload))
+			h.OnMessage(m)
 		}
 	}
 }
@@ -56,7 +56,7 @@ func (h *Hub) SetOnConnectCallback(callback func(c *Connection)) {
 }
 
 // Get's called whenever a message is received from a connection
-func (h *Hub) SetOnMessageCallback(callback func(c *Connection)) {
+func (h *Hub) SetOnMessageCallback(callback func(msg *Message)) {
 	h.OnMessage = callback
 }
 
