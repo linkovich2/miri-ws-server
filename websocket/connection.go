@@ -35,8 +35,6 @@ var upgrader = websocket.Upgrader{
 type Connection struct {
 	WebSocket *websocket.Conn // The websocket connection.
 	Send chan []byte // Buffered channel of outbound messages.
-	Authenticated bool
-	IsAdmin bool
 }
 
 type Message struct {
@@ -107,7 +105,7 @@ func ServeWS(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	c := &Connection{Send: make(chan []byte, 256), WebSocket: ws, Authenticated: false, IsAdmin: false}
+	c := &Connection{Send: make(chan []byte, 256), WebSocket: ws}
 	h.Register <- c
 	go c.WritePump()
 	c.ReadPump()
