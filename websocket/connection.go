@@ -6,21 +6,13 @@ import (
 	"net/http"
 	"time"
 	"strings"
-	"fmt"
 )
 
 const (
-	// Time allowed to write a message to the peer.
-	WRITE_WAIT = 10 * time.Second
-
-	// Time allowed to read the next pong message from the peer.
-	PONG_WAIT = 60 * time.Second
-
-	// Send pings to peer with this period. Must be less than pongWait.
-	PING_PERIOD = (PONG_WAIT * 9) / 10
-
-	// Maximum message size allowed from peer.
-	MAX_MESSAGE_SIZE = 512
+	WRITE_WAIT = 10 * time.Second      // Time allowed to write a message to the peer.
+	PONG_WAIT = 60 * time.Second       // Time allowed to read the next pong message from the peer.
+	PING_PERIOD = (PONG_WAIT * 9) / 10 // Send pings to peer with this period. Must be less than pongWait.
+	MAX_MESSAGE_SIZE = 512             // Maximum message size allowed from peer.
 )
 
 var upgrader = websocket.Upgrader{
@@ -29,7 +21,7 @@ var upgrader = websocket.Upgrader{
 
 	// I'm betting we'll need to remove this at some point so that we only accept connections
 	// from specific cross-origins
-	// We don't want users connecting from other locations with (potentially) mal-intent
+	// We don't want users connecting from other locations with (potentially) malintent
 	CheckOrigin: func(r *http.Request) bool {
 		if strings.Contains(r.Header.Get("Origin"), "9000") {
 			return true
@@ -48,7 +40,12 @@ type Connection struct {
 	Send chan []byte
 }
 
-// readPump pumps messages from the websocket connection to the hub.
+type Message struct {
+	Payload []byte
+	Connection *Connection
+}
+
+// ReadPump pumps messages from the websocket connection to the hub.
 func (c *Connection) ReadPump() {
 	defer func() {
 		h.Unregister <- c
@@ -60,24 +57,20 @@ func (c *Connection) ReadPump() {
 	for {
 		_, message, err := c.WebSocket.ReadMessage()
 
-		fmt.Println(string(message))
-		// this is where the incoming messages are passed to the hub. In our case, when a socket is connected it should be given a handler interface
-		// this handler should be able to pull from its incoming messages outside of the websocket class
-
 		if err != nil {
 			break
 		}
-		h.Inbound <- message
+		h.Inbound <- &Message{message, c}
 	}
 }
 
-// write writes a message with the given message type and payload.
+// Write writes a message with the given message type and payload.
 func (c *Connection) Write(mt int, payload []byte) error {
 	c.WebSocket.SetWriteDeadline(time.Now().Add(WRITE_WAIT))
 	return c.WebSocket.WriteMessage(mt, payload)
 }
 
-// writePump pumps messages from the hub to the websocket connection.
+// WritePump pumps messages from the hub to the websocket connection.
 func (c *Connection) WritePump() {
 	ticker := time.NewTicker(PING_PERIOD)
 	defer func() {

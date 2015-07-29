@@ -1,5 +1,8 @@
 package websocket
 
+import "fmt"
+
+
 // hub maintains the set of active connections and broadcasts messages to the
 // connections.
 type Hub struct {
@@ -7,7 +10,7 @@ type Hub struct {
 	Connections map[*Connection]bool
 
 	// Inbound messages from the connections.
-	Inbound chan []byte
+	Inbound chan *Message
 
 	// Register requests from the connections.
 	Register chan *Connection
@@ -21,7 +24,7 @@ type Hub struct {
 }
 
 var h = Hub{
-	Inbound:   make(chan []byte),
+	Inbound:   make(chan *Message),
 	Register:    make(chan *Connection),
 	Unregister:  make(chan *Connection),
 	Connections: make(map[*Connection]bool),
@@ -41,7 +44,8 @@ func (h *Hub) run() {
 			}
 		case m := <-h.Inbound:
 			// handle message
-			// send to OnMessage(c, m)
+			// h.OnMessage(m)
+			fmt.Println(string(m.Payload))
 		}
 	}
 }
