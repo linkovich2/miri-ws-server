@@ -67,7 +67,7 @@ func (c *Connection) ReadPump() {
 		if err != nil {
 			break
 		}
-		h.Broadcast <- message
+		h.Inbound <- message
 	}
 }
 
