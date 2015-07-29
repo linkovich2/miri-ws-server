@@ -18,8 +18,8 @@ func Start() {
   TheWorld = NewWorld("The Miri")
 
   // start the world update loop
-  go RunEvery(WORLD_UPDATE_LOOP_TIMER * time.Second, TheWorld.Update)
+  // go RunEvery(WORLD_UPDATE_LOOP_TIMER * time.Second, TheWorld.Update)
 
   var input string
-  fmt.Scanln(&input)
+  fmt.Scanln(&input) // we'll probably replace this for non-development environments with something that outputs to a file
 }
