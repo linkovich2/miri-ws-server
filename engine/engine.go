@@ -10,11 +10,24 @@ import (
 
 var TheWorld World
 
+// @temp
+type User struct {
+  Connection *websocket.Connection
+}
+
+var users []*User
+
 func Start() {
   dice.SeedRandom()
   hub := websocket.StartServer()
   hub.SetOnConnectCallback(func(c *websocket.Connection) {
-    // do something
+    // here we should probably give the connection an id for reference and association
+    // and attach that ID to the connection itself
+    // This way we can reference Users with a connection ID
+  })
+
+  hub.SetOnMessageCallback(func(m *websocket.Message) {
+    // since we'll have an ID value on the connection, we can reference our list of users
   })
 
   // load in the world, rooms, etc
