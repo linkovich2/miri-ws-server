@@ -2,46 +2,63 @@ package websocket
 
 // hub maintains the set of active connections and broadcasts messages to the
 // connections.
-type hub struct {
+type Hub struct {
 	// Registered connections.
-	connections map[*connection]bool
+	Connections map[*Connection]bool
 
 	// Inbound messages from the connections.
-	broadcast chan []byte
+	Broadcast chan []byte
 
 	// Register requests from the connections.
-	register chan *connection
+	Register chan *Connection
 
 	// Unregister requests from connections.
-	unregister chan *connection
+	Unregister chan *Connection
+
+	OnConnect func(c *Connection)
+	OnMessage func(c *Connection)
+	OnDisconnect func(c *Connection)
 }
 
-var h = hub{
-	broadcast:   make(chan []byte),
-	register:    make(chan *connection),
-	unregister:  make(chan *connection),
-	connections: make(map[*connection]bool),
+var h = Hub{
+	Broadcast:   make(chan []byte),
+	Register:    make(chan *Connection),
+	Unregister:  make(chan *Connection),
+	Connections: make(map[*Connection]bool),
 }
 
-func (h *hub) run() {
+func (h *Hub) run() {
 	for {
 		select {
-		case c := <-h.register:
-			h.connections[c] = true
-		case c := <-h.unregister:
-			if _, ok := h.connections[c]; ok {
-				delete(h.connections, c)
-				close(c.send)
+		case c := <-h.Register:
+			h.Connections[c] = true
+			h.OnConnect(c)
+		case c := <-h.Unregister:
+			if _, ok := h.Connections[c]; ok {
+				delete(h.Connections, c)
+				close(c.Send)
 			}
-		case m := <-h.broadcast:
-			for c := range h.connections {
+		case m := <-h.Broadcast:
+			for c := range h.Connections {
 				select {
-				case c.send <- m:
+				case c.Send <- m:
 				default:
-					close(c.send)
-					delete(h.connections, c)
+					close(c.Send)
+					delete(h.Connections, c)
 				}
 			}
 		}
 	}
+}
+
+func (h *Hub) SetOnConnectCallback(callback func(c *Connection)) {
+	h.OnConnect = callback
+}
+
+func (h *Hub) SetOnMessageCallback(callback func(c *Connection)) {
+	h.OnMessage = callback
+}
+
+func (h *Hub) SetOnDisconnectCallback(callback func(c *Connection)) {
+	h.OnDisconnect = callback
 }

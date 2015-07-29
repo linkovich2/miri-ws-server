@@ -1,7 +1,7 @@
 package engine
 
 import (
-  "time"
+  // "time"
   "fmt"
 
   "github.com/jonathonharrell/dice"
@@ -12,7 +12,10 @@ var TheWorld World
 
 func Start() {
   dice.SeedRandom()
-  go websocket.StartServer()
+  hub := websocket.StartServer()
+  hub.SetOnConnectCallback(func(c *websocket.Connection) {
+    // do something
+  })
 
   // load in the world, rooms, etc
   TheWorld = NewWorld("The Miri")

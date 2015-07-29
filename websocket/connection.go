@@ -11,21 +11,25 @@ import (
 
 const (
 	// Time allowed to write a message to the peer.
-	writeWait = 10 * time.Second
+	WRITE_WAIT = 10 * time.Second
 
 	// Time allowed to read the next pong message from the peer.
-	pongWait = 60 * time.Second
+	PONG_WAIT = 60 * time.Second
 
 	// Send pings to peer with this period. Must be less than pongWait.
-	pingPeriod = (pongWait * 9) / 10
+	PING_PERIOD = (PONG_WAIT * 9) / 10
 
 	// Maximum message size allowed from peer.
-	maxMessageSize = 512
+	MAX_MESSAGE_SIZE = 512
 )
 
 var upgrader = websocket.Upgrader{
 	ReadBufferSize:  1024,
 	WriteBufferSize: 1024,
+
+	// I'm betting we'll need to remove this at some point so that we only accept connections
+	// from specific cross-origins
+	// We don't want users connecting from other locations with (potentially) mal-intent
 	CheckOrigin: func(r *http.Request) bool {
 		if strings.Contains(r.Header.Get("Origin"), "9000") {
 			return true
@@ -36,25 +40,25 @@ var upgrader = websocket.Upgrader{
 }
 
 // connection is an middleman between the websocket connection and the hub.
-type connection struct {
+type Connection struct {
 	// The websocket connection.
-	ws *websocket.Conn
+	WebSocket *websocket.Conn
 
 	// Buffered channel of outbound messages.
-	send chan []byte
+	Send chan []byte
 }
 
 // readPump pumps messages from the websocket connection to the hub.
-func (c *connection) readPump() {
+func (c *Connection) ReadPump() {
 	defer func() {
-		h.unregister <- c
-		c.ws.Close()
+		h.Unregister <- c
+		c.WebSocket.Close()
 	}()
-	c.ws.SetReadLimit(maxMessageSize)
-	c.ws.SetReadDeadline(time.Now().Add(pongWait))
-	c.ws.SetPongHandler(func(string) error { c.ws.SetReadDeadline(time.Now().Add(pongWait)); return nil })
+	c.WebSocket.SetReadLimit(MAX_MESSAGE_SIZE)
+	c.WebSocket.SetReadDeadline(time.Now().Add(PONG_WAIT))
+	c.WebSocket.SetPongHandler(func(string) error { c.WebSocket.SetReadDeadline(time.Now().Add(PONG_WAIT)); return nil })
 	for {
-		_, message, err := c.ws.ReadMessage()
+		_, message, err := c.WebSocket.ReadMessage()
 
 		fmt.Println(string(message))
 		// this is where the incoming messages are passed to the hub. In our case, when a socket is connected it should be given a handler interface
@@ -63,35 +67,35 @@ func (c *connection) readPump() {
 		if err != nil {
 			break
 		}
-		h.broadcast <- message
+		h.Broadcast <- message
 	}
 }
 
 // write writes a message with the given message type and payload.
-func (c *connection) write(mt int, payload []byte) error {
-	c.ws.SetWriteDeadline(time.Now().Add(writeWait))
-	return c.ws.WriteMessage(mt, payload)
+func (c *Connection) Write(mt int, payload []byte) error {
+	c.WebSocket.SetWriteDeadline(time.Now().Add(WRITE_WAIT))
+	return c.WebSocket.WriteMessage(mt, payload)
 }
 
 // writePump pumps messages from the hub to the websocket connection.
-func (c *connection) writePump() {
-	ticker := time.NewTicker(pingPeriod)
+func (c *Connection) WritePump() {
+	ticker := time.NewTicker(PING_PERIOD)
 	defer func() {
 		ticker.Stop()
-		c.ws.Close()
+		c.WebSocket.Close()
 	}()
 	for {
 		select {
-		case message, ok := <-c.send:
+		case message, ok := <-c.Send:
 			if !ok {
-				c.write(websocket.CloseMessage, []byte{})
+				c.Write(websocket.CloseMessage, []byte{})
 				return
 			}
-			if err := c.write(websocket.TextMessage, message); err != nil {
+			if err := c.Write(websocket.TextMessage, message); err != nil {
 				return
 			}
 		case <-ticker.C:
-			if err := c.write(websocket.PingMessage, []byte{}); err != nil {
+			if err := c.Write(websocket.PingMessage, []byte{}); err != nil {
 				return
 			}
 		}
@@ -99,7 +103,7 @@ func (c *connection) writePump() {
 }
 
 // serverWs handles websocket requests from the peer.
-func serveWs(w http.ResponseWriter, r *http.Request) {
+func ServeWS(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "GET" {
 		http.Error(w, "Method not allowed", 405)
 		return
@@ -111,8 +115,8 @@ func serveWs(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	c := &connection{send: make(chan []byte, 256), ws: ws}
-	h.register <- c
-	go c.writePump()
-	c.readPump()
+	c := &Connection{Send: make(chan []byte, 256), WebSocket: ws}
+	h.Register <- c
+	go c.WritePump()
+	c.ReadPump()
 }
