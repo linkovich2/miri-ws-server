@@ -1,9 +1,5 @@
 package websocket
 
-import (
-	"log"
-)
-
 // hub maintains the set of active connections and broadcasts messages to the
 // connections.
 type hub struct {
@@ -40,7 +36,6 @@ func (h *hub) run() {
 		case c := <-h.register:
 			h.connections[c] = true
 		case c := <-h.unregister:
-			log.Println("player disconnected")
 			if _, ok := h.connections[c]; ok {
 				delete(h.connections, c)
 				close(c.send)
@@ -54,6 +49,8 @@ func (h *hub) run() {
 					delete(h.connections, c)
 				}
 			}
+		case something := <-h.broadcast:
+			msgH.OnMessage(string(something))
 		}
 	}
 }
