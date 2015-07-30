@@ -29,6 +29,7 @@ func Start() {
 
   hub.SetOnMessageCallback(func(m *websocket.Message) {
     // since we'll have an ID value on the connection, we can reference our list of users
+    hub.Send(m.Payload, m.Connection) // pong back the message for now
   })
 
   // load in the world, rooms, etc
