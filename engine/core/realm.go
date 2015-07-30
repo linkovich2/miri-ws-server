@@ -5,8 +5,8 @@ import (
 )
 
 const (
-  MAX_ROOMS_PER_REALM = 512 // max number of rooms per realm
-  MAX_WEATHER         = 16 // max number of "storms" that can be "on" at any given time (per realm)
+  maxRoomsPerRealm = 512 // max number of rooms per realm
+  maxWeather       = 16  // max number of "storms" that can be "on" at any given time (per realm)
 )
 
 type (
@@ -30,8 +30,8 @@ func (realm *Realm) Init() {
   // @todo call FromJSON here, build the length of TimeCycle from JSON arr length
   // build the rooms
 
-  realm.Rooms    = make(map[string]Room, MAX_ROOMS_PER_REALM) // init Room map
-  realm.Weathers = make(map[string]Weather, MAX_WEATHER)     // init Weathers
+  realm.Rooms    = make(map[string]Room, maxRoomsPerRealm) // init Room map
+  realm.Weathers = make(map[string]Weather, maxWeather)    // init Weathers
 }
 
 
