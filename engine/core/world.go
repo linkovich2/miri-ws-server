@@ -5,7 +5,7 @@ import (
 )
 
 const (
-  WORLD_UPDATE_LOOP_TIMER = 1 // @temp
+  WorldUpdateLoopTimer = 5
 )
 
 type World struct {

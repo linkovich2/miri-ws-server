@@ -10,7 +10,7 @@ import (
   // "github.com/jonathonharrell/miri-ws-server/engine/util"
 )
 
-var TheWorld core.World
+var world core.World
 
 // @temp
 type User struct {
@@ -34,10 +34,10 @@ func Start() {
   })
 
   // load in the world, rooms, etc
-  TheWorld = core.NewWorld("The Miri")
+  world = core.NewWorld("The Miri")
 
   // start the world update loop
-  // go util.RunEvery(WORLD_UPDATE_LOOP_TIMER * time.Second, TheWorld.Update)
+  // go util.RunEvery(core.WorldUpdateLoopTimer * time.Second, world.Update)
 
   var input string
   fmt.Scanln(&input) // we'll probably replace this for non-development environments with something that outputs to a file
