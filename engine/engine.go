@@ -5,11 +5,12 @@ import (
   "fmt"
 
   "github.com/jonathonharrell/dice"
-  "github.com/jonathonharrell/miri-ws-server/websocket"
-  // "github.com/jonathonharrell/miri-ws-server/util"
+  "github.com/jonathonharrell/miri-ws-server/engine/websocket"
+  "github.com/jonathonharrell/miri-ws-server/engine/core"
+  // "github.com/jonathonharrell/miri-ws-server/engine/util"
 )
 
-var TheWorld World
+var TheWorld core.World
 
 // @temp
 type User struct {
@@ -33,7 +34,7 @@ func Start() {
   })
 
   // load in the world, rooms, etc
-  TheWorld = NewWorld("The Miri")
+  TheWorld = core.NewWorld("The Miri")
 
   // start the world update loop
   // go util.RunEvery(WORLD_UPDATE_LOOP_TIMER * time.Second, TheWorld.Update)
