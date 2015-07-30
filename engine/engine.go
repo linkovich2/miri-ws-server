@@ -1,13 +1,13 @@
 package engine
 
 import (
-  // "time"
+  "time"
   "fmt"
 
   "github.com/jonathonharrell/dice"
   "github.com/jonathonharrell/miri-ws-server/engine/websocket"
   "github.com/jonathonharrell/miri-ws-server/engine/core"
-  // "github.com/jonathonharrell/miri-ws-server/engine/util"
+  "github.com/jonathonharrell/miri-ws-server/engine/util"
 )
 
 var world core.World
@@ -37,7 +37,7 @@ func Start() {
   world = core.NewWorld("The Miri")
 
   // start the world update loop
-  // go util.RunEvery(core.WorldUpdateLoopTimer * time.Second, world.Update)
+  go util.RunEvery(core.WorldUpdateLoopTimer * time.Second, world.Update)
 
   var input string
   fmt.Scanln(&input) // we'll probably replace this for non-development environments with something that outputs to a file
