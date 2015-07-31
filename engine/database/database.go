@@ -7,10 +7,15 @@ import (
 
 type DB struct {
   session *mgo.Session
+  Collections map[string]*mgo.Collection
 }
 
-func Connect() *DB {
-  s, err := mgo.Dial("localhost:27017") // @temp this should connect dynamically based on environment variables with sane defaults
+func (db *DB) Init() {
+
+}
+
+func (db *DB) Connect(host string, database string) {
+  s, err := mgo.Dial(host)
   if err != nil {
     panic(err)
   }
@@ -18,6 +23,10 @@ func Connect() *DB {
   defer s.Close()
 
   s.SetMode(mgo.Monotonic, true) // Optional. Switch the session to a monotonic behavior.
-  
-  return &DB{session: s}
+
+  db.session = s.DB(database)
+}
+
+func (db *DB) RegisterCollection(name string) {
+  db.Collections[name] = db.session.C(name)
 }
