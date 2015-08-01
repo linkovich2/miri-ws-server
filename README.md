@@ -2,5 +2,5 @@
 
 ### @todo
 - Authentication
-- Database Connection / ODM
-- Redo public/private methods/properties
+- Environment variables
+- Consistent model structure
