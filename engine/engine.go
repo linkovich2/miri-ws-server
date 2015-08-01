@@ -11,11 +11,13 @@ import (
   "github.com/jonathonharrell/miri-ws-server/engine/core"
   "github.com/jonathonharrell/miri-ws-server/engine/util"
   "github.com/jonathonharrell/miri-ws-server/engine/database"
+  "github.com/jonathonharrell/miri-ws-server/engine/auth"
 )
 
 var (
   world core.World
   db *mgo.Database
+  users []*auth.User
 )
 
 func Start() {
