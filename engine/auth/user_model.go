@@ -2,11 +2,13 @@ package auth
 
 import (
   "golang.org/x/crypto/bcrypt"
+
+  "github.com/jonathonharrell/miri-ws-server/engine/database"
 )
 
 type UserModel struct {
-  Email          string
-	HashedPassword string
+  Email          []byte
+	HashedPassword []byte
 
 	// @todo: Future stuff
 	// LastLoginDate
@@ -18,29 +20,24 @@ type UserModel struct {
 	// CreatedAt
 }
 
-func CreateUser(email, password string) *UserModel {
+type SessionModel struct {
+  SessionID []byte
+  UserID    []byte
+}
+
+func CreateUser(email, password []byte) error {
   hashed, _ := hashPassword(password)
-  return &UserModel{Email: email, HashedPassword: string(hashed)}
+  database.DB.C("users").Insert(&UserModel{Email: email, HashedPassword: hashed})
+
+  return nil
 }
 
-// func ValidatePassword(pw string) error {
-//
-// }
-//
-// func ValidateEmail(email string) error {
-//
-// }
-//
-// func ValidateForgotPasswordToken(token string) {
-//
-// }
-
-func hashPassword(pw string) ([]byte, error) {
-	return bcrypt.GenerateFromPassword([]byte(pw), 10)
+func hashPassword(pw []byte) ([]byte, error) {
+	return bcrypt.GenerateFromPassword(pw, 10)
 }
 
-func Match(pw string, hash string) bool {
-	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(pw))
+func Match(pw, hash []byte) bool {
+	err := bcrypt.CompareHashAndPassword(hash, pw)
 	if err != nil {
 		return true
 	}

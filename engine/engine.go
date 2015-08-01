@@ -4,8 +4,6 @@ import (
   "time"
   "fmt"
 
-  "gopkg.in/mgo.v2"
-
   "github.com/jonathonharrell/dice"
   "github.com/jonathonharrell/miri-ws-server/engine/websocket"
   "github.com/jonathonharrell/miri-ws-server/engine/core"
@@ -16,14 +14,16 @@ import (
 
 var (
   world core.World
-  db *mgo.Database
   users []*auth.User
 )
 
 func Start() {
   dice.SeedRandom()
 
-  db = database.Connect("localhost:27017", "miri") //@temp, replace with env vars
+  database.Connect("localhost:27017", "miri") //@temp, replace with env vars
+  defer database.Close() // when the program exits, close the mongo connection
+
+  // auth.CreateUser([]byte("jonathon.harrell@yahoo.com"), []byte("Ex@mple1"))
 
   hub := websocket.StartServer()
   hub.SetOnConnectCallback(func(c *websocket.Connection) {

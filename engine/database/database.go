@@ -4,15 +4,24 @@ import (
   "gopkg.in/mgo.v2"
 )
 
-func Connect(host string, database string) *mgo.Database {
+var (
+  session *mgo.Session
+  DB *mgo.Database
+)
+
+func Connect(host string, database string) {
   s, err := mgo.Dial(host)
   if err != nil {
     panic(err)
   }
 
-  defer s.Close()
+  session = s
 
-  s.SetMode(mgo.Monotonic, true) // Optional. Switch the session to a monotonic behavior.
+  session.SetMode(mgo.Monotonic, true) // @resource http://godoc.org/labix.org/v2/mgo#Session.SetMode
 
-  return s.DB(database)
+  DB = session.DB(database)
+}
+
+func Close() {
+  session.Close()
 }
