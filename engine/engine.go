@@ -4,23 +4,25 @@ import (
   "time"
   "fmt"
 
+  "gopkg.in/mgo.v2"
+
   "github.com/jonathonharrell/dice"
   "github.com/jonathonharrell/miri-ws-server/engine/websocket"
   "github.com/jonathonharrell/miri-ws-server/engine/core"
   "github.com/jonathonharrell/miri-ws-server/engine/util"
+  "github.com/jonathonharrell/miri-ws-server/engine/database"
 )
 
-var world core.World
-
-// @temp
-type User struct {
-  Connection *websocket.Connection
-}
-
-var users []*User
+var (
+  world core.World
+  db *mgo.Database
+)
 
 func Start() {
   dice.SeedRandom()
+
+  db = database.Connect("localhost:27017", "miri") //@temp, replace with env vars
+
   hub := websocket.StartServer()
   hub.SetOnConnectCallback(func(c *websocket.Connection) {
     // here we should probably give the connection an id for reference and association
