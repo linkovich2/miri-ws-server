@@ -6,8 +6,8 @@ import (
 
 // this is the main user type, which includes it's websocket connection and other immediate info
 type User struct {
-	Account *UserModel
-	Connection *websocket.Connection
-	IsAdmin bool
+	Account         *UserModel
+	Connection      *websocket.Connection
+	IsAdmin         bool
 	IsAuthenticated bool
 }

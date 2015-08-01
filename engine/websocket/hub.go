@@ -2,7 +2,6 @@ package websocket
 
 import "fmt"
 
-
 // hub maintains the set of active connections and broadcasts messages to the
 // connections.
 type Hub struct {
@@ -69,5 +68,5 @@ func (h *Hub) Broadcast(msg []byte, targets []*Connection) {
 
 // Send a message to one connection
 func (h *Hub) Send(msg []byte, c *Connection) {
-  c.send <- msg
+	c.send <- msg
 }
