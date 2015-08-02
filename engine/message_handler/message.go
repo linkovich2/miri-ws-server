@@ -21,7 +21,6 @@ func Route(name string, args ...interface{}) {
 	} else if reflect.ValueOf(m).NumField() == 0 {
 		reflect.ValueOf(m).MethodByName("Say").Call([]reflectValue{"That isn't a command!"})
 	}
-	return
 }
 
 func Interpreter(a *websocket.Message) {
@@ -29,5 +28,4 @@ func Interpreter(a *websocket.Message) {
 	str := string(a.Payload[:n])
 	firstWord := strings.Fields(str)
 	Route(firstWord[0], str[1:n])
-	return
 }

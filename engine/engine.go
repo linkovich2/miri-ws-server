@@ -10,6 +10,7 @@ import (
 	"github.com/jonathonharrell/miri-ws-server/engine/database"
 	"github.com/jonathonharrell/miri-ws-server/engine/util"
 	"github.com/jonathonharrell/miri-ws-server/engine/websocket"
+	"github.com/jonathonharrell/miri-ws-server/engine/message_handler"
 )
 
 var (
@@ -32,10 +33,7 @@ func Start() {
 		// This way we can reference Users with a connection ID
 	})
 
-	hub.SetOnMessageCallback(func(m *websocket.Message) {
-		// since we'll have an ID value on the connection, we can reference our list of users
-		hub.Send(m.Payload, m.Connection) // pong back the message for now
-	})
+	hub.SetOnMessageCallback(message_handler.Interpreter)
 
 	// load in the world, rooms, etc
 	world = core.NewWorld("The Miri")
