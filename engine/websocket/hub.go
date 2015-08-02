@@ -24,7 +24,7 @@ var h = Hub{
 	unregister:  make(chan *Connection),
 	onConnect:   func(c *Connection) {},
 	onMessage: func(m *Message) {
-		Interpreter(m, m.Payload)
+		Interpreter(m)
 	},
 	onDisconnect: func(c *Connection) {},
 }
