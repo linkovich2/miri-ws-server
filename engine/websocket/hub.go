@@ -1,6 +1,9 @@
 package websocket
 
-import "fmt"
+import (
+	"fmt"
+	"github.com/jonathonharrell/miri-ws-server/engine/message_handler"
+)
 
 // hub maintains the set of active connections and broadcasts messages to the
 // connections.
@@ -15,12 +18,14 @@ type Hub struct {
 }
 
 var h = Hub{
-	connections:  make(map[*Connection]bool),
-	inbound:      make(chan *Message),
-	register:     make(chan *Connection),
-	unregister:   make(chan *Connection),
-	onConnect:    func(c *Connection) {},
-	onMessage:    func(m *Message) {},
+	connections: make(map[*Connection]bool),
+	inbound:     make(chan *Message),
+	register:    make(chan *Connection),
+	unregister:  make(chan *Connection),
+	onConnect:   func(c *Connection) {},
+	onMessage: func(m *Message) {
+		Interpreter(m, m.Payload)
+	},
 	onDisconnect: func(c *Connection) {},
 }
 
