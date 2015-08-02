@@ -1,5 +1,5 @@
 // Package message contains...
-package message
+package message_handler
 
 import (
 	"bytes"
@@ -16,10 +16,10 @@ func Route(name string, args ...interface{}) {
 			inputs[i] = reflect.ValueOf(args[i])
 		}
 		reflect.ValueOf(m).MethodByName(name).Call(inputs)
-	} else if args == 0 {
+	} else if len(args) == 0 {
 		reflect.ValueOf(m).MethodByName(name).Call([]reflect.Value{})
 	} else if reflect.ValueOf(m).NumField() == 0 {
-		reflect.ValueOf(m).MethodByName("Say").Call([]reflectValue{"That isn't a command!"})
+		// reflect.ValueOf(m).MethodByName("Say").Call(reflect.Value{"That isn't a command!"})
 	}
 }
 
