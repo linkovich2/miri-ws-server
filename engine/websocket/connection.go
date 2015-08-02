@@ -1,20 +1,20 @@
 package websocket
 
 import (
+	"fmt"
 	"github.com/gorilla/websocket"
-	"stablelib.com/v1/uniuri"
 	"log"
 	"net/http"
-	"time"
+	"stablelib.com/v1/uniuri"
 	"strings"
-	"fmt"
+	"time"
 )
 
 const (
-	writeWait = 10 * time.Second     // Time allowed to write a message to the peer.
-	pongWait = 60 * time.Second      // Time allowed to read the next pong message from the peer.
-	pingPeriod = (pongWait * 9) / 10 // Send pings to peer with this period. Must be less than pongWait.
-	maxMessageSize = 512             // Maximum message size allowed from peer.
+	writeWait      = 10 * time.Second    // Time allowed to write a message to the peer.
+	pongWait       = 60 * time.Second    // Time allowed to read the next pong message from the peer.
+	pingPeriod     = (pongWait * 9) / 10 // Send pings to peer with this period. Must be less than pongWait.
+	maxMessageSize = 512                 // Maximum message size allowed from peer.
 )
 
 var upgrader = websocket.Upgrader{
@@ -36,12 +36,12 @@ var upgrader = websocket.Upgrader{
 // connection is an middleman between the websocket connection and the hub.
 type Connection struct {
 	webSocket *websocket.Conn // The websocket connection.
-	send chan []byte // Buffered channel of outbound messages.
-	ID   string
+	send      chan []byte     // Buffered channel of outbound messages.
+	ID        string
 }
 
 type Message struct {
-	Payload []byte
+	Payload    []byte
 	Connection *Connection
 }
 
