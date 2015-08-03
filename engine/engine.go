@@ -15,11 +15,12 @@ import (
 
 var (
 	world core.World
-	users []*auth.User
+	users map[string]*auth.User
 )
 
 func Start() {
 	dice.SeedRandom()
+	users = make(map[string]*auth.User) // init global users map
 
 	database.Connect("localhost:27017", "miri") //@temp, replace with env vars
 	defer database.Close()                      // when the program exits, close the mongo connection
@@ -28,12 +29,28 @@ func Start() {
 
 	hub := websocket.StartServer()
 	hub.SetOnConnectCallback(func(c *websocket.Connection) {
-		// here we should probably give the connection an id for reference and association
-		// and attach that ID to the connection itself
-		// This way we can reference Users with a connection ID
+		users[c.ID] = &auth.User{Connection: c, State: auth.NotAuthenticated}
+		// maybe we should also try to authenticate, if we want to use cookies or whatever
 	})
 
-	hub.SetOnMessageCallback(message_handler.Interpreter)
+	hub.SetOnMessageCallback(func(m *websocket.Message) {
+		message_handler.Interpret(m, users[m.Connection.ID])
+	})
+
+	message_handler.Init() // set up message handler and router
+	// import handlers
+	message_handler.AddHandler(auth.NotAuthenticated, "say", func (u *auth.User, args ...interface{}) { // @temp
+		hub.Send([]byte("omg awesome"), u.Connection)
+		fmt.Printf("%v\n", args)
+	})
+
+	// create error handlers for message handler
+	message_handler.InvalidStateHandler = func(u *auth.User, args ...interface{}) {
+		hub.Send([]byte("State not valid for some reason."), u.Connection)
+	}
+	message_handler.InvalidHandlerIndex = func(u *auth.User, args ...interface{}) {
+		hub.Send([]byte("Command not found."), u.Connection)
+	}
 
 	// load in the world, rooms, etc
 	world = core.NewWorld("The Miri")

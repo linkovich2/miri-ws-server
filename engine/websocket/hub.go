@@ -1,7 +1,6 @@
 package websocket
 
 import (
-	"fmt"
 )
 
 // hub maintains the set of active connections and broadcasts messages to the
@@ -39,8 +38,6 @@ func (h *Hub) run() {
 				close(c.send)
 			}
 		case m := <-h.inbound:
-			// handle message
-			fmt.Println(string(m.Payload))
 			h.onMessage(m)
 		}
 	}

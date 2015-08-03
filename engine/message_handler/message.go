@@ -3,32 +3,46 @@ package message_handler
 
 import (
 	"github.com/jonathonharrell/miri-ws-server/engine/websocket"
-	"reflect"
+	"github.com/jonathonharrell/miri-ws-server/engine/auth"
 	"fmt"
 )
 
-type Methods struct {}
-var m = &Methods{}
+type errorHandler func(u *auth.User, args ...interface{})
 
-func (m *Methods) Say(args ...interface{}) {
-	fmt.Printf("%v\n", args)
+var (
+	MethodSet map[int]map[string]func(u *auth.User, args ...interface{})
+	InvalidStateHandler errorHandler
+	InvalidHandlerIndex errorHandler
+)
+
+func Init() {
+	MethodSet = make(map[int]map[string]func(u *auth.User, args ...interface{}))
+
+	MethodSet[auth.NotAuthenticated] = make(map[string]func(u *auth.User, args ...interface{}))
+	MethodSet[auth.Authenticated]    = make(map[string]func(u *auth.User, args ...interface{}))
+	MethodSet[auth.InGame]           = make(map[string]func(u *auth.User, args ...interface{}))
 }
 
-func Route(name string, args ...interface{}) {
-	if len(args) > 0 {
-		inputs := make([]reflect.Value, len(args))
-		for i, _ := range args {
-			inputs[i] = reflect.ValueOf(args[i])
+// @todo, this should return an error if the key is already defined
+func AddHandler(state int, name string, handler func(u *auth.User, args ...interface{})) {
+	MethodSet[state][name] = handler
+}
+
+func Route(name string, u *auth.User, args ...interface{}) {
+	if s, ok := MethodSet[u.State]; ok {
+		if cmd, exists := s[name]; exists {
+			cmd(u, args) // we're all good, yay!
+		} else {
+			InvalidHandlerIndex(u, args)
 		}
-		reflect.ValueOf(m).MethodByName(name).Call(inputs)
-	}// else if len(args) == 0 {
-	// 	reflect.ValueOf(m).MethodByName(name).Call([]reflect.Value{})
-	// } else if reflect.ValueOf(m).NumField() == 0 {
-	// 	// reflect.ValueOf(m).MethodByName("Say").Call(reflect.Value{"That isn't a command!"})
-	// }
+	} else {
+		InvalidStateHandler(u, args)
+	}
 }
 
-func Interpreter(m *websocket.Message) {
+func Interpret(m *websocket.Message, u *auth.User) {
+	fmt.Printf("%v\n", u.Connection.ID)
+
 	var n int
 	for i := 0; i < len(m.Payload); i++ {
 		if string(m.Payload[i]) == " " {
@@ -39,5 +53,5 @@ func Interpreter(m *websocket.Message) {
 
 	cmd := string(m.Payload[0:n])
 	args := string(m.Payload[(n + 1):len(m.Payload)])
-	Route(cmd, args)
+	Route(cmd, u, args)
 }
