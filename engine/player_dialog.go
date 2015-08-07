@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 
 	"github.com/jonathonharrell/miri-ws-server/engine/auth"
+	"github.com/jonathonharrell/miri-ws-server/engine/util/filters"
 )
 
 type ChatArgs struct {
@@ -18,5 +19,7 @@ func CmdSay(u *auth.User, args *json.RawMessage) {
 	chat := &ChatArgs{}
 	json.Unmarshal(*args, &chat)
 
-	hub.Send([]byte(chat.Input), u.Connection)
+	s := filters.ProfanityFilter(chat.Input)
+
+	hub.Send([]byte(s), u.Connection)
 }

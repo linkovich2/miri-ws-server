@@ -10,6 +10,7 @@ import (
 	"github.com/jonathonharrell/miri-ws-server/engine/database"
 	"github.com/jonathonharrell/miri-ws-server/engine/message_handler"
 	"github.com/jonathonharrell/miri-ws-server/engine/util"
+	"github.com/jonathonharrell/miri-ws-server/engine/util/filters"
 	"github.com/jonathonharrell/miri-ws-server/engine/websocket"
 )
 
@@ -21,6 +22,7 @@ var (
 
 func Start() {
 	dice.SeedRandom()
+	filters.Init()
 	users = make(map[string]*auth.User) // init global users map
 
 	database.Connect("localhost:27017", "miri") //@temp, replace with env vars
