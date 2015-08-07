@@ -2,15 +2,15 @@
 package message_handler
 
 import (
-	"github.com/jonathonharrell/miri-ws-server/engine/websocket"
-	"github.com/jonathonharrell/miri-ws-server/engine/auth"
 	"fmt"
+	"github.com/jonathonharrell/miri-ws-server/engine/auth"
+	"github.com/jonathonharrell/miri-ws-server/engine/websocket"
 )
 
 type errorHandler func(u *auth.User, args ...interface{})
 
 var (
-	MethodSet map[int]map[string]func(u *auth.User, args ...interface{})
+	MethodSet           map[int]map[string]func(u *auth.User, args ...interface{})
 	InvalidStateHandler errorHandler
 	InvalidHandlerIndex errorHandler
 )
@@ -19,8 +19,8 @@ func Init() {
 	MethodSet = make(map[int]map[string]func(u *auth.User, args ...interface{}))
 
 	MethodSet[auth.NotAuthenticated] = make(map[string]func(u *auth.User, args ...interface{}))
-	MethodSet[auth.Authenticated]    = make(map[string]func(u *auth.User, args ...interface{}))
-	MethodSet[auth.InGame]           = make(map[string]func(u *auth.User, args ...interface{}))
+	MethodSet[auth.Authenticated] = make(map[string]func(u *auth.User, args ...interface{}))
+	MethodSet[auth.InGame] = make(map[string]func(u *auth.User, args ...interface{}))
 }
 
 // @todo, this should return an error if the key is already defined

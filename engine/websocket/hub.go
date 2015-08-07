@@ -1,7 +1,6 @@
 package websocket
 
-import (
-)
+import ()
 
 // hub maintains the set of active connections and broadcasts messages to the
 // connections.

@@ -8,9 +8,9 @@ import (
 	"github.com/jonathonharrell/miri-ws-server/engine/auth"
 	"github.com/jonathonharrell/miri-ws-server/engine/core"
 	"github.com/jonathonharrell/miri-ws-server/engine/database"
+	"github.com/jonathonharrell/miri-ws-server/engine/message_handler"
 	"github.com/jonathonharrell/miri-ws-server/engine/util"
 	"github.com/jonathonharrell/miri-ws-server/engine/websocket"
-	"github.com/jonathonharrell/miri-ws-server/engine/message_handler"
 )
 
 var (
@@ -39,7 +39,7 @@ func Start() {
 
 	message_handler.Init() // set up message handler and router
 	// import handlers
-	message_handler.AddHandler(auth.NotAuthenticated, "say", func (u *auth.User, args ...interface{}) { // @temp
+	message_handler.AddHandler(auth.NotAuthenticated, "say", func(u *auth.User, args ...interface{}) { // @temp
 		hub.Send([]byte("omg awesome"), u.Connection)
 		fmt.Printf("%v\n", args)
 	})
