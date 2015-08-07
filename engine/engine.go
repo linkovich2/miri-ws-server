@@ -41,7 +41,6 @@ func Start() {
 	// import handlers
 	message_handler.AddHandler(auth.NotAuthenticated, "say", func(u *auth.User, args ...interface{}) { // @temp
 		hub.Send([]byte("omg awesome"), u.Connection)
-		fmt.Printf("%v\n", args)
 	})
 
 	// create error handlers for message handler

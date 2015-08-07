@@ -3,6 +3,7 @@ package message_handler
 
 import (
 	"fmt"
+	"encoding/json"
 	"github.com/jonathonharrell/miri-ws-server/engine/auth"
 	"github.com/jonathonharrell/miri-ws-server/engine/websocket"
 )
@@ -28,7 +29,7 @@ func AddHandler(state int, name string, handler func(u *auth.User, args ...inter
 	MethodSet[state][name] = handler
 }
 
-func Route(name string, u *auth.User, args ...interface{}) {
+func Route(name string, u *auth.User, args *json.RawMessage) {
 	if s, ok := MethodSet[u.State]; ok {
 		if cmd, exists := s[name]; exists {
 			cmd(u, args) // we're all good, yay!
@@ -41,17 +42,34 @@ func Route(name string, u *auth.User, args ...interface{}) {
 }
 
 func Interpret(m *websocket.Message, u *auth.User) {
-	fmt.Printf("%v\n", u.Connection.ID)
+	// @todo we should log the received command
+	// @todo we should probably be able to attach a logger to the message handler
 
-	var n int
-	for i := 0; i < len(m.Payload); i++ {
-		if string(m.Payload[i]) == " " {
-			n = i
-			break
-		}
+	var obj map[string]*json.RawMessage
+	err := json.Unmarshal(m.Payload, &obj)
+	if err != nil {
+		// invalid JSON format?
+		fmt.Println("Invalid JSON formatting") // @todo errors
+		return
 	}
 
-	cmd := string(m.Payload[0:n])
-	args := string(m.Payload[(n + 1):len(m.Payload)])
+	command, commandExists := obj["command"]
+
+	if !commandExists {
+		// no comand found in JSON payload, invalid JSON then
+		fmt.Println("No command found in JSON payload") // @todo error handling
+		return
+	}
+
+	args, argsExist := obj["args"]
+
+	if !argsExist {
+		fmt.Println("No args found in JSON payload; continuing") // @todo error handling
+		args = &json.RawMessage{}
+	}
+
+	var cmd string
+	err = json.Unmarshal(*command, &cmd)
+
 	Route(cmd, u, args)
 }
