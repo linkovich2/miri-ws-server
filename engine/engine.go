@@ -16,6 +16,7 @@ import (
 var (
 	world core.World
 	users map[string]*auth.User
+	hub   *websocket.Hub
 )
 
 func Start() {
@@ -27,7 +28,7 @@ func Start() {
 
 	// auth.CreateUser([]byte("jonathon.harrell@yahoo.com"), []byte("Ex@mple1"))
 
-	hub := websocket.StartServer()
+	hub = websocket.StartServer()
 	hub.SetOnConnectCallback(func(c *websocket.Connection) {
 		users[c.ID] = &auth.User{Connection: c, State: auth.NotAuthenticated}
 		// maybe we should also try to authenticate, if we want to use cookies or whatever
@@ -39,9 +40,7 @@ func Start() {
 
 	message_handler.Init() // set up message handler and router
 	// import handlers
-	message_handler.AddHandler(auth.NotAuthenticated, "say", func(u *auth.User, args ...interface{}) { // @temp
-		hub.Send([]byte("omg awesome"), u.Connection)
-	})
+	message_handler.AddHandler(auth.NotAuthenticated, "say", CmdSay) // @todo move this to a message_handler_register file
 
 	// create error handlers for message handler
 	message_handler.InvalidStateHandler = func(u *auth.User, args ...interface{}) {

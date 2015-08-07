@@ -2,8 +2,8 @@
 package message_handler
 
 import (
-	"fmt"
 	"encoding/json"
+	"fmt"
 	"github.com/jonathonharrell/miri-ws-server/engine/auth"
 	"github.com/jonathonharrell/miri-ws-server/engine/websocket"
 )
@@ -11,21 +11,21 @@ import (
 type errorHandler func(u *auth.User, args ...interface{})
 
 var (
-	MethodSet           map[int]map[string]func(u *auth.User, args ...interface{})
+	MethodSet           map[int]map[string]func(u *auth.User, args *json.RawMessage)
 	InvalidStateHandler errorHandler
 	InvalidHandlerIndex errorHandler
 )
 
 func Init() {
-	MethodSet = make(map[int]map[string]func(u *auth.User, args ...interface{}))
+	MethodSet = make(map[int]map[string]func(u *auth.User, args *json.RawMessage))
 
-	MethodSet[auth.NotAuthenticated] = make(map[string]func(u *auth.User, args ...interface{}))
-	MethodSet[auth.Authenticated] = make(map[string]func(u *auth.User, args ...interface{}))
-	MethodSet[auth.InGame] = make(map[string]func(u *auth.User, args ...interface{}))
+	MethodSet[auth.NotAuthenticated] = make(map[string]func(u *auth.User, args *json.RawMessage))
+	MethodSet[auth.Authenticated] = make(map[string]func(u *auth.User, args *json.RawMessage))
+	MethodSet[auth.InGame] = make(map[string]func(u *auth.User, args *json.RawMessage))
 }
 
 // @todo, this should return an error if the key is already defined
-func AddHandler(state int, name string, handler func(u *auth.User, args ...interface{})) {
+func AddHandler(state int, name string, handler func(u *auth.User, args *json.RawMessage)) {
 	MethodSet[state][name] = handler
 }
 
