@@ -18,7 +18,7 @@ func Init() {
 	//   call this the "RP Filter"
 }
 
-func ProfanityFilter(s string) string {
+func ReplaceProfanity(s string) string {
 	rand.Seed(int64(time.Now().Nanosecond()))
 
 	for word, replacements := range c {

@@ -7,8 +7,8 @@ import (
 )
 
 type UserModel struct {
-	Email          []byte
-	HashedPassword []byte
+	Email          string
+	HashedPassword string
 
 	// @todo: Future stuff
 	// LastLoginDate
@@ -21,23 +21,23 @@ type UserModel struct {
 }
 
 type SessionModel struct {
-	SessionID []byte
-	UserID    []byte
+	SessionID string
+	UserID    string
 }
 
-func CreateUser(email, password []byte) error {
+func CreateUser(email, password string) error {
 	hashed, _ := hashPassword(password)
-	database.DB.C("users").Insert(&UserModel{Email: email, HashedPassword: hashed})
+	database.DB.C("users").Insert(&UserModel{Email: email, HashedPassword: string(hashed)})
 
 	return nil
 }
 
-func hashPassword(pw []byte) ([]byte, error) {
-	return bcrypt.GenerateFromPassword(pw, 10)
+func hashPassword(pw string) ([]byte, error) {
+	return bcrypt.GenerateFromPassword([]byte(pw), 10)
 }
 
-func Match(pw, hash []byte) bool {
-	err := bcrypt.CompareHashAndPassword(hash, pw)
+func Match(pw, hash string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(pw))
 	if err != nil {
 		return true
 	}
