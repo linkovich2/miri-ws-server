@@ -7,12 +7,12 @@ import (
 	"github.com/jonathonharrell/miri-ws-server/engine/util/filters"
 )
 
-type ChatArgs struct {
+type chatArgs struct {
 	Input string
 }
 
-func CmdSay(u *auth.User, args *json.RawMessage) {
-	chat := &ChatArgs{}
+func cmdSay(u *auth.User, args *json.RawMessage) {
+	chat := &chatArgs{}
 	json.Unmarshal(*args, &chat)
 
 	s := filters.ReplaceProfanity(chat.Input)

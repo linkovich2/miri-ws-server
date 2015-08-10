@@ -7,13 +7,7 @@ import (
 )
 
 func attachMessageHandlers() {
-	// pass global hub to subpackages
-	makeHubAvailable()
-
-	hub.SetOnConnectCallback(func(c *websocket.Connection) {
-		users[c.ID] = &auth.User{Connection: c, State: auth.NotAuthenticated}
-		// maybe we should also try to authenticate, if we want to use cookies or whatever
-	})
+	hub.SetOnConnectCallback(onConnectCallback)
 
 	hub.SetOnMessageCallback(func(m *websocket.Message) {
 		message_handler.Interpret(m, users[m.Connection.ID])
@@ -22,8 +16,8 @@ func attachMessageHandlers() {
 	message_handler.Init() // set up message handler and router
 
 	// -- BEGIN register message handlers
-	message_handler.AddHandler(auth.NotAuthenticated, "say", CmdSay)
-	message_handler.AddHandler(auth.NotAuthenticated, "authenticate", auth.CmdAuthenticate)
+	message_handler.AddHandler(auth.NotAuthenticated, "say", cmdSay)
+	message_handler.AddHandler(auth.NotAuthenticated, "authenticate", cmdAuthenticate)
 	// -- END
 
 	// -- BEGIN register error handlers
@@ -35,8 +29,4 @@ func attachMessageHandlers() {
 		hub.Send([]byte("Command not found."), u.Connection)
 	}
 	// -- END
-}
-
-func makeHubAvailable() {
-	auth.SetHub(hub)
 }
