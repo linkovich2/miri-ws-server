@@ -25,7 +25,7 @@ type positionRange struct {
 /**
  * Get position template string from position object: Position{14, 22, 2} => "14:22:2"
  */
-func (p *position) ToString() string {
+func (p *position) toString() string {
 	tmpl, _ := template.New("positionString").Parse("{{.X}}:{{.Y}}:{{.Z}}")
 	var s bytes.Buffer
 	tmpl.Execute(&s, p)

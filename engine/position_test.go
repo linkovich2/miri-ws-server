@@ -2,35 +2,35 @@ package engine
 
 import "testing"
 
-func TestToString(t *testing.T) {
-	p := Position{1, 1, 1}
-	s := p.ToString()
+func testToString(t *testing.T) {
+	p := position{1, 1, 1}
+	s := p.toString()
 
 	if s != "1:1:1" {
 		t.Error("Expected 1:1:1, got ", s)
 	}
 }
 
-func TestGetPosition(t *testing.T) {
+func testGetPosition(t *testing.T) {
 	pString := "248:122:3"
-	s, _ := GetPosition(pString)
+	s, _ := getPosition(pString)
 
-	if s.X != 248 {
-		t.Error("Expected position object, got ", s.X)
+	if s.x != 248 {
+		t.Error("Expected position object, got ", s.x)
 	}
 
-	if s.Y != 122 {
-		t.Error("Expected position object, got ", s.Y)
+	if s.y != 122 {
+		t.Error("Expected position object, got ", s.y)
 	}
 
-	if s.Z != 3 {
-		t.Error("Expected position object, got ", s.Z)
+	if s.z != 3 {
+		t.Error("Expected position object, got ", s.z)
 	}
 }
 
-func TestGetPositionError(t *testing.T) {
+func testGetPositionError(t *testing.T) {
 	pString := "222"
-	_, err := GetPosition(pString)
+	_, err := getPosition(pString)
 
 	if err == nil {
 		t.Error("Expected error, got ", err)
