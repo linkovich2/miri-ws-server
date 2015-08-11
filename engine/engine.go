@@ -25,7 +25,8 @@ func Start() {
 	// auth.CreateUser([]byte("jonathon.harrell@yahoo.com"), []byte("Ex@mple1"))
 
 	startWebsocketServer()
-	attachMessageHandlers()
+	attachMessageHandlers() // probably don't need this @todo
+	registerCommandAliases()
 
 	// load in the world, rooms, etc
 	miri = world{"Miri", make(map[string]realm)}

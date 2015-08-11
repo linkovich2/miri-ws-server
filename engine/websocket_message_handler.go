@@ -10,8 +10,6 @@ import (
 type (
 	errorHandler func(u *user, args ...interface{})
 	handlerInterface struct {}
-
-	aliasList map[string]string
 )
 
 var (
@@ -22,8 +20,8 @@ var (
 	invalidHandlerIndex errorHandler
 )
 
-func (a *aliasList) AddAlias(alt string, cmd string) {
-	a[alt] = cmd
+func addAlias(alt string, cmd string) {
+	aliases[alt] = cmd
 }
 
 func route(name string, u *user, args *json.RawMessage) {
@@ -32,19 +30,18 @@ func route(name string, u *user, args *json.RawMessage) {
 	// because we'd need to call public methods on the handler only
 	// and it's easier and faster to concatenate strings then to capitalize the first letter
 	if alias, exists := aliases[name]; exists {
-		method = strings.Join([]string{"Cmd_", alias}, "")
+		method = strings.Join([]string{"Cmd", alias}, "")
 	} else {
-		method := strings.Join([]string{"Cmd_", name}, "")
+		method = strings.Join([]string{"Cmd", name}, "")
 	}
 
 	cmd := reflect.ValueOf(handlers).MethodByName(method)
 
-	// @todo check if method exists first
-	// if cmd.isValid() {
+	if cmd.IsValid() {
 		cmd.Call([]reflect.Value{reflect.ValueOf(u), reflect.ValueOf(args)})
-	// } else {
-	// 	invalidHandlerIndex(u, args)
-	// }
+	} else {
+		invalidHandlerIndex(u, args)
+	}
 }
 
 func interpret(m *message, u *user) {
