@@ -1,11 +1,11 @@
 package engine
 
 type room struct {
-	id       int
-	name     string
-	realm    string
-	pos      position
-	active   bool
+	id          int
+	name        string
+	realm       string
+	pos         position
+	active      bool
 	connections []*connection
 }
 

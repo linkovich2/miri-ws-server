@@ -1,9 +1,9 @@
 package engine
 
 type weather struct {
-	name  string
-	rng positionRange
-	tp  weatherType
+	name string
+	rng  positionRange
+	tp   weatherType
 
 	// needs some kind of timer, to help see when its going to stop, intesify or ebb
 }

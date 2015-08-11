@@ -7,13 +7,13 @@ import (
 )
 
 type (
-	errorHandler func(u *user, args ...interface{})
-	handlerInterface struct {}
+	errorHandler     func(u *user, args ...interface{})
+	handlerInterface struct{}
 )
 
 var (
 	handlers = &handlerInterface{}
-	aliases = make(map[string]string)
+	aliases  = make(map[string]string)
 
 	invalidStateHandler errorHandler
 	invalidHandlerIndex errorHandler

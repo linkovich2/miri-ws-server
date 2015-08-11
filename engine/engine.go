@@ -10,7 +10,7 @@ import (
 )
 
 var (
-	miri world
+	miri  world
 	users map[string]*user
 )
 
