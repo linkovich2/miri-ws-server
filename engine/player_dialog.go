@@ -10,7 +10,8 @@ type chatArgs struct {
 	Input string
 }
 
-func cmdSay(u *user, args *json.RawMessage) {
+func (h *handlerInterface) Cmd_say(u *user, args *json.RawMessage) {
+	logger.Info("Called 'say'!")
 	chat := &chatArgs{}
 	json.Unmarshal(*args, &chat)
 

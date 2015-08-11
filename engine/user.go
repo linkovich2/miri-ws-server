@@ -6,16 +6,9 @@ const (
 	inGame
 )
 
-type (
-	formLogin struct {
-		email    string
-		password string
-	}
-
-	user struct {
-		account    *modelUser
-		connection *connection
-		isAdmin    bool
-		state      int
-	}
-)
+type user struct {
+	account    *modelUser
+	connection *connection
+	isAdmin    bool
+	state      int
+}

@@ -2,6 +2,11 @@ package engine
 
 import "encoding/json"
 
+type formLogin struct {
+	email    string
+	password string
+}
+
 func cmdAuthenticate(u *user, args *json.RawMessage) {
 	form := &formLogin{}
 	err := json.Unmarshal(*args, &form)

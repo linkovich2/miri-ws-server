@@ -3,39 +3,48 @@ package engine
 import (
 	"encoding/json"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
-type errorHandler func(u *user, args ...interface{})
+type (
+	errorHandler func(u *user, args ...interface{})
+	handlerInterface struct {}
+
+	aliasList map[string]string
+)
 
 var (
-	methodSet           map[int]map[string]func(u *user, args *json.RawMessage)
+	handlers = &handlerInterface{}
+	aliases = make(map[string]string)
+
 	invalidStateHandler errorHandler
 	invalidHandlerIndex errorHandler
 )
 
-func initMessageHandler() {
-	methodSet = make(map[int]map[string]func(u *user, args *json.RawMessage))
-
-	methodSet[notAuthenticated] = make(map[string]func(u *user, args *json.RawMessage))
-	methodSet[authenticated] = make(map[string]func(u *user, args *json.RawMessage))
-	methodSet[inGame] = make(map[string]func(u *user, args *json.RawMessage))
-}
-
-// @todo, this should return an error if the key is already defined
-func addHandler(state int, name string, handler func(u *user, args *json.RawMessage)) {
-	methodSet[state][name] = handler
+func (a *aliasList) AddAlias(alt string, cmd string) {
+	a[alt] = cmd
 }
 
 func route(name string, u *user, args *json.RawMessage) {
-	if s, ok := methodSet[u.state]; ok {
-		if cmd, exists := s[name]; exists {
-			cmd(u, args) // we're all good, yay!
-		} else {
-			invalidHandlerIndex(u, args)
-		}
+	var method string
+
+	// because we'd need to call public methods on the handler only
+	// and it's easier and faster to concatenate strings then to capitalize the first letter
+	if alias, exists := aliases[name]; exists {
+		method = strings.Join([]string{"Cmd_", alias}, "")
 	} else {
-		invalidStateHandler(u, args)
+		method := strings.Join([]string{"Cmd_", name}, "")
 	}
+
+	cmd := reflect.ValueOf(handlers).MethodByName(method)
+
+	// @todo check if method exists first
+	// if cmd.isValid() {
+		cmd.Call([]reflect.Value{reflect.ValueOf(u), reflect.ValueOf(args)})
+	// } else {
+	// 	invalidHandlerIndex(u, args)
+	// }
 }
 
 func interpret(m *message, u *user) {
