@@ -1,7 +1,5 @@
 package engine
 
-import ()
-
 // hub maintains the set of active connections and broadcasts messages to the
 // connections.
 type Hub struct {
@@ -28,6 +26,8 @@ func (h *Hub) run() {
 		case c := <-h.unregister:
 			if _, ok := h.connections[c]; ok {
 				// run any other logic on disconnect we need here
+				logger.Notice("Connection [%s] disconnected", c.ID)
+
 				delete(h.connections, c)
 				close(c.send)
 			}

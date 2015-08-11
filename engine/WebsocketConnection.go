@@ -1,11 +1,8 @@
 package engine
 
 import (
-	"fmt"
 	"github.com/gorilla/websocket"
-	"log"
 	"net/http"
-	"stablelib.com/v1/uniuri"
 	"strings"
 	"time"
 )
@@ -93,24 +90,4 @@ func (c *Connection) writePump() {
 			}
 		}
 	}
-}
-
-// serveWs handles websocket requests from the peer.
-func serveWs(w http.ResponseWriter, r *http.Request) {
-	if r.Method != "GET" {
-		http.Error(w, "Method not allowed", 405)
-		return
-	}
-
-	ws, err := upgrader.Upgrade(w, r, nil)
-	if err != nil {
-		log.Println(err)
-		return
-	}
-
-	c := &Connection{send: make(chan []byte, 256), webSocket: ws, ID: uniuri.New()}
-	fmt.Println(c.ID)
-	hub.register <- c
-	go c.writePump()
-	c.readPump()
 }
