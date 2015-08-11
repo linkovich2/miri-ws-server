@@ -2,8 +2,8 @@ package engine
 
 import "encoding/json"
 
-func cmdAuthenticate(u *User, args *json.RawMessage) {
-	form := &LoginData{}
+func cmdAuthenticate(u *user, args *json.RawMessage) {
+	form := &formLogin{}
 	err := json.Unmarshal(*args, &form)
 
 	if err != nil {
@@ -11,5 +11,5 @@ func cmdAuthenticate(u *User, args *json.RawMessage) {
 		return
 	}
 
-	hub.Send([]byte("Trying to authenticate"), u.Connection)
+	hub.Send([]byte("Trying to authenticate"), u.connection)
 }

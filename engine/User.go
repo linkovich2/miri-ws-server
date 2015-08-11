@@ -1,21 +1,21 @@
 package engine
 
 const (
-	NotAuthenticated = iota
-	Authenticated
-	InGame
+	notAuthenticated = iota
+	authenticated
+	inGame
 )
 
 type (
-	LoginData struct {
-		Email    string
-		Password string
+	formLogin struct {
+		email    string
+		password string
 	}
 
-	User struct {
-		Account    *UserModel
-		Connection *Connection
-		IsAdmin    bool
-		State      int
+	user struct {
+		account    *modelUser
+		connection *connection
+		isAdmin    bool
+		state      int
 	}
 )

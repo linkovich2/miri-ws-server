@@ -1,31 +1,34 @@
 package engine
 
-import ()
-
-type Room struct {
-	ID       int
-	Name     string
-	Realm    string
-	Position Position
-	Active   bool
+type room struct {
+	id       int
+	name     string
+	realm    string
+	pos      position
+	active   bool
+	connections []*connection
 }
 
-func (room *Room) Init() {
-	room.Deactivate()
+func (r *room) init() {
+	r.deactivate()
 }
 
-func (room *Room) Update() {
+func (r *room) update() {
 	// do something, this is the "slow update", world-level update
 }
 
-func (room *Room) Activate() {
-	room.Active = true
+func (r *room) activate() {
+	r.active = true
 	// here we should activate the "fast updates" for entities in the room
 	// spin those off into separate goroutines
 }
 
-func (room *Room) Deactivate() {
-	room.Active = false
+func (r *room) deactivate() {
+	r.active = false
 
 	// we should now "cool down" the "fast updates"
+}
+
+func (r *room) broadcast() {
+
 }

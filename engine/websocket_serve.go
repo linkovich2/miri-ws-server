@@ -25,8 +25,8 @@ func startWebsocketServer() {
 			return
 		}
 
-		c := &Connection{send: make(chan []byte, 256), webSocket: ws, ID: uniuri.New()}
-		logger.Info("New Connection [%s]", c.ID)
+		c := &connection{send: make(chan []byte, 256), webSocket: ws, id: uniuri.New()}
+		logger.Info("New Connection [%s]", c.id)
 		hub.register <- c
 		go c.writePump()
 		c.readPump()

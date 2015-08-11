@@ -8,16 +8,16 @@ import (
 	"text/template"
 )
 
-type Position struct {
-	X, Y, Z int
+type position struct {
+	x, y, z int
 }
 
-type PositionRange struct {
-	Max struct {
+type positionRange struct {
+	max struct {
 		X, Y int
 	}
 
-	Min struct {
+	min struct {
 		X, Y int
 	}
 }
@@ -25,10 +25,10 @@ type PositionRange struct {
 /**
  * Get position template string from position object: Position{14, 22, 2} => "14:22:2"
  */
-func (position *Position) ToString() string {
+func (p *position) ToString() string {
 	tmpl, _ := template.New("positionString").Parse("{{.X}}:{{.Y}}:{{.Z}}")
 	var s bytes.Buffer
-	tmpl.Execute(&s, position)
+	tmpl.Execute(&s, p)
 
 	return s.String()
 }
@@ -36,15 +36,15 @@ func (position *Position) ToString() string {
 /**
  * Get a Position struct from a template, IE: "15:22:2" => Position{15, 22, 2}
  */
-func GetPosition(positionString string) (Position, error) {
+func getPosition(positionString string) (position, error) {
 	arr := strings.Split(positionString, ":")
 	if len(arr) < 3 {
-		return Position{}, errors.New("Position string must have exactly 3 keys, {X}:{Y}:{Z}")
+		return position{}, errors.New("Position string must have exactly 3 keys, {X}:{Y}:{Z}")
 	}
 
 	x, _ := strconv.Atoi(arr[0])
 	y, _ := strconv.Atoi(arr[1])
 	z, _ := strconv.Atoi(arr[2])
 
-	return Position{x, y, z}, nil
+	return position{x, y, z}, nil
 }

@@ -2,9 +2,9 @@ package engine
 
 import "golang.org/x/crypto/bcrypt"
 
-type UserModel struct {
-	Email          string
-	HashedPassword string
+type modelUser struct {
+	email          string
+	hashedPassword string
 
 	// @todo: Future stuff
 	// LastLoginDate
@@ -16,14 +16,14 @@ type UserModel struct {
 	// CreatedAt
 }
 
-type SessionModel struct {
-	SessionID string
-	UserID    string
+type modelSession struct {
+	sessionId string
+	userId    string
 }
 
-func CreateUser(email, password string) error {
+func createUser(email, password string) error {
 	hashed, _ := hashPassword(password)
-	db.C("users").Insert(&UserModel{Email: email, HashedPassword: string(hashed)})
+	db.C("users").Insert(&modelUser{email: email, hashedPassword: string(hashed)})
 
 	return nil
 }
@@ -32,7 +32,7 @@ func hashPassword(pw string) ([]byte, error) {
 	return bcrypt.GenerateFromPassword([]byte(pw), 10)
 }
 
-func Match(pw, hash string) bool {
+func matchPassword(pw, hash string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(pw))
 	if err != nil {
 		return true

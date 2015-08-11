@@ -1,47 +1,41 @@
 package engine
 
-import ()
-
 const (
 	maxRoomsPerRealm = 512 // max number of rooms per realm
 	maxWeather       = 16  // max number of "storms" that can be "on" at any given time (per realm)
 )
 
 type (
-	Realm struct {
-		ID        int
-		Name      string `json:"name"`
-		Rooms     map[string]Room
-		Weathers  map[string]Weather
-		TimeCycle map[string]RealmTime `json:"times"`
-		Time      string
+	realm struct {
+		id        int
+		name      string `json:"name"`
+		rooms     map[string]room
+		weathers  map[string]weather
+		timeCycle map[string]realmTime `json:"times"`
+		time      string
 	}
 
-	RealmTime struct {
-		Name        string
-		Min         int    // minute during hour this time will display
-		Description string // the lighting, smells, etc.
+	realmTime struct {
+		name        string
+		min         int    // minute during hour this time will display
+		description string // the lighting, smells, etc.
 	}
 )
 
-func (realm *Realm) Init() {
+func (r *realm) init() {
 	// @todo call FromJSON here, build the length of TimeCycle from JSON arr length
 	// build the rooms
 
-	realm.Rooms = make(map[string]Room, maxRoomsPerRealm) // init Room map
-	realm.Weathers = make(map[string]Weather, maxWeather) // init Weathers
+	r.rooms = make(map[string]room, maxRoomsPerRealm) // init Room map
+	r.weathers = make(map[string]weather, maxWeather) // init Weathers
 }
 
-func (realm *Realm) Update() {
-	for _, r := range realm.Rooms {
-		r.Update()
+func (r *realm) update() {
+	for _, r := range r.rooms {
+		r.update()
 	}
 
 	// also:
 	// generate weather
 	// update realm time
-}
-
-func (realm *Realm) FromJSON(filepath string) {
-	// create a realm from a json file
 }

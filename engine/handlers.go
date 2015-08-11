@@ -1,20 +1,20 @@
 package engine
 
 func attachMessageHandlers() {
-	InitMessageHandler() // set up message handler and router
+	initMessageHandler() // set up message handler and router
 
 	// -- BEGIN register message handlers
-	AddHandler(NotAuthenticated, "say", cmdSay)
-	AddHandler(NotAuthenticated, "authenticate", cmdAuthenticate)
+	addHandler(notAuthenticated, "say", cmdSay)
+	addHandler(notAuthenticated, "authenticate", cmdAuthenticate)
 	// -- END
 
 	// -- BEGIN register error handlers
-	InvalidStateHandler = func(u *User, args ...interface{}) {
-		hub.Send([]byte("State not valid for some reason."), u.Connection)
+	invalidStateHandler = func(u *user, args ...interface{}) {
+		hub.Send([]byte("State not valid for some reason."), u.connection)
 	}
 
-	InvalidHandlerIndex = func(u *User, args ...interface{}) {
-		hub.Send([]byte("Command not found."), u.Connection)
+	invalidHandlerIndex = func(u *user, args ...interface{}) {
+		hub.Send([]byte("Command not found."), u.connection)
 	}
 	// -- END
 }

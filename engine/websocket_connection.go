@@ -31,19 +31,19 @@ var upgrader = websocket.Upgrader{
 }
 
 // connection is an middleman between the websocket connection and the hub.
-type Connection struct {
+type connection struct {
 	webSocket *websocket.Conn // The websocket connection.
 	send      chan []byte     // Buffered channel of outbound messages.
-	ID        string
+	id        string
 }
 
-type Message struct {
-	Payload    []byte
-	Connection *Connection
+type message struct {
+	payload    []byte
+	connection *connection
 }
 
 // ReadPump pumps messages from the websocket connection to the hub.
-func (c *Connection) readPump() {
+func (c *connection) readPump() {
 	defer func() {
 		hub.unregister <- c
 		c.webSocket.Close()
@@ -52,23 +52,23 @@ func (c *Connection) readPump() {
 	c.webSocket.SetReadDeadline(time.Now().Add(pongWait))
 	c.webSocket.SetPongHandler(func(string) error { c.webSocket.SetReadDeadline(time.Now().Add(pongWait)); return nil })
 	for {
-		_, message, err := c.webSocket.ReadMessage()
+		_, msg, err := c.webSocket.ReadMessage()
 
 		if err != nil {
 			break
 		}
-		hub.inbound <- &Message{message, c}
+		hub.inbound <- &message{msg, c}
 	}
 }
 
 // Write writes a message with the given message type and payload.
-func (c *Connection) write(mt int, payload []byte) error {
+func (c *connection) write(mt int, payload []byte) error {
 	c.webSocket.SetWriteDeadline(time.Now().Add(writeWait))
 	return c.webSocket.WriteMessage(mt, payload)
 }
 
 // WritePump pumps messages from the hub to the websocket connection.
-func (c *Connection) writePump() {
+func (c *connection) writePump() {
 	ticker := time.NewTicker(pingPeriod)
 	defer func() {
 		ticker.Stop()
