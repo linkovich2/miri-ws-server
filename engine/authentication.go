@@ -1,14 +1,9 @@
 package engine
 
-import (
-	"encoding/json"
+import "encoding/json"
 
-	"github.com/jonathonharrell/miri-ws-server/engine/auth"
-	"github.com/jonathonharrell/miri-ws-server/engine/websocket"
-)
-
-func cmdAuthenticate(u *auth.User, args *json.RawMessage) {
-	form := &auth.LoginData{}
+func cmdAuthenticate(u *User, args *json.RawMessage) {
+	form := &LoginData{}
 	err := json.Unmarshal(*args, &form)
 
 	if err != nil {
@@ -19,7 +14,7 @@ func cmdAuthenticate(u *auth.User, args *json.RawMessage) {
 	hub.Send([]byte("Trying to authenticate"), u.Connection)
 }
 
-func onConnectCallback(c *websocket.Connection) {
-	users[c.ID] = &auth.User{Connection: c, State: auth.NotAuthenticated}
+func onConnectCallback(c *Connection) {
+	users[c.ID] = &User{Connection: c, State: NotAuthenticated}
 	// maybe we should also try to authenticate, if we want to use cookies or whatever
 }

@@ -1,8 +1,4 @@
-package auth
-
-import (
-	"github.com/jonathonharrell/miri-ws-server/engine/websocket"
-)
+package engine
 
 const (
 	NotAuthenticated = iota
@@ -18,7 +14,7 @@ type (
 
 	User struct {
 		Account    *UserModel
-		Connection *websocket.Connection
+		Connection *Connection
 		IsAdmin    bool
 		State      int
 	}

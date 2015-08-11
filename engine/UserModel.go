@@ -1,10 +1,6 @@
-package auth
+package engine
 
-import (
-	"golang.org/x/crypto/bcrypt"
-
-	"github.com/jonathonharrell/miri-ws-server/engine/database"
-)
+import "golang.org/x/crypto/bcrypt"
 
 type UserModel struct {
 	Email          string
@@ -27,7 +23,7 @@ type SessionModel struct {
 
 func CreateUser(email, password string) error {
 	hashed, _ := hashPassword(password)
-	database.DB.C("users").Insert(&UserModel{Email: email, HashedPassword: string(hashed)})
+	db.C("users").Insert(&UserModel{Email: email, HashedPassword: string(hashed)})
 
 	return nil
 }

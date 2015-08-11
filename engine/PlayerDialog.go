@@ -3,7 +3,6 @@ package engine
 import (
 	"encoding/json"
 
-	"github.com/jonathonharrell/miri-ws-server/engine/auth"
 	"github.com/jonathonharrell/miri-ws-server/engine/util/filters"
 )
 
@@ -11,7 +10,7 @@ type chatArgs struct {
 	Input string
 }
 
-func cmdSay(u *auth.User, args *json.RawMessage) {
+func cmdSay(u *User, args *json.RawMessage) {
 	chat := &chatArgs{}
 	json.Unmarshal(*args, &chat)
 

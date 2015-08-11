@@ -1,6 +1,4 @@
-package core
-
-import ()
+package engine
 
 const (
 	WorldUpdateLoopTimer = 5
@@ -19,7 +17,7 @@ func (world *World) Update() {
 	// @todo for testing only, we want to also simulate player actions here
 	// to see what the results might be coming back to a client
 
-	log.Notice("World update ran")
+	logger.Notice("World update ran")
 }
 
 func NewWorld(name string) World {

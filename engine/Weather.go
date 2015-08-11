@@ -1,6 +1,4 @@
-package core
-
-import ()
+package engine
 
 type Weather struct {
 	Name  string
