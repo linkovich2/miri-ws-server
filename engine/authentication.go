@@ -7,7 +7,7 @@ type formLogin struct {
 	password string
 }
 
-func (h *handlerInterface) CmdNotAuthenticatedAuthenticate(u *user, args *json.RawMessage) {
+func (h *handlerInterface) CommandNotAuthenticated_AUTHENTICATE(u *user, args *json.RawMessage) {
 	form := &formLogin{}
 	err := json.Unmarshal(*args, &form)
 

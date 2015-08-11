@@ -1,5 +1,5 @@
 package engine
 
 func registerCommandAliases() {
-  addAlias("say", "Say")
+  // add aliases for commands
 }

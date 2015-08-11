@@ -26,12 +26,13 @@ func addAlias(alt string, cmd string) {
 func route(name string, u *user, args *json.RawMessage) {
 	var method string
 
-	// because we'd need to call public methods on the handler only
-	// and it's easier and faster to concatenate strings then to capitalize the first letter
-	if alias, exists := aliases[name]; exists {
-		method = strings.Join([]string{"Cmd", stateString(u.state), alias}, "")
+	// capitalize first letter of command
+	c := strings.ToUpper(name)
+
+	if alias, exists := aliases[c]; exists {
+		method = strings.Join([]string{"Command", stateString(u.state), "_", alias}, "")
 	} else {
-		method = strings.Join([]string{"Cmd", stateString(u.state), name}, "")
+		method = strings.Join([]string{"Command", stateString(u.state), "_", c}, "")
 	}
 
 	cmd := reflect.ValueOf(handlers).MethodByName(method)
