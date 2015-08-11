@@ -5,17 +5,17 @@ import ()
 // hub maintains the set of active connections and broadcasts messages to the
 // connections.
 type Hub struct {
-	connections  map[*Connection]bool // Registered connections.
-	inbound      chan *Message        // Inbound messages from the connections.
-	register     chan *Connection     // Register requests from the connections.
-	unregister   chan *Connection     // Unregister requests from connections.
+	connections map[*Connection]bool // Registered connections.
+	inbound     chan *Message        // Inbound messages from the connections.
+	register    chan *Connection     // Register requests from the connections.
+	unregister  chan *Connection     // Unregister requests from connections.
 }
 
 var hub = Hub{
-	connections:  make(map[*Connection]bool),
-	inbound:      make(chan *Message),
-	register:     make(chan *Connection),
-	unregister:   make(chan *Connection),
+	connections: make(map[*Connection]bool),
+	inbound:     make(chan *Message),
+	register:    make(chan *Connection),
+	unregister:  make(chan *Connection),
 }
 
 func (h *Hub) run() {
