@@ -2,7 +2,6 @@ package engine
 
 import (
 	"encoding/json"
-	"fmt"
 	"reflect"
 	"strings"
 )
@@ -30,9 +29,9 @@ func route(name string, u *user, args *json.RawMessage) {
 	// because we'd need to call public methods on the handler only
 	// and it's easier and faster to concatenate strings then to capitalize the first letter
 	if alias, exists := aliases[name]; exists {
-		method = strings.Join([]string{"Cmd", alias}, "")
+		method = strings.Join([]string{"Cmd", stateString(u.state), alias}, "")
 	} else {
-		method = strings.Join([]string{"Cmd", name}, "")
+		method = strings.Join([]string{"Cmd", stateString(u.state), name}, "")
 	}
 
 	cmd := reflect.ValueOf(handlers).MethodByName(method)
@@ -52,7 +51,7 @@ func interpret(m *message, u *user) {
 	err := json.Unmarshal(m.payload, &obj)
 	if err != nil {
 		// invalid JSON format?
-		fmt.Println("Invalid JSON formatting") // @todo errors
+		logger.Error("Invalid JSON formatting") // @todo errors
 		return
 	}
 
@@ -60,19 +59,19 @@ func interpret(m *message, u *user) {
 
 	if !commandExists {
 		// no comand found in JSON payload, invalid JSON then
-		fmt.Println("No command found in JSON payload") // @todo error handling
+		logger.Error("No command found in JSON payload") // @todo error handling
 		return
 	}
 
 	args, argsExist := obj["args"]
 
-	if !argsExist {
-		fmt.Println("No args found in JSON payload; continuing") // @todo error handling
-		args = &json.RawMessage{}
-	}
-
 	var cmd string
 	err = json.Unmarshal(*command, &cmd)
+
+	if !argsExist {
+		logger.Warning("No args found in JSON payload for command: %s for connection %s; continuing", cmd, u.connection.id)
+		args = &json.RawMessage{}
+	}
 
 	route(cmd, u, args)
 }
