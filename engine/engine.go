@@ -25,7 +25,6 @@ func Start() {
 	// auth.CreateUser([]byte("jonathon.harrell@yahoo.com"), []byte("Ex@mple1"))
 
 	startWebsocketServer()
-	attachMessageHandlers() // probably don't need this @todo
 	registerCommandAliases()
 
 	// load in the world, rooms, etc

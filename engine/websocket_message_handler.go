@@ -6,22 +6,22 @@ import (
 	"strings"
 )
 
-type (
-	errorHandler     func(u *user, args ...interface{})
-	handlerInterface struct{}
-)
+type handlerInterface struct{}
 
 var (
 	handlers = &handlerInterface{}
 	aliases  = make(map[string]string)
-
-	invalidStateHandler errorHandler
-	invalidHandlerIndex errorHandler
 )
 
+func handlerNotFoundError(u *user, args ...interface{}) {
+	hub.Send([]byte("State not valid for some reason."), u.connection)
+}
+
+// Add an alias to the list
 func addAlias(alt string, cmd string) {
 	aliases[alt] = cmd
 }
+
 
 func route(name string, u *user, args *json.RawMessage) {
 	var method string
@@ -40,9 +40,10 @@ func route(name string, u *user, args *json.RawMessage) {
 	if cmd.IsValid() {
 		cmd.Call([]reflect.Value{reflect.ValueOf(u), reflect.ValueOf(args)})
 	} else {
-		invalidHandlerIndex(u, args)
+		handlerNotFoundError(u, args)
 	}
 }
+
 
 func interpret(m *message, u *user) {
 	// @todo we should log the received command
