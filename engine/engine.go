@@ -12,7 +12,6 @@ import (
 var (
 	world World
 	users map[string]*User
-	hub   *Hub
 )
 
 func Start() {
@@ -25,8 +24,7 @@ func Start() {
 
 	// auth.CreateUser([]byte("jonathon.harrell@yahoo.com"), []byte("Ex@mple1"))
 
-	hub = startWebsocketServer()
-
+	startWebsocketServer()
 	attachMessageHandlers()
 
 	// load in the world, rooms, etc

@@ -1,12 +1,6 @@
 package engine
 
 func attachMessageHandlers() {
-	hub.SetOnConnectCallback(onConnectCallback)
-
-	hub.SetOnMessageCallback(func(m *Message) {
-		Interpret(m, users[m.Connection.ID])
-	})
-
 	InitMessageHandler() // set up message handler and router
 
 	// -- BEGIN register message handlers

@@ -9,19 +9,13 @@ type Hub struct {
 	inbound      chan *Message        // Inbound messages from the connections.
 	register     chan *Connection     // Register requests from the connections.
 	unregister   chan *Connection     // Unregister requests from connections.
-	onConnect    func(c *Connection)
-	onMessage    func(msg *Message)
-	onDisconnect func(c *Connection)
 }
 
-var h = Hub{
+var hub = Hub{
 	connections:  make(map[*Connection]bool),
 	inbound:      make(chan *Message),
 	register:     make(chan *Connection),
 	unregister:   make(chan *Connection),
-	onConnect:    func(c *Connection) {},
-	onMessage:    func(m *Message) {},
-	onDisconnect: func(c *Connection) {},
 }
 
 func (h *Hub) run() {
@@ -29,32 +23,18 @@ func (h *Hub) run() {
 		select {
 		case c := <-h.register:
 			h.connections[c] = true
-			h.onConnect(c)
+			users[c.ID] = &User{Connection: c, State: NotAuthenticated}
+			// maybe we should also try to authenticate, if we want to use cookies or whatever
 		case c := <-h.unregister:
 			if _, ok := h.connections[c]; ok {
-				h.onDisconnect(c)
+				// run any other logic on disconnect we need here
 				delete(h.connections, c)
 				close(c.send)
 			}
 		case m := <-h.inbound:
-			h.onMessage(m)
+			Interpret(m, users[m.Connection.ID])
 		}
 	}
-}
-
-// Get's called whenever there is a new connection
-func (h *Hub) SetOnConnectCallback(callback func(c *Connection)) {
-	h.onConnect = callback
-}
-
-// Get's called whenever a message is received from a connection
-func (h *Hub) SetOnMessageCallback(callback func(msg *Message)) {
-	h.onMessage = callback
-}
-
-// Get's called when there is a disconnection
-func (h *Hub) SetOnDisconnectCallback(callback func(c *Connection)) {
-	h.onDisconnect = callback
 }
 
 // Send a message to a lot of connections

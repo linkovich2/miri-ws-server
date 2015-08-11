@@ -48,7 +48,7 @@ type Message struct {
 // ReadPump pumps messages from the websocket connection to the hub.
 func (c *Connection) readPump() {
 	defer func() {
-		h.unregister <- c
+		hub.unregister <- c
 		c.webSocket.Close()
 	}()
 	c.webSocket.SetReadLimit(maxMessageSize)
@@ -60,7 +60,7 @@ func (c *Connection) readPump() {
 		if err != nil {
 			break
 		}
-		h.inbound <- &Message{message, c}
+		hub.inbound <- &Message{message, c}
 	}
 }
 
@@ -110,7 +110,7 @@ func serveWs(w http.ResponseWriter, r *http.Request) {
 
 	c := &Connection{send: make(chan []byte, 256), webSocket: ws, ID: uniuri.New()}
 	fmt.Println(c.ID)
-	h.register <- c
+	hub.register <- c
 	go c.writePump()
 	c.readPump()
 }

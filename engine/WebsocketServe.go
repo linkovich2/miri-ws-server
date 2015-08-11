@@ -7,10 +7,9 @@ import (
 
 var addr = flag.String("addr", ":8080", "http service address")
 
-func startWebsocketServer() *Hub {
+func startWebsocketServer() {
 	flag.Parse()
-	go h.run()
+	go hub.run()
 	http.HandleFunc("/", serveWs)
 	go http.ListenAndServe(*addr, nil)
-	return &h
 }
