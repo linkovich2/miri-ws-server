@@ -8,9 +8,9 @@ const (
 
 func stateString(s int) string {
 	switch s {
-	case 0:
+	case notAuthenticated:
 		return "NotAuthenticated"
-	case 1:
+	case authenticated:
 		return "Authenticated"
 	default:
 		return ""
