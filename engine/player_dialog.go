@@ -7,14 +7,14 @@ import (
 )
 
 type chatArgs struct {
-	input string
+	Input string
 }
 
 func cmdSay(u *user, args *json.RawMessage) {
 	chat := &chatArgs{}
 	json.Unmarshal(*args, &chat)
 
-	s := filters.ReplaceProfanity(chat.input)
+	s := filters.ReplaceProfanity(chat.Input)
 	// @todo RP filter and any other filters we want chat to go through
 
 	hub.Send([]byte(s), u.connection)
