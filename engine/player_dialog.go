@@ -18,5 +18,5 @@ func (h *HandlerInterface) Command_SAY(u *User, args *json.RawMessage) {
 	s := filters.ReplaceProfanity(chat.Input)
 	// @todo RP filter and any other filters we want chat to go through
 
-	hub.Send([]byte(s), u.Connection)
+	hub.Send(&MessageResponse{Message: s}, u.Connection)
 }

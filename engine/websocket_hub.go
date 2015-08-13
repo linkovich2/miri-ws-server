@@ -1,13 +1,24 @@
 package engine
 
+import "encoding/json"
+
 // hub maintains the set of active connections and broadcasts messages to the
 // connections.
-type ConnectionHub struct {
-	Connections map[*Connection]bool // Registered connections.
-	inbound     chan *Message        // Inbound messages from the connections.
-	register    chan *Connection     // Register requests from the connections.
-	unregister  chan *Connection     // Unregister requests from connections.
-}
+type (
+	ConnectionHub struct {
+		Connections map[*Connection]bool // Registered connections.
+		inbound     chan *Message        // Inbound messages from the connections.
+		register    chan *Connection     // Register requests from the connections.
+		unregister  chan *Connection     // Unregister requests from connections.
+	}
+
+	MessageResponse struct {
+		ResponseTo string   `json:"response_to"`
+		Errors     []string `json:"errors"`
+		Success    bool     `json:"success"`
+		Message    string   `json:"message"` // @todo this should probably be another struct with specific areas to deliver messages to in the UI
+	}
+)
 
 var hub = ConnectionHub{
 	Connections: make(map[*Connection]bool),
@@ -44,13 +55,15 @@ func (h *ConnectionHub) run() {
 }
 
 // Send a message to a lot of connections
-func (h *ConnectionHub) Broadcast(msg []byte, targets []*Connection) {
+func (h *ConnectionHub) Broadcast(m *MessageResponse, targets []*Connection) {
+	msg, _ := json.Marshal(m)
 	for _, c := range targets {
 		c.send <- msg
 	}
 }
 
 // Send a message to one connection
-func (h *ConnectionHub) Send(msg []byte, c *Connection) {
+func (h *ConnectionHub) Send(m *MessageResponse, c *Connection) {
+	msg, _ := json.Marshal(m)
 	c.send <- msg
 }

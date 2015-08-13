@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-type HandlerInterface struct{}
+type HandlerInterface struct{} // empty struct to attach message handlers to
 
 var (
 	handlers = &HandlerInterface{}
@@ -14,7 +14,7 @@ var (
 )
 
 func handlerNotFoundError(u *User, args ...interface{}) {
-	hub.Send([]byte("State not valid for some reason."), u.Connection)
+	hub.Send(&MessageResponse{Errors: []string{"State not valid for some reason."}}, u.Connection)
 }
 
 // Add an alias to the list
