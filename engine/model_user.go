@@ -1,6 +1,10 @@
 package engine
 
-import "golang.org/x/crypto/bcrypt"
+import (
+	"github.com/asaskevich/govalidator"
+	"golang.org/x/crypto/bcrypt"
+	"gopkg.in/mgo.v2/bson"
+)
 
 type ModelUser struct {
 	Email          string
@@ -19,13 +23,28 @@ type ModelUser struct {
 
 // @todo FUTURE FEATURE need a session model for DB storage
 
-func CreateUser(email, password string) error {
-	// @todo make sure email is unique, make sure email is valid, make sure pass is at least 6 characters VALIDATION
+func CreateUser(email, password string) (errors []string) {
+	existing := ModelUser{}
+	err := db.C("users").Find(bson.M{"email": email}).One(&existing)
 
-	hashed, _ := HashPassword(password)
-	db.C("users").Insert(&ModelUser{Email: email, HashedPassword: string(hashed), IsAdmin: false})
+	if err == nil { // checking for existing user
+		errors = append(errors, "A user already exists with that email.")
+	}
 
-	return nil
+	if !govalidator.IsEmail(email) {
+		errors = append(errors, "Not a valid email")
+	}
+
+	if len(password) < 6 {
+		errors = append(errors, "Password must be at least 6 characters long.")
+	}
+
+	if len(errors) <= 0 {
+		hashed, _ := HashPassword(password)
+		db.C("users").Insert(&ModelUser{Email: email, HashedPassword: string(hashed), IsAdmin: false})
+	}
+
+	return errors
 }
 
 func HashPassword(pw string) ([]byte, error) {

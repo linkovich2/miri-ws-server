@@ -44,14 +44,13 @@ func (h *ConnectionHub) run() {
 }
 
 // Send a message to a lot of connections
-func (h *ConnectionHub) Broadcast(msg string, targets []*Connection) {
-	m := []byte(msg)
+func (h *ConnectionHub) Broadcast(msg []byte, targets []*Connection) {
 	for _, c := range targets {
-		c.send <- m
+		c.send <- msg
 	}
 }
 
 // Send a message to one connection
-func (h *ConnectionHub) Send(msg string, c *Connection) {
-	c.send <- []byte(msg)
+func (h *ConnectionHub) Send(msg []byte, c *Connection) {
+	c.send <- msg
 }

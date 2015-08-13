@@ -2,10 +2,24 @@ package engine
 
 import "encoding/json"
 
-type FormLogin struct {
-	Email    string
-	Password string
-}
+type (
+	FormLogin struct {
+		Email    string
+		Password string
+	}
+
+	LoginResponse struct { // @todo create a more generalized response struct
+		Errors     []string `json:"errors"`
+		Success    bool     `json:"success"`
+		ResponseTo string   `json:"response_to"`
+	}
+
+	SignupResponse struct {
+		Errors     []string `json:"errors"`
+		Success    bool     `json:"success"`
+		ResponseTo string   `json:"response_to"`
+	}
+)
 
 func (h *HandlerInterface) CommandNotAuthenticated_AUTHENTICATE(u *User, args *json.RawMessage) {
 	form := &FormLogin{}
@@ -16,8 +30,7 @@ func (h *HandlerInterface) CommandNotAuthenticated_AUTHENTICATE(u *User, args *j
 		return
 	}
 
-	hub.Send(form.Email, u.Connection)
-	hub.Send("*****", u.Connection)
+	// hub.Send(form.Email, u.Connection)
 }
 
 func (h *HandlerInterface) CommandNotAuthenticated_CREATEUSER(u *User, args *json.RawMessage) {
@@ -29,6 +42,13 @@ func (h *HandlerInterface) CommandNotAuthenticated_CREATEUSER(u *User, args *jso
 		return
 	}
 
-	hub.Send(form.Email, u.Connection)
-	hub.Send("*****", u.Connection)
+	errors := CreateUser(form.Email, form.Password)
+	success := len(errors) <= 0
+	if success {
+		u.State = Authenticated
+	}
+
+	res := &SignupResponse{errors, success, "createuser"}
+	j, _ := json.Marshal(res)
+	hub.Send(j, u.Connection)
 }

@@ -14,7 +14,7 @@ var (
 )
 
 func handlerNotFoundError(u *User, args ...interface{}) {
-	hub.Send("State not valid for some reason.", u.Connection)
+	hub.Send([]byte("State not valid for some reason."), u.Connection)
 }
 
 // Add an alias to the list
