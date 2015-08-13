@@ -6,17 +6,17 @@ import (
 	"github.com/jonathonharrell/miri-ws-server/engine/util/filters"
 )
 
-type chatArgs struct {
+type ChatArgs struct {
 	Input string
 }
 
-func (h *handlerInterface) Command_SAY(u *user, args *json.RawMessage) {
+func (h *HandlerInterface) Command_SAY(u *User, args *json.RawMessage) {
 	logger.Info("Called 'say'!")
-	chat := &chatArgs{}
+	chat := &ChatArgs{}
 	json.Unmarshal(*args, &chat)
 
 	s := filters.ReplaceProfanity(chat.Input)
 	// @todo RP filter and any other filters we want chat to go through
 
-	hub.Send([]byte(s), u.connection)
+	hub.Send(s, u.Connection)
 }

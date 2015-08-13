@@ -9,7 +9,7 @@ var (
 	session *mgo.Session
 )
 
-func connectToDatabase(host string, database string) {
+func ConnectToDatabase(host string, database string) {
 	s, err := mgo.Dial(host)
 	if err != nil {
 		panic(err)
@@ -21,6 +21,6 @@ func connectToDatabase(host string, database string) {
 	db = session.DB(database)
 }
 
-func closeDatabaseConnection() {
+func CloseDatabaseConnection() {
 	session.Close()
 }

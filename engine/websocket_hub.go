@@ -2,49 +2,56 @@ package engine
 
 // hub maintains the set of active connections and broadcasts messages to the
 // connections.
-type connectionHub struct {
-	connections map[*connection]bool // Registered connections.
-	inbound     chan *message        // Inbound messages from the connections.
-	register    chan *connection     // Register requests from the connections.
-	unregister  chan *connection     // Unregister requests from connections.
+type ConnectionHub struct {
+	Connections map[*Connection]bool // Registered connections.
+	inbound     chan *Message        // Inbound messages from the connections.
+	register    chan *Connection     // Register requests from the connections.
+	unregister  chan *Connection     // Unregister requests from connections.
 }
 
-var hub = connectionHub{
-	connections: make(map[*connection]bool),
-	inbound:     make(chan *message),
-	register:    make(chan *connection),
-	unregister:  make(chan *connection),
+var hub = ConnectionHub{
+	Connections: make(map[*Connection]bool),
+	inbound:     make(chan *Message),
+	register:    make(chan *Connection),
+	unregister:  make(chan *Connection),
 }
 
-func (h *connectionHub) run() {
+func (h *ConnectionHub) run() {
 	for {
 		select {
 		case c := <-h.register:
-			h.connections[c] = true
-			users[c.id] = &user{connection: c, state: notAuthenticated}
-			// maybe we should also try to authenticate, if we want to use cookies or whatever
-		case c := <-h.unregister:
-			if _, ok := h.connections[c]; ok {
-				// run any other logic on disconnect we need here
-				logger.Notice("Connection [%s] disconnected", c.id)
+			h.Connections[c] = true
 
-				delete(h.connections, c)
+			logger.Info("New Connection [%s]", c.ID)
+			users[c.ID] = &User{Connection: c, State: NotAuthenticated}
+			// @todo FUTURE FEATURE we should also try to authenticate here based on cookie / json web token / session
+
+		case c := <-h.unregister:
+			if _, ok := h.Connections[c]; ok {
+				// @todo FUTURE FEATURE we need to remove the session from the DB,
+				// for now we just close out the connection and it is no longer authenticated
+
+				// run any other logic on disconnect we need here
+				logger.Notice("Connection [%s] disconnected", c.ID)
+
+				delete(h.Connections, c)
 				close(c.send)
 			}
 		case m := <-h.inbound:
-			interpret(m, users[m.connection.id])
+			interpret(m, users[m.Connection.ID])
 		}
 	}
 }
 
 // Send a message to a lot of connections
-func (h *connectionHub) Broadcast(msg []byte, targets []*connection) {
+func (h *ConnectionHub) Broadcast(msg string, targets []*Connection) {
+	m := []byte(msg)
 	for _, c := range targets {
-		c.send <- msg
+		c.send <- m
 	}
 }
 
 // Send a message to one connection
-func (h *connectionHub) Send(msg []byte, c *connection) {
-	c.send <- msg
+func (h *ConnectionHub) Send(msg string, c *Connection) {
+	c.send <- []byte(msg)
 }

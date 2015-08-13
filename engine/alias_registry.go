@@ -1,5 +1,5 @@
 package engine
 
-func registerCommandAliases() {
+func RegisterCommandAliases() {
 	// add aliases for commands
 }

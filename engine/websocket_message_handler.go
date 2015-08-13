@@ -6,33 +6,32 @@ import (
 	"strings"
 )
 
-type handlerInterface struct{}
+type HandlerInterface struct{}
 
 var (
-	handlers = &handlerInterface{}
+	handlers = &HandlerInterface{}
 	aliases  = make(map[string]string)
 )
 
-func handlerNotFoundError(u *user, args ...interface{}) {
-	hub.Send([]byte("State not valid for some reason."), u.connection)
+func handlerNotFoundError(u *User, args ...interface{}) {
+	hub.Send("State not valid for some reason.", u.Connection)
 }
 
 // Add an alias to the list
-func addAlias(alt string, cmd string) {
+func AddAlias(alt string, cmd string) {
 	aliases[alt] = cmd
 }
 
-
-func route(name string, u *user, args *json.RawMessage) {
+func routeToCommand(name string, u *User, args *json.RawMessage) {
 	var method string
 
 	// capitalize first letter of command
 	c := strings.ToUpper(name)
 
 	if alias, exists := aliases[c]; exists {
-		method = strings.Join([]string{"Command", stateString(u.state), "_", alias}, "")
+		method = strings.Join([]string{"Command", StateString(u.State), "_", alias}, "")
 	} else {
-		method = strings.Join([]string{"Command", stateString(u.state), "_", c}, "")
+		method = strings.Join([]string{"Command", StateString(u.State), "_", c}, "")
 	}
 
 	cmd := reflect.ValueOf(handlers).MethodByName(method)
@@ -44,13 +43,12 @@ func route(name string, u *user, args *json.RawMessage) {
 	}
 }
 
-
-func interpret(m *message, u *user) {
+func interpret(m *Message, u *User) {
 	// @todo we should log the received command
 	// @todo we should probably be able to attach a logger to the message handler
 
 	var obj map[string]*json.RawMessage
-	err := json.Unmarshal(m.payload, &obj)
+	err := json.Unmarshal(m.Payload, &obj)
 	if err != nil {
 		// invalid JSON format?
 		logger.Error("Invalid JSON formatting") // @todo errors
@@ -71,9 +69,9 @@ func interpret(m *message, u *user) {
 	err = json.Unmarshal(*command, &cmd)
 
 	if !argsExist {
-		logger.Warning("No args found in JSON payload for command: %s for connection %s; continuing", cmd, u.connection.id)
+		logger.Warning("No args found in JSON payload for command: %s for connection %s; continuing", cmd, u.Connection.ID)
 		args = &json.RawMessage{}
 	}
 
-	route(cmd, u, args)
+	routeToCommand(cmd, u, args)
 }

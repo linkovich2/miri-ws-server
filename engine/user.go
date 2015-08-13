@@ -1,25 +1,25 @@
 package engine
 
 const (
-	notAuthenticated = iota
-	authenticated
-	inGame
+	NotAuthenticated = iota
+	Authenticated
+	InGame
 )
 
-func stateString(s int) string {
+func StateString(s int) string {
 	switch s {
-	case notAuthenticated:
+	case NotAuthenticated:
 		return "NotAuthenticated"
-	case authenticated:
+	case Authenticated:
 		return "Authenticated"
 	default:
 		return ""
 	}
 }
 
-type user struct {
-	account    *modelUser
-	connection *connection
-	isAdmin    bool
-	state      int
+type User struct {
+	Account    *ModelUser
+	Connection *Connection
+	IsAdmin    bool
+	State      int
 }

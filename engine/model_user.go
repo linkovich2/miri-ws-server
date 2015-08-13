@@ -2,11 +2,12 @@ package engine
 
 import "golang.org/x/crypto/bcrypt"
 
-type modelUser struct {
-	email          string
-	hashedPassword string
+type ModelUser struct {
+	Email          string
+	HashedPassword string
+	IsAdmin        bool
 
-	// @todo: Future stuff
+	// @todo Future stuff
 	// LastLoginDate
 	// LastLoginIP
 	// CurrentLoginDate
@@ -16,23 +17,22 @@ type modelUser struct {
 	// CreatedAt
 }
 
-type modelSession struct {
-	sessionId string
-	userId    string
-}
+// @todo FUTURE FEATURE need a session model for DB storage
 
-func createUser(email, password string) error {
-	hashed, _ := hashPassword(password)
-	db.C("users").Insert(&modelUser{email: email, hashedPassword: string(hashed)})
+func CreateUser(email, password string) error {
+	// @todo make sure email is unique, make sure email is valid, make sure pass is at least 6 characters VALIDATION
+
+	hashed, _ := HashPassword(password)
+	db.C("users").Insert(&ModelUser{Email: email, HashedPassword: string(hashed), IsAdmin: false})
 
 	return nil
 }
 
-func hashPassword(pw string) ([]byte, error) {
+func HashPassword(pw string) ([]byte, error) {
 	return bcrypt.GenerateFromPassword([]byte(pw), 10)
 }
 
-func matchPassword(pw, hash string) bool {
+func MatchPassword(pw, hash string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(pw))
 	if err != nil {
 		return true

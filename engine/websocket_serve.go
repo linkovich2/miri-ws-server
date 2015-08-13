@@ -9,7 +9,7 @@ import (
 
 var addr = flag.String("addr", ":8080", "http service address")
 
-func startWebsocketServer() {
+func StartWebsocketServer() {
 	flag.Parse()
 	go hub.run()
 
@@ -25,8 +25,7 @@ func startWebsocketServer() {
 			return
 		}
 
-		c := &connection{send: make(chan []byte, 256), webSocket: ws, id: uniuri.New()}
-		logger.Info("New Connection [%s]", c.id)
+		c := &Connection{send: make(chan []byte, 256), webSocket: ws, ID: uniuri.New()}
 		hub.register <- c
 		go c.writePump()
 		c.readPump()

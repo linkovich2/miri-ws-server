@@ -1,17 +1,17 @@
 package engine
 
 const (
-	worldUpdateLoopTimer = 5
+	WorldUpdateLoopTimer = 5
 )
 
-type world struct {
-	name   string
-	realms map[string]realm
+type World struct {
+	Name   string
+	Realms map[string]Realm
 }
 
-func (w *world) update() {
-	for _, r := range w.realms {
-		r.update()
+func (w *World) Update() {
+	for _, r := range w.Realms {
+		r.Update()
 	}
 
 	// @todo for testing only, we want to also simulate player actions here

@@ -2,19 +2,33 @@ package engine
 
 import "encoding/json"
 
-type formLogin struct {
-	email    string
-	password string
+type FormLogin struct {
+	Email    string
+	Password string
 }
 
-func (h *handlerInterface) CommandNotAuthenticated_AUTHENTICATE(u *user, args *json.RawMessage) {
-	form := &formLogin{}
+func (h *HandlerInterface) CommandNotAuthenticated_AUTHENTICATE(u *User, args *json.RawMessage) {
+	form := &FormLogin{}
 	err := json.Unmarshal(*args, &form)
 
 	if err != nil {
-		// something is probably missing from the JSON
+		// @todo something is probably missing from the JSON
 		return
 	}
 
-	hub.Send([]byte("Trying to authenticate"), u.connection)
+	hub.Send(form.Email, u.Connection)
+	hub.Send("*****", u.Connection)
+}
+
+func (h *HandlerInterface) CommandNotAuthenticated_CREATEUSER(u *User, args *json.RawMessage) {
+	form := &FormLogin{}
+	err := json.Unmarshal(*args, &form)
+
+	if err != nil {
+		// @todo something is probably missing from the JSON
+		return
+	}
+
+	hub.Send(form.Email, u.Connection)
+	hub.Send("*****", u.Connection)
 }

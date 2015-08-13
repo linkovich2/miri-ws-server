@@ -1,38 +1,38 @@
 package engine
 
 const (
-	maxRoomsPerRealm = 512 // max number of rooms per realm
-	maxWeather       = 16  // max number of "storms" that can be "on" at any given time (per realm)
+	MaxRoomsPerRealm = 512 // max number of rooms per realm
+	MaxWeather       = 16  // max number of "storms" that can be "on" at any given time (per realm)
 )
 
 type (
-	realm struct {
-		id        int
-		name      string `json:"name"`
-		rooms     map[string]room
-		weathers  map[string]weather
-		timeCycle map[string]realmTime `json:"times"`
-		time      string
+	Realm struct {
+		ID        int
+		Name      string `json:"name"`
+		Rooms     map[string]Room
+		Weathers  map[string]Weather
+		TimeCycle map[string]RealmTime `json:"times"`
+		Time      string
 	}
 
-	realmTime struct {
-		name        string
-		min         int    // minute during hour this time will display
-		description string // the lighting, smells, etc.
+	RealmTime struct {
+		Name        string
+		Min         int    // minute during hour this time will display
+		Description string // the lighting, smells, etc.
 	}
 )
 
-func (r *realm) init() {
+func (r *Realm) Init() {
 	// @todo call FromJSON here, build the length of TimeCycle from JSON arr length
 	// build the rooms
 
-	r.rooms = make(map[string]room, maxRoomsPerRealm) // init Room map
-	r.weathers = make(map[string]weather, maxWeather) // init Weathers
+	r.Rooms = make(map[string]Room, MaxRoomsPerRealm) // init Room map
+	r.Weathers = make(map[string]Weather, MaxWeather) // init Weathers
 }
 
-func (r *realm) update() {
-	for _, r := range r.rooms {
-		r.update()
+func (r *Realm) Update() {
+	for _, r := range r.Rooms {
+		r.Update()
 	}
 
 	// also:

@@ -8,10 +8,10 @@ import (
 )
 
 const (
-	writeWait      = 10 * time.Second    // Time allowed to write a message to the peer.
-	pongWait       = 60 * time.Second    // Time allowed to read the next pong message from the peer.
-	pingPeriod     = (pongWait * 9) / 10 // Send pings to peer with this period. Must be less than pongWait.
-	maxMessageSize = 512                 // Maximum message size allowed from peer.
+	WriteWait      = 10 * time.Second    // Time allowed to write a message to the peer.
+	PongWait       = 60 * time.Second    // Time allowed to read the next pong message from the peer.
+	PingPeriod     = (PongWait * 9) / 10 // Send pings to peer with this period. Must be less than pongWait.
+	MaxMessageSize = 512                 // Maximum message size allowed from peer.
 )
 
 var upgrader = websocket.Upgrader{
@@ -22,6 +22,7 @@ var upgrader = websocket.Upgrader{
 	// from specific cross-origins
 	// We don't want users connecting from other locations with (potentially) malintent
 	CheckOrigin: func(r *http.Request) bool {
+		// @todo make this a little more strict
 		if strings.Contains(r.Header.Get("Origin"), "9000") {
 			return true
 		} else {
@@ -31,45 +32,45 @@ var upgrader = websocket.Upgrader{
 }
 
 // connection is an middleman between the websocket connection and the hub.
-type connection struct {
+type Connection struct {
 	webSocket *websocket.Conn // The websocket connection.
 	send      chan []byte     // Buffered channel of outbound messages.
-	id        string
+	ID        string
 }
 
-type message struct {
-	payload    []byte
-	connection *connection
+type Message struct {
+	Payload    []byte
+	Connection *Connection
 }
 
 // ReadPump pumps messages from the websocket connection to the hub.
-func (c *connection) readPump() {
+func (c *Connection) readPump() {
 	defer func() {
 		hub.unregister <- c
 		c.webSocket.Close()
 	}()
-	c.webSocket.SetReadLimit(maxMessageSize)
-	c.webSocket.SetReadDeadline(time.Now().Add(pongWait))
-	c.webSocket.SetPongHandler(func(string) error { c.webSocket.SetReadDeadline(time.Now().Add(pongWait)); return nil })
+	c.webSocket.SetReadLimit(MaxMessageSize)
+	c.webSocket.SetReadDeadline(time.Now().Add(PongWait))
+	c.webSocket.SetPongHandler(func(string) error { c.webSocket.SetReadDeadline(time.Now().Add(PongWait)); return nil })
 	for {
 		_, msg, err := c.webSocket.ReadMessage()
 
 		if err != nil {
 			break
 		}
-		hub.inbound <- &message{msg, c}
+		hub.inbound <- &Message{msg, c}
 	}
 }
 
 // Write writes a message with the given message type and payload.
-func (c *connection) write(mt int, payload []byte) error {
-	c.webSocket.SetWriteDeadline(time.Now().Add(writeWait))
+func (c *Connection) write(mt int, payload []byte) error {
+	c.webSocket.SetWriteDeadline(time.Now().Add(WriteWait))
 	return c.webSocket.WriteMessage(mt, payload)
 }
 
 // WritePump pumps messages from the hub to the websocket connection.
-func (c *connection) writePump() {
-	ticker := time.NewTicker(pingPeriod)
+func (c *Connection) writePump() {
+	ticker := time.NewTicker(PingPeriod)
 	defer func() {
 		ticker.Stop()
 		c.webSocket.Close()

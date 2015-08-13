@@ -1,45 +1,45 @@
 package engine
 
-type weather struct {
-	name string
-	rng  positionRange
-	tp   weatherType
+type Weather struct {
+	Name  string
+	Range PositionRange
+	Type  WeatherType
 
 	// needs some kind of timer, to help see when its going to stop, intesify or ebb
 }
 
-type weatherType struct {
-	name        string
-	description string
+type WeatherType struct {
+	Name        string
+	Description string
 
 	// @todo represent effects of weather on player character
 }
 
-func (w *weather) getIntensity(p *position) {
+func (w *Weather) getIntensity(p *Position) {
 	// @stub, returns weather intensity based on a position
 }
 
-func (w *weather) move(modifier string) {
+func (w *Weather) move(modifier string) {
 	// @stub, move the "storm"
 }
 
-func (w *weather) grow(modifier int) {
+func (w *Weather) grow(modifier int) {
 	// @stub, grow the "storm"
 }
 
-func (w *weather) shrink(modifier int) {
+func (w *Weather) shrink(modifier int) {
 	// @stub, shrink the "storm"
 }
 
-func (w *weather) roomIn(r *room) {
+func (w *Weather) roomIn(r *Room) {
 	// @stub check if this room is in this "storm"
 }
 
-func (w *weather) resolveConflict(conflictingWeather *weather) {
+func (w *Weather) resolveConflict(conflictingWeather *Weather) {
 	// @stub, in case of overlapping weather
 }
 
-func (w *weather) update() {
+func (w *Weather) update() {
 	// @stub, weather should decide things about itself
 }
 
