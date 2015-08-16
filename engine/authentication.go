@@ -16,7 +16,13 @@ func (h *HandlerInterface) CommandNotAuthenticated_AUTHENTICATE(u *User, args *j
 		return
 	}
 
-	// hub.Send(form.Email, u.Connection)
+	success, errors := Authenticate(form.Email, form.Password)
+	if success {
+		u.State = Authenticated
+		logger.Info("User logged in: %s", form.Email)
+	}
+
+	hub.Send(&MessageResponse{Errors: errors, Success: success, ResponseTo: "authenticate"}, u.Connection)
 }
 
 func (h *HandlerInterface) CommandNotAuthenticated_CREATEUSER(u *User, args *json.RawMessage) {

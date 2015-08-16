@@ -47,6 +47,17 @@ func CreateUser(email, password string) (errors []string) {
 	return errors
 }
 
+func Authenticate(email, password string) (success bool, errors []string) {
+	existing := ModelUser{}
+	err := db.C("users").Find(bson.M{"email": email}).One(&existing)
+
+	if err != nil { // checking for existing user
+		errors = append(errors, "Could not find user.")
+	}
+
+	return MatchPassword(password, existing.HashedPassword), errors
+}
+
 func HashPassword(pw string) ([]byte, error) {
 	return bcrypt.GenerateFromPassword([]byte(pw), 10)
 }
