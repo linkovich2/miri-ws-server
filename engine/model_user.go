@@ -51,8 +51,9 @@ func Authenticate(email, password string) (success bool, errors []string) {
 	existing := ModelUser{}
 	err := db.C("users").Find(bson.M{"email": email}).One(&existing)
 
-	if err != nil { // checking for existing user
+	if err != nil { // no existing user
 		errors = append(errors, "Invalid email or password.")
+		return false, errors
 	}
 
 	success = MatchPassword(password, existing.HashedPassword)
