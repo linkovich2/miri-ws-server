@@ -52,10 +52,16 @@ func Authenticate(email, password string) (success bool, errors []string) {
 	err := db.C("users").Find(bson.M{"email": email}).One(&existing)
 
 	if err != nil { // checking for existing user
-		errors = append(errors, "Could not find user.")
+		errors = append(errors, "Invalid email or password.")
 	}
 
-	return MatchPassword(password, existing.HashedPassword), errors
+	success = MatchPassword(password, existing.HashedPassword)
+
+	if err == nil && !success { // if user found but not matching password
+		errors = append(errors, "Invalid email or password.")
+	}
+
+	return success, errors
 }
 
 func HashPassword(pw string) ([]byte, error) {
