@@ -2,12 +2,29 @@ package engine
 
 import ()
 
-type character struct{}
+/*Types that should be contained inside a character*/
 
-type gender struct{}
+type character struct {
+}
 
-type race struct{}
+type gender struct {
+	Male   bool
+	Female bool
+}
 
-type aTraits struct{}
+type race struct {
+	SpaghettiMonster bool
+}
 
-type fTraits struct{}
+type aTraits struct {
+}
+
+type fTraits struct {
+}
+
+/*Functions, MapTo should correctly map each character to a specific type and return it in Json
+depending on what they picked, ie SpaghettiMonster -> Meatballs and sauce,
+or SpaghettiNoodle -> Floppy and wet*/
+
+func (c *character) MapTo() {
+}
