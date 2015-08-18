@@ -71,7 +71,7 @@ func HashPassword(pw string) ([]byte, error) {
 
 func MatchPassword(pw, hash string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(pw))
-	if err != nil {
+	if err == nil {
 		return true
 	}
 
