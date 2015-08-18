@@ -1,50 +1,48 @@
 package engine
 
-import ()
-
 type Weather struct {
-  Name string
-  Range PositionRange
-  Type WeatherType
+	Name  string
+	Range PositionRange
+	Type  WeatherType
 
-  // needs some kind of timer, to help see when its going to stop, intesify or ebb
+	// needs some kind of timer, to help see when its going to stop, intesify or ebb
 }
 
 type WeatherType struct {
-  Name string
-  Description string
+	Name        string
+	Description string
 
-  // @todo represent effects of weather on player character
+	// @todo represent effects of weather on player character
 }
 
-func (weather *Weather) GetIntensity(pos *Position) {
-  // @stub, returns weather intensity based on a position
+func (w *Weather) getIntensity(p *Position) {
+	// @stub, returns weather intensity based on a position
 }
 
-func (weather *Weather) Move(modifier string) {
-  // @stub, move the "storm"
+func (w *Weather) move(modifier string) {
+	// @stub, move the "storm"
 }
 
-func (weather *Weather) Grow(modifier int) {
-  // @stub, grow the "storm"
+func (w *Weather) grow(modifier int) {
+	// @stub, grow the "storm"
 }
 
-func (weather *Weather) Shrink(modifier int) {
-  // @stub, shrink the "storm"
+func (w *Weather) shrink(modifier int) {
+	// @stub, shrink the "storm"
 }
 
-func (weather *Weather) RoomIn(room *Room) {
-  // @stub check if this room is in this "storm"
+func (w *Weather) roomIn(r *Room) {
+	// @stub check if this room is in this "storm"
 }
 
-func (weather *Weather) ResolveConflict(conflictingWeather *Weather) {
-  // @stub, in case of overlapping weather
+func (w *Weather) resolveConflict(conflictingWeather *Weather) {
+	// @stub, in case of overlapping weather
 }
 
-func (weather *Weather) Update() {
-  // @stub, weather should decide things about itself
+func (w *Weather) update() {
+	// @stub, weather should decide things about itself
 }
 
-func GenerateWeather() {
-  // @stub, generate weather from a starting point
+func generateWeather() {
+	// @stub, generate weather from a starting point
 }

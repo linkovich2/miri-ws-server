@@ -5,6 +5,10 @@ import ()
 /*Types that should be contained inside a character*/
 
 type character struct {
+	genders map[*gender]bool
+	races   map[*race]bool
+	aTraits map[*aTrait]bool
+	fTraits map[*fTrait]bool
 }
 
 type gender struct {
@@ -16,15 +20,15 @@ type race struct {
 	SpaghettiMonster bool
 }
 
-type aTraits struct {
+type aTrait struct {
 }
 
-type fTraits struct {
+type fTrait struct {
 }
 
-/*Functions, MapTo should correctly map each character to a specific type and return it in Json
-depending on what they picked, ie SpaghettiMonster -> Meatballs and sauce,
-or SpaghettiNoodle -> Floppy and wet*/
+/*Functions, MapTo should correctly map each character to specific types,
+depending on what they picked. ie SpaghettiMonster -> Meatballs, or sauce,
+or SpaghettiNoodle -> Floppy, or wet*/
 
 func (c *character) MapTo() {
 }
