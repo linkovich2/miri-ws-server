@@ -1,7 +1,5 @@
 package engine
 
-import ()
-
 const (
 	MaxRoomsPerRealm = 512 // max number of rooms per realm
 	MaxWeather       = 16  // max number of "storms" that can be "on" at any given time (per realm)
