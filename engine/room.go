@@ -4,7 +4,7 @@ type Room struct {
 	ID          int
 	Name        string
 	Realm       string
-	Position    Position
+	Pos         Position
 	Active      bool
 	Description string
 	Connections []*Connection
