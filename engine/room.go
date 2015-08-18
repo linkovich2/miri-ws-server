@@ -6,7 +6,6 @@ type Room struct {
 	Realm       string
 	Pos         Position
 	Active      bool
-	Description string
 	Connections []*Connection
 }
 
