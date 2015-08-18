@@ -7,6 +7,7 @@ type Room struct {
 	Position    Position
 	Active      bool
 	Description string
+	Connections []*Connection
 }
 
 func (r *Room) Init() {
