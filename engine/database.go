@@ -24,3 +24,7 @@ func ConnectToDatabase(host string, database string) {
 func CloseDatabaseConnection() {
 	session.Close()
 }
+
+func GetDB() *mgo.Database {
+	return db
+}

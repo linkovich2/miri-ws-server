@@ -27,3 +27,7 @@ func LoadEnv() {
 	logger.Info("\nEnvironment\n-----------\nPort: %v\nDB Host: %s\nDB Name: %s\n",
 		env.Port, env.DBHost, env.DBName)
 }
+
+func GetEnv() Environment {
+	return env
+}
