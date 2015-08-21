@@ -22,4 +22,5 @@ type User struct {
 	Connection *Connection
 	IsAdmin    bool
 	State      int
+	Characters []Character
 }
