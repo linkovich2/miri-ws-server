@@ -1,16 +1,13 @@
 package engine
 
 import (
-	"flag"
 	"net/http"
+	"strconv"
 
 	"stablelib.com/v1/uniuri"
 )
 
-var addr = flag.String("addr", ":8080", "http service address")
-
-func StartWebsocketServer() {
-	flag.Parse()
+func StartWebsocketServer(port int) {
 	go hub.run()
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
@@ -31,5 +28,6 @@ func StartWebsocketServer() {
 		c.readPump()
 	})
 
-	go http.ListenAndServe(*addr, nil)
+	addr := ":" + strconv.Itoa(port)
+	go http.ListenAndServe(addr, nil)
 }

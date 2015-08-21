@@ -18,20 +18,17 @@ func Start() {
 	dice.SeedRandom()              // seed rand for dice
 	filters.Init()                 // init filter libs (RP filter, profanity filter, language filter, etc)
 	users = make(map[string]*User) // init global users map
+	LoadEnv()
 
-	ConnectToDatabase("localhost:27017", "miri") //@temp, replace with env vars
+	ConnectToDatabase(env.DBHost, env.DBName)
 	defer CloseDatabaseConnection()
 
-	// auth.CreateUser([]byte("jonathon.harrell@yahoo.com"), []byte("Ex@mple1"))
-
-	StartWebsocketServer()
+	StartWebsocketServer(env.Port)
 	RegisterCommandAliases()
 
-	// load in the world, rooms, etc
-	miri = &World{"Miri", make(map[string]Realm)}
+	miri = &World{"Miri", make(map[string]Realm)} // load in the world, rooms, etc
 
-	// start the world update loop
-	go util.RunEvery(WorldUpdateLoopTimer*time.Second, miri.Update)
+	go util.RunEvery(WorldUpdateLoopTimer*time.Second, miri.Update) // start the world update loop
 
 	var input string
 	fmt.Scanln(&input) // we'll probably replace this for non-development environments with something that outputs to a file
