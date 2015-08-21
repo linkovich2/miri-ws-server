@@ -1,34 +1,28 @@
 package engine
 
-import ()
+import (
+	"encoding/json"
+	"io/ioutil"
+	"log"
+)
 
-/*character should be something every connection has?*/
-type character struct {
-	genders map[*gender]bool
-	races   map[*race]bool
-	aTraits map[*aTrait]bool
-	fTraits map[*fTrait]bool
-}
+/*character should be something every User has*/
+type (
+	Character struct {
+		/*Types that should be contained inside a character*/
+		Race string
+	}
+)
 
-/*Types that should be contained inside a character*/
-type gender struct {
-	Male   bool
-	Female bool
-}
-
-type race struct {
-	SpaghettiMonster bool
-}
-
-type aTrait struct {
-}
-
-type fTrait struct {
-}
-
-/*Methods, MapTo should correctly map each character to specific types,
-depending on what they picked. ie SpaghettiMonster -> Meatballs, or sauce,
-or SpaghettiNoodle -> Floppy, or wet*/
-
-func (c *character) MapTo() {
+func (c *Character) CommandAuthenticated_CHARSEL() {
+	// Check the db for saved characters first!
+	var ch []Character
+	races, err := ioutil.ReadFile("races.json")
+	if err != nil {
+		log.Print("error: %v", err)
+	}
+	er := json.Unmarshal(races, ch)
+	if er != nil {
+		log.Print("error: %v", er)
+	}
 }
