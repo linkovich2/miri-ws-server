@@ -22,8 +22,12 @@ func (h *HandlerInterface) CommandNotAuthenticated_AUTHENTICATE(u *User, args *j
 
 	success, errors := Authenticate(form.Email, form.Password, u)
 
-	user := &AuthenticateResponse{IsAdmin: u.IsAdmin}
-	hub.Send(&MessageResponse{Errors: errors, Success: success, ResponseTo: "authenticate", Data: user}, u.Connection)
+	res := &AuthenticateResponse{}
+	if success {
+		res.IsAdmin = u.Account.IsAdmin
+	}
+
+	hub.Send(&MessageResponse{Errors: errors, Success: success, ResponseTo: "authenticate", Data: res}, u.Connection)
 }
 
 func (h *HandlerInterface) CommandNotAuthenticated_CREATEUSER(u *User, args *json.RawMessage) {
@@ -38,6 +42,10 @@ func (h *HandlerInterface) CommandNotAuthenticated_CREATEUSER(u *User, args *jso
 	errors := CreateUser(form.Email, form.Password, u)
 	success := len(errors) <= 0
 
-	user := &AuthenticateResponse{IsAdmin: u.IsAdmin}
-	hub.Send(&MessageResponse{Errors: errors, Success: success, ResponseTo: "createuser", Data: user}, u.Connection)
+	res := &AuthenticateResponse{}
+	if success {
+		res.IsAdmin = u.Account.IsAdmin
+	}
+
+	hub.Send(&MessageResponse{Errors: errors, Success: success, ResponseTo: "createuser", Data: res}, u.Connection)
 }

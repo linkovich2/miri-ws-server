@@ -47,8 +47,7 @@ func CreateUser(email, password string, u *User) (errors []string) {
 
 		u.State = Authenticated
 		u.Account = user
-		u.IsAdmin = false
-		logger.Info("New User: %s", email)
+		logger.Info("New User Created: %s", email)
 	}
 
 	return errors
@@ -68,8 +67,8 @@ func Authenticate(email, password string, u *User) (success bool, errors []strin
 	if err == nil && !success { // if user found but not matching password
 		errors = append(errors, "Invalid email or password.")
 	} else {
+		u.State = Authenticated
 		u.Account = &existing
-		u.IsAdmin = existing.IsAdmin
 		logger.Info("User logged in: %s", email)
 	}
 
