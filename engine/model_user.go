@@ -7,7 +7,7 @@ import (
 )
 
 type ModelUser struct {
-	ID             bson.ObjectId `bson:"_id"`
+	ID             bson.ObjectId `bson:"_id,omitempty"`
 	Email          string
 	HashedPassword string
 	IsAdmin        bool

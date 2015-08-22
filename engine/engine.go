@@ -23,6 +23,8 @@ func Start() {
 	ConnectToDatabase(env.DBHost, env.DBName)
 	defer CloseDatabaseConnection()
 
+	Bootstrap()
+
 	StartWebsocketServer(env.Port)
 	RegisterCommandAliases()
 
