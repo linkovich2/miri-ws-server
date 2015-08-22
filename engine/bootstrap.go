@@ -7,7 +7,7 @@ func Bootstrap() {
 }
 
 func BootstrapSuperAdmin() {
-	errors := CreateUser("superadmin@minimiri.com", "superadmin")
+	errors := CreateUser("superadmin@minimiri.com", "superadmin", &User{})
 	if len(errors) > 0 {
 		logger.Info("Admin already existed.")
 		return
