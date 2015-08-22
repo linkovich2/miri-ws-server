@@ -7,6 +7,7 @@ import (
 )
 
 type ModelUser struct {
+	ID             bson.ObjectId `bson:"_id,omitempty"`
 	Email          string
 	HashedPassword string
 	IsAdmin        bool
@@ -24,7 +25,7 @@ type ModelUser struct {
 
 // @todo FUTURE FEATURE need a session model for DB storage
 
-func CreateUser(email, password string) (errors []string) {
+func CreateUser(email, password string, u *User) (errors []string) {
 	existing := ModelUser{}
 	err := db.C("users").Find(bson.M{"email": email}).One(&existing)
 
@@ -42,13 +43,19 @@ func CreateUser(email, password string) (errors []string) {
 
 	if len(errors) <= 0 {
 		hashed, _ := HashPassword(password)
-		db.C("users").Insert(&ModelUser{Email: email, HashedPassword: string(hashed), IsAdmin: false})
+		user := &ModelUser{Email: email, HashedPassword: string(hashed), IsAdmin: false}
+		db.C("users").Insert(user)
+
+		u.State = Authenticated
+		u.Account = user
+		u.IsAdmin = false
+		logger.Info("New User: %s", email)
 	}
 
 	return errors
 }
 
-func Authenticate(email, password string) (success bool, errors []string) {
+func Authenticate(email, password string, u *User) (success bool, errors []string) {
 	existing := ModelUser{}
 	err := db.C("users").Find(bson.M{"email": email}).One(&existing)
 
@@ -61,6 +68,10 @@ func Authenticate(email, password string) (success bool, errors []string) {
 
 	if err == nil && !success { // if user found but not matching password
 		errors = append(errors, "Invalid email or password.")
+	} else {
+		u.Account = &existing
+		u.IsAdmin = existing.IsAdmin
+		logger.Info("User logged in: %s", email)
 	}
 
 	return success, errors

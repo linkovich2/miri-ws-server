@@ -7,6 +7,10 @@ type FormLogin struct {
 	Password string
 }
 
+type AuthenticateResponse struct {
+	IsAdmin bool `json:"is_admin"`
+}
+
 func (h *HandlerInterface) CommandNotAuthenticated_AUTHENTICATE(u *User, args *json.RawMessage) {
 	form := &FormLogin{}
 	err := json.Unmarshal(*args, &form)
@@ -16,13 +20,10 @@ func (h *HandlerInterface) CommandNotAuthenticated_AUTHENTICATE(u *User, args *j
 		return
 	}
 
-	success, errors := Authenticate(form.Email, form.Password)
-	if success {
-		u.State = Authenticated
-		logger.Info("User logged in: %s", form.Email)
-	}
+	success, errors := Authenticate(form.Email, form.Password, u)
 
-	hub.Send(&MessageResponse{Errors: errors, Success: success, ResponseTo: "authenticate"}, u.Connection)
+	user := &AuthenticateResponse{IsAdmin: u.IsAdmin}
+	hub.Send(&MessageResponse{Errors: errors, Success: success, ResponseTo: "authenticate", Data: user}, u.Connection)
 }
 
 func (h *HandlerInterface) CommandNotAuthenticated_CREATEUSER(u *User, args *json.RawMessage) {
@@ -34,12 +35,9 @@ func (h *HandlerInterface) CommandNotAuthenticated_CREATEUSER(u *User, args *jso
 		return
 	}
 
-	errors := CreateUser(form.Email, form.Password)
+	errors := CreateUser(form.Email, form.Password, u)
 	success := len(errors) <= 0
-	if success {
-		u.State = Authenticated
-		logger.Info("New User: %s", form.Email)
-	}
 
-	hub.Send(&MessageResponse{Errors: errors, Success: success, ResponseTo: "createuser"}, u.Connection)
+	user := &AuthenticateResponse{IsAdmin: u.IsAdmin}
+	hub.Send(&MessageResponse{Errors: errors, Success: success, ResponseTo: "createuser", Data: user}, u.Connection)
 }

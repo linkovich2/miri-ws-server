@@ -13,10 +13,11 @@ type (
 	}
 
 	MessageResponse struct {
-		ResponseTo string   `json:"response_to"`
-		Errors     []string `json:"errors"`
-		Success    bool     `json:"success"`
-		Message    string   `json:"message"` // @todo this should probably be another struct with specific areas to deliver messages to in the UI
+		ResponseTo string      `json:"response_to"`
+		Errors     []string    `json:"errors"`
+		Success    bool        `json:"success"`
+		Message    string      `json:"message"` // @todo this should probably be another struct with specific areas to deliver messages to in the UI
+		Data       interface{} `json:"data"`
 	}
 )
 
