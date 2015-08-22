@@ -20,7 +20,6 @@ func StateString(s int) string {
 type User struct {
 	Account    *ModelUser
 	Connection *Connection
-	IsAdmin    bool
 	State      int
 	Characters []Character
 }
