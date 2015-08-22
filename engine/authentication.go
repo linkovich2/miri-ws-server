@@ -38,5 +38,6 @@ func (h *HandlerInterface) CommandNotAuthenticated_CREATEUSER(u *User, args *jso
 	errors := CreateUser(form.Email, form.Password, u)
 	success := len(errors) <= 0
 
-	hub.Send(&MessageResponse{Errors: errors, Success: success, ResponseTo: "createuser"}, u.Connection)
+	user := &AuthenticateResponse{IsAdmin: u.IsAdmin}
+	hub.Send(&MessageResponse{Errors: errors, Success: success, ResponseTo: "createuser", Data: user}, u.Connection)
 }
