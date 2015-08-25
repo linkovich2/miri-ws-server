@@ -2,7 +2,6 @@ package engine
 
 import (
 	"encoding/json"
-	"gopkg.in/mgo.v2"
 	"io/ioutil"
 	"log"
 )
@@ -17,9 +16,10 @@ type (
 	Character struct {
 		/*Types that should be contained inside a character*/
 		CharacterName string
-		Race          *Race
+		Race          []Race
 	}
 	Race struct {
+		RaceName    string
 		Description string
 	}
 )
@@ -27,7 +27,7 @@ type (
 func (c *Character) Delete() {
 }
 
-func (c *Character) CreateCharacter() []Character {
+func (c *Character) CharacterList() []Character {
 	var ch []Character
 	races, err := ioutil.ReadFile("races.json")
 	if err != nil {
@@ -41,10 +41,8 @@ func (c *Character) CreateCharacter() []Character {
 	return nil
 }
 
-func (h *HandlerInterface) CommandAuthenticated_CHARSEL(u *User) {
+func (h *HandlerInterface) CommandAuthenticated_CHARSEL(u *User, msg *json.RawMessage) {
 	// Check the db for saved characters first!
-	var Finduser mgo.Collection
-	q := Finduser.FindId(u.Account)
-	log.Print(q)
+	logger.Info("CommandAuthenticated_CHARSEL is called")
 	// Once we're done change state to InGame? Or return to character select?
 }
