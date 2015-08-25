@@ -17,7 +17,7 @@ type (
 	Character struct {
 		/*Types that should be contained inside a character*/
 		CharacterName string
-		Race          []Race
+		Race          Race
 	}
 	Race struct {
 		RaceName    string
@@ -30,6 +30,7 @@ func (c *Character) Delete() {
 }
 
 func (c *Character) CharacterList(u *User) []Character {
+
 	var ch Character
 	races, err := ioutil.ReadFile("races.json")
 	if err != nil {
@@ -44,7 +45,14 @@ func (c *Character) CharacterList(u *User) []Character {
 }
 
 func (h *HandlerInterface) CommandAuthenticated_CHARLIST(u *User, msg *json.RawMessage) {
-	// Check the db for saved characters first!
-	log.Print("CommandAuthenticated_CHARLIST is called", db.C("users").Find(bson.M{"email": u.Account.Email}))
-	// Once we're done change state to InGame? Or return to character select?
+	// Checking Database for saved characters
+	var ch Character
+	existing := ModelUser{}
+	err := db.C("users").Find(bson.M{"email": u.Account.Characters}).One(&existing)
+	if err == nil {
+		// Send a Race list here!
+	} else {
+		// Send list of characters
+		ch.CharacterList(u)
+	}
 }
