@@ -2,6 +2,7 @@ package engine
 
 import (
 	"encoding/json"
+	"gopkg.in/mgo.v2/bson"
 	"io/ioutil"
 	"log"
 )
@@ -20,6 +21,7 @@ type (
 	}
 	Race struct {
 		RaceName    string
+		Gender      string
 		Description string
 	}
 )
@@ -27,22 +29,22 @@ type (
 func (c *Character) Delete() {
 }
 
-func (c *Character) CharacterList() []Character {
-	var ch []Character
+func (c *Character) CharacterList(u *User) []Character {
+	var ch Character
 	races, err := ioutil.ReadFile("races.json")
 	if err != nil {
 		log.Print("error: %v", err)
 	}
-	er := json.Unmarshal(races, &ch)
+	er := json.Unmarshal(races, &ch.Race)
 	if er != nil {
 		log.Print("error: %v", er)
 	}
-	log.Print(ch[1].Race)
+	log.Print(ch.Race)
 	return nil
 }
 
-func (h *HandlerInterface) CommandAuthenticated_CHARSEL(u *User, msg *json.RawMessage) {
+func (h *HandlerInterface) CommandAuthenticated_CHARLIST(u *User, msg *json.RawMessage) {
 	// Check the db for saved characters first!
-	logger.Info("CommandAuthenticated_CHARSEL is called")
+	log.Print("CommandAuthenticated_CHARLIST is called", db.C("users").Find(bson.M{"email": u.Account.Email}))
 	// Once we're done change state to InGame? Or return to character select?
 }
