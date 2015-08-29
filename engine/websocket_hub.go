@@ -68,3 +68,14 @@ func (h *ConnectionHub) Send(m *MessageResponse, c *Connection) {
 	msg, _ := json.Marshal(m)
 	c.send <- msg
 }
+
+func (h *ConnectionHub) BasicSend(responseTo string, data interface{}, c *Connection) {
+	res := &MessageResponse{
+		Errors:     nil,
+		Success:    true,
+		ResponseTo: responseTo,
+		Data:       data,
+	}
+
+	h.Send(res, c)
+}

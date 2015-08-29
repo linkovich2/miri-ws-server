@@ -4,16 +4,49 @@ import (
 	"encoding/json"
 )
 
-type Character struct {
-}
+const (
+	CharCreate_Start = iota
+	CharCreate_Gender
+	CharCreate_Aesthetic
+	CharCreate_Functional
+	CharCreate_Background
+	CharCreate_Name
+)
 
-func (h *HandlerInterface) CommandAuthenticated_CHARLIST(u *User, args *json.RawMessage) {
-	res := &MessageResponse{
-		Errors:     nil,
-		Success:    true,
-		ResponseTo: "charlist",
-		Data:       u.Account.Characters,
+type (
+	Character struct {
+		Race   string
+		Gender string
+		// AestheticTraits []AestheticTrait
+		// FunctionalTraits []FunctionalTrait
+		// Background string
+		// Name string
 	}
 
-	hub.Send(res, u.Connection)
+	CharacterForm struct {
+		Character Character
+		Step      int
+	}
+)
+
+var activeCharacterForms = make(map[*User]*CharacterForm)
+
+func (h *HandlerInterface) CommandAuthenticated_CHARLIST(u *User, args *json.RawMessage) {
+	hub.BasicSend("charlist", u.Account.Characters, u.Connection)
+}
+
+func (h *HandlerInterface) CommandAuthenticated_CHARCREATE(u *User, args *json.RawMessage) {
+	if form, exists := activeCharacterForms[u]; exists {
+		// check for current step and handle accordingly
+		switch form.Step {
+
+		}
+	} else {
+		activeCharacterForms[u] = &CharacterForm{Step: CharCreate_Start}
+		hub.BasicSend("charcreate", races, u.Connection)
+	}
+}
+
+func (h *HandlerInterface) CommandAuthenticated_CHARCREATE_STEPBACK(u *User, args *json.RawMessage) {
+	// @todo
 }
