@@ -21,4 +21,5 @@ type User struct {
 	Account    *ModelUser
 	Connection *Connection
 	State      int
+	Character  *Character
 }
