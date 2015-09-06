@@ -11,7 +11,7 @@ type ModelUser struct {
 	Email          string
 	HashedPassword string
 	IsAdmin        bool
-	Characters     [3]Character
+	Characters     [3]*Character
 
 	// @todo Future stuff
 	// LastLoginDate

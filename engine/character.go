@@ -15,8 +15,8 @@ const (
 
 type (
 	Character struct {
-		Race   string
-		Gender string
+		Race   string `json:"race"`
+		Gender string `json:"gender"`
 		// AestheticTraits []AestheticTrait
 		// FunctionalTraits []FunctionalTrait
 		// Background string

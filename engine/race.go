@@ -5,9 +5,10 @@ import (
 )
 
 type Race struct {
-	Name        string
-	Description string
-	ID          string
+	Name            string `json:"name"`
+	Description     string `json:"description"`
+	LongDescription string `json:"long_description"`
+	ID              string `json:"id, omitempty"`
 }
 
 var races []Race

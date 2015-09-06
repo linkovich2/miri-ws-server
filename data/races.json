@@ -2,11 +2,19 @@
   {
     "name":"Human",
     "description":"Blah blah blah",
-    "id":"HUMAN"
+    "id":"HUMAN",
+    "long_description":"<p>More stuff</p>"
   },
   {
     "name":"Elf",
     "description":"Blah blah balhakfgkamfdgkm",
-    "id":"ELF"
+    "id":"ELF",
+    "long_description": "<p>A lot more about elves. We can put <strong>HTML</strong> in here.</p>"
+  },
+  {
+    "name":"Dwarf",
+    "description":"Blah blah balhakfgkamfdgkm",
+    "id":"DWARF",
+    "long_description": "<p>A lot more about dwarves mother fuckers. We can put <strong>HTML</strong> in here.</p>"
   }
 ]
