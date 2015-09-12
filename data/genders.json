@@ -6,7 +6,7 @@
   },
   {
     "name":"Female",
-    "disallowed_races": ["DWARF"],
+    "disallowed_races": [],
     "id": "F"
   }
 ]
