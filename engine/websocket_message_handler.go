@@ -23,6 +23,7 @@ func AddAlias(alt string, cmd string) {
 }
 
 func routeToCommand(name string, u *User, args *json.RawMessage) {
+	LogNewLine()
 	logger.Info("Connection [%s]: Processing %s command...", u.Connection.ID, name)
 
 	var method string
