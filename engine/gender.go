@@ -6,8 +6,13 @@ import (
 
 type Gender struct {
 	Name            string   `json:"name"`
-	ID              string   `json:"id, omitempty"`
+	ID              string   `json:"id"`
 	DisallowedRaces []string `json:"disallowed_races"`
+}
+
+type GenderShort struct {
+	Name string `json:"name"`
+	ID   string `json:"id"`
 }
 
 var genders []Gender

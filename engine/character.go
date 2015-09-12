@@ -96,8 +96,8 @@ func (f *CharacterForm) validateRace(c *Character) bool {
 	return valid
 }
 
-func (f *CharacterForm) getAvailableGenders() []Gender {
-	res := []Gender{}
+func (f *CharacterForm) getAvailableGenders() []GenderShort {
+	res := []GenderShort{}
 
 	for _, g := range genders {
 		remove := false
@@ -109,7 +109,7 @@ func (f *CharacterForm) getAvailableGenders() []Gender {
 		}
 
 		if !remove {
-			res = append(res, g)
+			res = append(res, GenderShort{g.Name, g.ID})
 		}
 	}
 
