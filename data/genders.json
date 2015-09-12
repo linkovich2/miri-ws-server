@@ -1,0 +1,12 @@
+[
+  {
+    "name":"Male",
+    "disallowed_races": [],
+    "id": "M"
+  },
+  {
+    "name":"Female",
+    "disallowed_races": [],
+    "id": "F"
+  }
+]

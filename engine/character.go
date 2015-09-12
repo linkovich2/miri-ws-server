@@ -37,16 +37,30 @@ func (h *HandlerInterface) CommandAuthenticated_CHARLIST(u *User, args *json.Raw
 
 func (h *HandlerInterface) CommandAuthenticated_CHARCREATE(u *User, args *json.RawMessage) {
 	if form, exists := activeCharacterForms[u]; exists {
+		// logger.Info("Connection [%s] active form on CHARCREATE STEP %v", u.Connection.ID, form.Step) // @temp
+
 		// check for current step and handle accordingly
 		switch form.Step {
-
+		case CharCreate_Start:
+			form.Step = CharCreate_Gender
+			hub.BasicSend("charcreatestepup", nil, u.Connection)
+			hub.BasicSend("charcreategenders", genders, u.Connection)
 		}
+
 	} else {
 		activeCharacterForms[u] = &CharacterForm{Step: CharCreate_Start}
-		hub.BasicSend("charcreate", races, u.Connection)
+		hub.BasicSend("charcreateraces", races, u.Connection)
 	}
 }
 
-func (h *HandlerInterface) CommandAuthenticated_CHARCREATE_STEPBACK(u *User, args *json.RawMessage) {
+func (h *HandlerInterface) CommandAuthenticated_CHARCREATESTEPBACK(u *User, args *json.RawMessage) {
 	// @todo
+}
+
+func (h *HandlerInterface) CommandAuthenticated_NEWCHAR(u *User, args *json.RawMessage) {
+	if _, exists := activeCharacterForms[u]; exists {
+		delete(activeCharacterForms, u)
+	} else {
+		logger.Error(" -- tried to cancel CHARCREATE form that didn't exist, ignoring.")
+	}
 }

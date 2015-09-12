@@ -14,7 +14,7 @@ var (
 )
 
 func handlerNotFoundError(u *User, args ...interface{}) {
-	hub.Send(&MessageResponse{Errors: []string{"State not valid for some reason."}}, u.Connection)
+	hub.Send(&MessageResponse{Errors: []string{"Either wrong state or command does not exist."}}, u.Connection)
 }
 
 // Add an alias to the list
@@ -23,6 +23,8 @@ func AddAlias(alt string, cmd string) {
 }
 
 func routeToCommand(name string, u *User, args *json.RawMessage) {
+	logger.Info("Connection [%s]: Processing %s command...", u.Connection.ID, name)
+
 	var method string
 
 	// capitalize first letter of command
@@ -39,6 +41,7 @@ func routeToCommand(name string, u *User, args *json.RawMessage) {
 	if cmd.IsValid() {
 		cmd.Call([]reflect.Value{reflect.ValueOf(u), reflect.ValueOf(args)})
 	} else {
+		logger.Error(" -- '%s' command wasn't found for the given state!", name)
 		handlerNotFoundError(u, args)
 	}
 }
@@ -69,7 +72,6 @@ func interpret(m *Message, u *User) {
 	err = json.Unmarshal(*command, &cmd)
 
 	if !argsExist {
-		logger.Warning("No args found in JSON payload for command: %s for connection %s; continuing", cmd, u.Connection.ID)
 		args = &json.RawMessage{}
 	}
 
