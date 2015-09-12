@@ -42,9 +42,27 @@ func (h *HandlerInterface) CommandAuthenticated_CHARCREATE(u *User, args *json.R
 		// check for current step and handle accordingly
 		switch form.Step {
 		case CharCreate_Start:
-			form.Step = CharCreate_Gender
-			hub.BasicSend("charcreatestepup", nil, u.Connection)
-			hub.BasicSend("charcreategenders", genders, u.Connection)
+			c := &Character{}
+			_ = json.Unmarshal(*args, c)
+
+			if form.validateRace(c) {
+				// validate then send back genders
+				form.Step = CharCreate_Gender
+				form.Character.Race = c.Race
+				hub.BasicSend("charcreatestepup", nil, u.Connection)
+				hub.BasicSend("charcreategenders", form.getAvailableGenders(), u.Connection)
+			}
+
+		case CharCreate_Gender:
+			hub.BasicSend("charcreateaesthetic", nil, u.Connection)
+		case CharCreate_Aesthetic:
+			hub.BasicSend("charcreatefunctional", nil, u.Connection)
+		case CharCreate_Functional:
+			hub.BasicSend("charcreatebackgrounds", nil, u.Connection)
+		case CharCreate_Background:
+			hub.BasicSend("charcreatename", nil, u.Connection)
+		case CharCreate_Name:
+			// DONE! yay! save the character if everything is valid
 		}
 
 	} else {
@@ -63,4 +81,37 @@ func (h *HandlerInterface) CommandAuthenticated_NEWCHAR(u *User, args *json.RawM
 	} else {
 		logger.Error(" -- tried to cancel CHARCREATE form that didn't exist, ignoring.")
 	}
+}
+
+func (f *CharacterForm) validateRace(c *Character) bool {
+	valid := false
+
+	for _, r := range races {
+		if r.ID == c.Race {
+			valid = true
+			break
+		}
+	}
+
+	return valid
+}
+
+func (f *CharacterForm) getAvailableGenders() []Gender {
+	res := []Gender{}
+
+	for _, g := range genders {
+		remove := false
+
+		for _, exclude := range g.DisallowedRaces {
+			if exclude == f.Character.Race {
+				remove = true
+			}
+		}
+
+		if !remove {
+			res = append(res, g)
+		}
+	}
+
+	return res
 }
