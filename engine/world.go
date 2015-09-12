@@ -16,6 +16,4 @@ func (w *World) Update() {
 
 	// @todo for testing only, we want to also simulate player actions here
 	// to see what the results might be coming back to a client
-
-	logger.Notice("World update ran")
 }
