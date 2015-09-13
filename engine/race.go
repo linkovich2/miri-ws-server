@@ -11,8 +11,12 @@ type Race struct {
 	ID              string `json:"id, omitempty"`
 }
 
-var races []Race
+var races = make(map[string]Race)
 
 func InitRaces() {
-	loader.Grab("races.json", &races)
+	arr := []Race{}
+	loader.Grab("races.json", &arr)
+	for _, val := range arr {
+		races[val.ID] = val
+	}
 }

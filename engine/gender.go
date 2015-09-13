@@ -15,8 +15,12 @@ type GenderShort struct {
 	ID   string `json:"id"`
 }
 
-var genders []Gender
+var genders = make(map[string]Gender)
 
 func InitGenders() {
-	loader.Grab("genders.json", &genders)
+	arr := []Gender{}
+	loader.Grab("genders.json", &arr)
+	for _, val := range arr {
+		genders[val.ID] = val
+	}
 }
