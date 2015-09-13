@@ -67,33 +67,51 @@ func (h *HandlerInterface) CommandAuthenticated_CHARCREATE(u *User, args *json.R
 
 	} else {
 		activeCharacterForms[u] = &CharacterForm{Step: CharCreate_Start}
-		hub.BasicSend("charcreateraces", races, u.Connection)
+		hub.BasicSend("charcreateraces", activeCharacterForms[u].getAvailableRaces(), u.Connection)
 	}
 }
 
 func (h *HandlerInterface) CommandAuthenticated_CHARCREATESTEPBACK(u *User, args *json.RawMessage) {
-	// @todo
+	if form, exists := activeCharacterForms[u]; exists {
+		if form.Step >= 1 {
+			form.stepBack()
+			hub.BasicSend("charcreatestepback", nil, u.Connection)
+		} else {
+			logger.Warning(" -- received step back on step 0 CHARCREATE, weird.")
+		}
+	} else {
+		logger.Warning(" -- tried to step back CHARCREATE form that didn't exist, ignoring.")
+	}
 }
 
 func (h *HandlerInterface) CommandAuthenticated_NEWCHAR(u *User, args *json.RawMessage) {
 	if _, exists := activeCharacterForms[u]; exists {
 		delete(activeCharacterForms, u)
 	} else {
-		logger.Error(" -- tried to cancel CHARCREATE form that didn't exist, ignoring.")
+		logger.Warning(" -- tried to cancel CHARCREATE form that didn't exist, ignoring.")
 	}
 }
 
-func (f *CharacterForm) validateRace(c *Character) bool {
-	valid := false
+func (f *CharacterForm) stepBack() {
+	f.Step = f.Step - 1
+}
 
-	for _, r := range races {
-		if r.ID == c.Race {
-			valid = true
-			break
-		}
+func (f *CharacterForm) validateRace(c *Character) bool {
+	if _, exists := races[c.Race]; exists {
+		return true
 	}
 
-	return valid
+	return false
+}
+
+func (f *CharacterForm) getAvailableRaces() []Race {
+	res := []Race{}
+
+	for _, r := range races {
+		res = append([]Race{r}, res...)
+	}
+
+	return res
 }
 
 func (f *CharacterForm) getAvailableGenders() []GenderShort {
