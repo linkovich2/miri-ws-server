@@ -4,7 +4,5 @@
 Make sure you have MongoDB installed and running, then just `go build && ./miri-ws-server[.exe]`
 
 ### @todo
-- Authentication
-- Environment variables
-- Consistent model structure
-- Deal with byte arrays over strings where possible
+- CC: step back
+- CC: traits, backgrounds, name, save
