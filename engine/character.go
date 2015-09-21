@@ -108,7 +108,11 @@ func (f *CharacterForm) getAvailableRaces() []Race {
 	res := []Race{}
 
 	for _, r := range races {
-		res = append([]Race{r}, res...)
+		if r.ID == "HUMAN" { // explicitly put human first
+			res = append([]Race{r}, res...)
+		} else {
+			res = append(res, r)
+		}
 	}
 
 	return res
