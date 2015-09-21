@@ -94,6 +94,23 @@ func (h *HandlerInterface) CommandAuthenticated_NEWCHAR(u *User, args *json.RawM
 
 func (f *CharacterForm) stepBack() {
 	f.Step = f.Step - 1
+	switch f.Step {
+	case CharCreate_Start:
+		f.Character = Character{}
+	case CharCreate_Gender:
+		f.Character = Character{
+			Race: f.Character.Race,
+		}
+	case CharCreate_Aesthetic:
+		f.Character = Character{
+			Race: f.Character.Race,
+			Gender: f.Character.Gender,
+		}
+	case CharCreate_Functional:
+		// @todo character has race, gender, and aesthetic traits
+	case CharCreate_Background:
+		// @todo character has race, gender, aesthetic and functional traits
+	}
 }
 
 func (f *CharacterForm) validateRace(c *Character) bool {
