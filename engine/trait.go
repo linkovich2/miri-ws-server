@@ -55,3 +55,16 @@ func InitTraitCategories() {
 		traitCategories[val.ID] = val
 	}
 }
+
+func (a *AestheticTrait) Shorten() (short AestheticTraitShort) {
+	short = AestheticTraitShort{
+		Name:        a.Name,
+		ID:          a.ID,
+		Description: a.Description,
+		Image:       a.Image,
+		Category:    a.Category,
+		Unique:      a.Unique,
+	}
+
+	return short
+}

@@ -103,7 +103,7 @@ func (f *CharacterForm) stepBack() {
 		}
 	case CharCreate_Aesthetic:
 		f.Character = Character{
-			Race: f.Character.Race,
+			Race:   f.Character.Race,
 			Gender: f.Character.Gender,
 		}
 	case CharCreate_Functional:
