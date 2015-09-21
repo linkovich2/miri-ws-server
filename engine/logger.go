@@ -12,5 +12,5 @@ var format = logging.MustStringFormatter(
 )
 
 func LogNewLine() {
-	fmt.Printf("-- \n")
+	fmt.Printf("\n")
 }
