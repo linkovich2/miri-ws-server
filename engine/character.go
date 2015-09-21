@@ -15,9 +15,9 @@ const (
 
 type (
 	Character struct {
-		Race   string `json:"race"`
-		Gender string `json:"gender"`
-		// AestheticTraits []AestheticTrait
+		Race            string   `json:"race"`
+		Gender          string   `json:"gender"`
+		AestheticTraits []string `json:"aesthetic_traits"`
 		// FunctionalTraits []FunctionalTrait
 		// Background string
 		// Name string
@@ -54,7 +54,7 @@ func (h *HandlerInterface) CommandAuthenticated_CHARCREATE(u *User, args *json.R
 			}
 
 		case CharCreate_Gender:
-			hub.BasicSend("charcreateaesthetic", nil, u.Connection)
+			hub.BasicSend("charcreateaesthetic", form.getAvailableAestheticTraits(), u.Connection)
 		case CharCreate_Aesthetic:
 			hub.BasicSend("charcreatefunctional", nil, u.Connection)
 		case CharCreate_Functional:
@@ -107,7 +107,11 @@ func (f *CharacterForm) stepBack() {
 			Gender: f.Character.Gender,
 		}
 	case CharCreate_Functional:
-		// @todo character has race, gender, and aesthetic traits
+		f.Character = Character{
+			Race:            f.Character.Race,
+			Gender:          f.Character.Gender,
+			AestheticTraits: f.Character.AestheticTraits,
+		}
 	case CharCreate_Background:
 		// @todo character has race, gender, aesthetic and functional traits
 	}
@@ -144,12 +148,49 @@ func (f *CharacterForm) getAvailableGenders() []GenderShort {
 		for _, exclude := range g.DisallowedRaces {
 			if exclude == f.Character.Race {
 				remove = true
+				break
 			}
 		}
 
 		if !remove {
 			res = append(res, GenderShort{g.Name, g.ID})
 		}
+	}
+
+	return res
+}
+
+func (f *CharacterForm) getAvailableAestheticTraits() map[string]AestheticTraitCategoryShort {
+	res := make(map[string]AestheticTraitCategoryShort)
+
+	for _, cat := range aestheticTraitsCategorized {
+		list := []AestheticTraitShort{}
+
+		for _, t := range cat.Traits {
+			remove := false
+
+			for _, exclude := range t.DisallowedGenders {
+				if exclude == f.Character.Gender {
+					remove = true
+					break
+				}
+			}
+
+			if !remove {
+				for _, exclude := range t.DisallowedRaces {
+					if exclude == f.Character.Race {
+						remove = true
+						break
+					}
+				}
+			}
+
+			if !remove {
+				list = append(list, t.Shorten())
+			}
+		}
+
+		res[cat.ID] = AestheticTraitCategoryShort{cat.Name, cat.Unique, cat.ID, list}
 	}
 
 	return res
