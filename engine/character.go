@@ -54,6 +54,16 @@ func (h *HandlerInterface) CommandAuthenticated_CHARCREATE(u *User, args *json.R
 			}
 
 		case CharCreate_Gender:
+			c := &Character{}
+			_ = json.Unmarshal(*args, c)
+
+			if form.validateGender(c) {
+				// validate then send back genders
+				form.Step = CharCreate_Aesthetic
+				form.Character.Gender = c.Gender
+				hub.BasicSend("charcreatestepup", nil, u.Connection)
+				hub.BasicSend("charcreategenders", form.getAvailableGenders(), u.Connection)
+			}
 			hub.BasicSend("charcreateaesthetic", form.getAvailableAestheticTraits(), u.Connection)
 		case CharCreate_Aesthetic:
 			hub.BasicSend("charcreatefunctional", nil, u.Connection)
@@ -119,6 +129,15 @@ func (f *CharacterForm) stepBack() {
 
 func (f *CharacterForm) validateRace(c *Character) bool {
 	if _, exists := races[c.Race]; exists {
+		return true
+	}
+
+	return false
+}
+
+func (f *CharacterForm) validateGender(c *Character) bool {
+	// @todo also validate race again here
+	if _, exists := genders[c.Gender]; exists {
 		return true
 	}
 
