@@ -15,7 +15,7 @@
     "name":"Dwarf",
     "description":"Stout, stoic and enduring, like the mountains they so love.",
     "id":"DWARF",
-    "long_description": "<p>A lot more about dwarves mother fuckers. We can put <strong>HTML</strong> in here.</p>"
+    "long_description": "<p><strong>Distinct Groups:</strong> Hill Dwarf, Mountain Dwarf</p><p>Short and stout, they average between 4'2 and 4'9 in height, with hill dwarves a bit shorter. Dwarven males are typically taller and heavier than their female counterparts. Like Humans, dwarves have a wide variety of skin, hair and eye colors. Mountain dwarves are more pale, with lighter eye and hair colors then their open-sky relatives.</p>"
   },
   {
     "name":"Gnome",
