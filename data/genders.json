@@ -1,12 +1,17 @@
 [
   {
     "name":"Male",
-    "disallowed_races": [],
+    "disallowed_races": ["AUTOMATON"],
     "id": "M"
   },
   {
     "name":"Female",
-    "disallowed_races": [],
+    "disallowed_races": ["AUTOMATON"],
     "id": "F"
+  },
+  {
+    "name":"N/A",
+    "disallowed_races": ["HUMAN","ORC","HALFORC","HALFELF","ELF","DWARF","HALFLING","EUTARA","DRAGONBORN","CATLIKE","HALFGIANT","GNOME","MINOTAUR","GOBLIN","CENTAUR","HALFANGEL","TIEFLING","SATYR"],
+    "id":"NA"
   }
 ]
