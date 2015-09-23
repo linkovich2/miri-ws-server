@@ -2,6 +2,7 @@ package engine
 
 import (
 	"encoding/json"
+	"github.com/jonathonharrell/miri-ws-server/engine/util"
 )
 
 const (
@@ -164,11 +165,8 @@ func (f *CharacterForm) getAvailableGenders() []GenderShort {
 	for _, g := range genders {
 		remove := false
 
-		for _, exclude := range g.DisallowedRaces {
-			if exclude == f.Character.Race {
-				remove = true
-				break
-			}
+		if exclude, _ := util.InArray(f.Character.Race, g.DisallowedRaces); exclude {
+			remove = true
 		}
 
 		if !remove {
@@ -188,20 +186,12 @@ func (f *CharacterForm) getAvailableAestheticTraits() map[string]AestheticTraitC
 		for _, t := range cat.Traits {
 			remove := false
 
-			for _, exclude := range t.DisallowedGenders {
-				if exclude == f.Character.Gender {
-					remove = true
-					break
-				}
+			if exclude, _ := util.InArray(f.Character.Gender, t.DisallowedGenders); exclude {
+				remove = true
 			}
 
-			if !remove {
-				for _, exclude := range t.DisallowedRaces {
-					if exclude == f.Character.Race {
-						remove = true
-						break
-					}
-				}
+			if exclude, _ := util.InArray(f.Character.Race, t.DisallowedRaces); exclude {
+				remove = true
 			}
 
 			if !remove {
