@@ -9,28 +9,32 @@
         "disallowed_races": [],
         "disallowed_genders": [],
         "id": "BROWNHAIR",
-        "image": 1
+        "image": 1,
+        "description":""
       },
       {
         "name":"Blonde Hair",
         "disallowed_races": [],
         "disallowed_genders": [],
         "id": "BLONDEHAIR",
-        "image": 2
+        "image": 2,
+        "description":""
       },
       {
         "name":"Grey Hair",
         "disallowed_races": [],
         "disallowed_genders": [],
         "id": "GREYHAIR",
-        "image": 3
+        "image": 3,
+        "description":""
       },
       {
         "name":"Black Hair",
         "disallowed_races": [],
         "disallowed_genders": [],
         "id": "BLACKHAIR",
-        "image": 4
+        "image": 4,
+        "description":""
       }
     ]
   },
@@ -42,30 +46,34 @@
       {
         "name":"Messy Bun",
         "disallowed_races": [],
-        "disallowed_genders": ["M"],
+        "disallowed_genders": ["M","NA"],
         "id": "MESSYBUNHAIR",
-        "image": 0
+        "image": 0,
+        "description":"Your hair is loosely arranged in a bun above your head, strands falling about messily."
       },
       {
         "name":"Long, Straight",
         "disallowed_races": [],
-        "disallowed_genders": ["M"],
+        "disallowed_genders": ["M","NA"],
         "id": "LONGSTRAIGHTHAIR",
-        "image": 0
+        "image": 0,
+        "description":"Your hair is long and straight, reaching just below shoulder-length."
       },
       {
         "name":"Short",
         "disallowed_races": [],
-        "disallowed_genders": ["F"],
+        "disallowed_genders": ["F","NA"],
         "id": "SHORTHAIR",
-        "image": 0
+        "image": 0,
+        "description":"Your hair is kept neatly close to your head, less then half an inch long."
       },
       {
         "name":"Bald",
         "disallowed_races": [],
-        "disallowed_genders": ["F"],
+        "disallowed_genders": ["F","NA"],
         "id": "BALDHEADED",
-        "image": 0
+        "image": 0,
+        "description":"You are bald, but at least you're aerodynamic."
       }
     ]
   },
@@ -79,28 +87,32 @@
         "disallowed_races": [],
         "disallowed_genders": [],
         "id": "FRECKLEY",
-        "image": 0
+        "image": 0,
+        "description":"You have a decent amount of freckles."
       },
       {
         "name":"Red-nosed",
-        "disallowed_races": ["ELF"],
+        "disallowed_races": ["ELF", "HUMAN"],
         "disallowed_genders": [],
         "id": "REDNOSED",
-        "image": 0
+        "image": 0,
+        "description":"Your nose is red, probably from drinking too much."
       },
       {
         "name":"Scars - Face",
         "disallowed_races": [],
         "disallowed_genders": [],
         "id": "SCARREDFACE",
-        "image": 0
+        "image": 0,
+        "description":"Your face is scarred. Whether from battle or clumsiness, only you know."
       },
       {
         "name":"Scars - Body",
         "disallowed_races": [],
         "disallowed_genders": [],
         "id": "SCARREDBODY",
-        "image": 0
+        "image": 0,
+        "description":"Your body is scarred. I'm sure there's a story behind each mark."
       }
     ]
   }
