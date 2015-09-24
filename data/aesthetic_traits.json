@@ -33,5 +33,40 @@
         "image": 4
       }
     ]
+  },
+  {
+    "name": "Hair Style",
+    "id": "HAIRSTYLE",
+    "unique": true,
+    "traits": [
+      {
+        "name":"Messy Bun",
+        "disallowed_races": [],
+        "disallowed_genders": ["M"],
+        "id": "MESSYBUN",
+        "image": 0
+      },
+      {
+        "name":"Long, Straight",
+        "disallowed_races": [],
+        "disallowed_genders": ["M"],
+        "id": "LONGSTRAIGHT",
+        "image": 0
+      },
+      {
+        "name":"Short",
+        "disallowed_races": [],
+        "disallowed_genders": ["F"],
+        "id": "SHORT",
+        "image": 0
+      },
+      {
+        "name":"Black Hair",
+        "disallowed_races": [],
+        "disallowed_genders": ["F"],
+        "id": "BALD",
+        "image": 0
+      }
+    ]
   }
 ]
