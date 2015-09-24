@@ -63,9 +63,8 @@ func (h *HandlerInterface) CommandAuthenticated_CHARCREATE(u *User, args *json.R
 				form.Step = CharCreate_Aesthetic
 				form.Character.Gender = c.Gender
 				hub.BasicSend("charcreatestepup", nil, u.Connection)
-				hub.BasicSend("charcreategenders", form.getAvailableGenders(), u.Connection)
+				hub.BasicSend("charcreateaesthetic", form.getAvailableAestheticTraits(), u.Connection)
 			}
-			hub.BasicSend("charcreateaesthetic", form.getAvailableAestheticTraits(), u.Connection)
 		case CharCreate_Aesthetic:
 			hub.BasicSend("charcreatefunctional", nil, u.Connection)
 		case CharCreate_Functional:
