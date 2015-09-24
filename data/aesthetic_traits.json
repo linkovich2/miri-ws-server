@@ -61,7 +61,7 @@
         "image": 0
       },
       {
-        "name":"Black Hair",
+        "name":"Bald",
         "disallowed_races": [],
         "disallowed_genders": ["F"],
         "id": "BALDHEADED",
