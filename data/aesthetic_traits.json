@@ -43,28 +43,63 @@
         "name":"Messy Bun",
         "disallowed_races": [],
         "disallowed_genders": ["M"],
-        "id": "MESSYBUN",
+        "id": "MESSYBUNHAIR",
         "image": 0
       },
       {
         "name":"Long, Straight",
         "disallowed_races": [],
         "disallowed_genders": ["M"],
-        "id": "LONGSTRAIGHT",
+        "id": "LONGSTRAIGHTHAIR",
         "image": 0
       },
       {
         "name":"Short",
         "disallowed_races": [],
         "disallowed_genders": ["F"],
-        "id": "SHORT",
+        "id": "SHORTHAIR",
         "image": 0
       },
       {
         "name":"Black Hair",
         "disallowed_races": [],
         "disallowed_genders": ["F"],
-        "id": "BALD",
+        "id": "BALDHEADED",
+        "image": 0
+      }
+    ]
+  },
+  {
+    "name": "Misc. Appearance",
+    "id": "OTHERAESTHETICS",
+    "unique": false,
+    "traits": [
+      {
+        "name":"Freckles",
+        "disallowed_races": [],
+        "disallowed_genders": [],
+        "id": "FRECKLEY",
+        "image": 0
+      },
+      {
+        "name":"Red-nosed",
+        "disallowed_races": ["ELF"],
+        "disallowed_genders": [],
+        "id": "REDNOSED",
+        "image": 0
+      },
+      {
+        "name":"Scars - Face",
+        "disallowed_races": [],
+        "disallowed_genders": [],
+        "id": "SCARREDFACE",
+        "image": 0
+      },
+      {
+        "name":"Scars - Body",
+        "disallowed_races": [],
+        "disallowed_genders": [],
+        "id": "SCARREDBODY",
         "image": 0
       }
     ]
