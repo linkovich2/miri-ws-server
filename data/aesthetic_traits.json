@@ -73,7 +73,7 @@
         "disallowed_genders": ["F","NA"],
         "id": "BALDHEADED",
         "image": 0,
-        "description":"You are bald, but at least you're aerodynamic."
+        "description":"You are bald, but at least you\'re aerodynamic."
       }
     ]
   },
@@ -112,7 +112,7 @@
         "disallowed_genders": [],
         "id": "SCARREDBODY",
         "image": 0,
-        "description":"Your body is scarred. I'm sure there's a story behind each mark."
+        "description":"Your body is scarred. I\'m sure there's a story behind each mark."
       }
     ]
   }
