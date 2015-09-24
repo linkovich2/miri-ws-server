@@ -9,28 +9,28 @@
         "disallowed_races": [],
         "disallowed_genders": [],
         "id": "BROWNHAIR",
-        "image": 0
+        "image": 1
       },
       {
         "name":"Blonde Hair",
         "disallowed_races": [],
         "disallowed_genders": [],
         "id": "BLONDEHAIR",
-        "image": 1
+        "image": 2
       },
       {
         "name":"Grey Hair",
         "disallowed_races": [],
         "disallowed_genders": [],
         "id": "GREYHAIR",
-        "image": 2
+        "image": 3
       },
       {
         "name":"Black Hair",
         "disallowed_races": [],
         "disallowed_genders": [],
         "id": "BLACKHAIR",
-        "image": 3
+        "image": 4
       }
     ]
   }
