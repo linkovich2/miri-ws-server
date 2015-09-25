@@ -8,10 +8,5 @@
     "name":"Female",
     "disallowed_races": [],
     "id": "F"
-  },
-  {
-    "name":"N/A",
-    "disallowed_races": ["HUMAN","ELF","DWARF","HALFLING"],
-    "id":"NA"
   }
 ]

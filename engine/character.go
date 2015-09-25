@@ -66,7 +66,18 @@ func (h *HandlerInterface) CommandAuthenticated_CHARCREATE(u *User, args *json.R
 				hub.BasicSend("charcreateaesthetic", form.getAvailableAestheticTraits(), u.Connection)
 			}
 		case CharCreate_Aesthetic:
-			hub.BasicSend("charcreatefunctional", nil, u.Connection)
+			c := &Character{}
+			_ = json.Unmarshal(*args, c)
+
+			valid, errors := form.validateAestheticTraits(c)
+			if valid {
+				form.Step = CharCreate_Functional
+				form.Character.AestheticTraits = c.AestheticTraits
+				hub.BasicSend("charcreatestepup", nil, u.Connection)
+				hub.BasicSend("charcreatefunctional", form.getAvailableFunctionalTraits(), u.Connection)
+			} else {
+				hub.Send(&MessageResponse{Errors: errors, Success: false, ResponseTo: "charcreatestepup", Data: nil}, u.Connection)
+			}
 		case CharCreate_Functional:
 			hub.BasicSend("charcreatebackgrounds", nil, u.Connection)
 		case CharCreate_Background:
@@ -136,12 +147,18 @@ func (f *CharacterForm) validateRace(c *Character) bool {
 }
 
 func (f *CharacterForm) validateGender(c *Character) bool {
-	// @todo also validate race again here
-	if _, exists := genders[c.Gender]; exists {
-		return true
+	if f.validateRace(c) {
+		if _, exists := genders[c.Gender]; exists {
+			return true
+		}
 	}
 
 	return false
+}
+
+func (f *CharacterForm) validateAestheticTraits(c *Character) (valid bool, errors []string) {
+	errors = []string{"You must select at least one hair style."}
+	return
 }
 
 func (f *CharacterForm) getAvailableRaces() []Race {
@@ -162,15 +179,15 @@ func (f *CharacterForm) getAvailableGenders() []GenderShort {
 	res := []GenderShort{}
 
 	for _, g := range genders {
-		remove := false
-
 		if exclude, _ := util.InArray(f.Character.Race, g.DisallowedRaces); exclude {
-			remove = true
+			continue
 		}
 
-		if !remove {
-			res = append(res, GenderShort{g.Name, g.ID})
+		if g.Only != "" && f.Character.Race != g.Only {
+			continue
 		}
+
+		res = append(res, GenderShort{g.Name, g.ID})
 	}
 
 	return res
@@ -179,27 +196,44 @@ func (f *CharacterForm) getAvailableGenders() []GenderShort {
 func (f *CharacterForm) getAvailableAestheticTraits() map[string]AestheticTraitCategoryShort {
 	res := make(map[string]AestheticTraitCategoryShort)
 
-	for _, cat := range aestheticTraitsCategorized {
+	for _, cat := range aestheticTraitsCategorized { // Category Level
+		if cat.Only != "" && f.Character.Race != cat.Only && f.Character.Gender != cat.Only {
+			continue
+		}
+
+		if exclude, _ := util.InArray(f.Character.Race, cat.DisallowedRaces); exclude {
+			continue
+		}
+
+		if exclude, _ := util.InArray(f.Character.Gender, cat.DisallowedGenders); exclude {
+			continue
+		}
+
 		list := []AestheticTraitShort{}
 
-		for _, t := range cat.Traits {
-			remove := false
+		for _, t := range cat.Traits { // Trait inner loop
+			if t.Only != "" && f.Character.Race != t.Only && f.Character.Gender != t.Only {
+				continue
+			}
 
 			if exclude, _ := util.InArray(f.Character.Gender, t.DisallowedGenders); exclude {
-				remove = true
+				continue
 			}
 
 			if exclude, _ := util.InArray(f.Character.Race, t.DisallowedRaces); exclude {
-				remove = true
+				continue
 			}
 
-			if !remove {
-				list = append(list, t.Shorten())
-			}
+			list = append(list, t.Shorten())
 		}
 
-		res[cat.ID] = AestheticTraitCategoryShort{cat.Name, cat.Unique, cat.ID, list}
+		res[cat.ID] = AestheticTraitCategoryShort{cat.Name, cat.Unique, cat.ID, list, cat.Minimum}
 	}
 
+	return res
+}
+
+func (f *CharacterForm) getAvailableFunctionalTraits() map[string]FunctionalTraitCategoryShort {
+	res := make(map[string]FunctionalTraitCategoryShort)
 	return res
 }

@@ -4,4 +4,5 @@ func LoadEverything() {
 	InitRaces()
 	InitGenders()
 	InitAestheticTraits()
+	InitFunctionalTraits()
 }

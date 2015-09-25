@@ -1,0 +1,21 @@
+[
+  {
+    "name": "I am a follower of... (optional)",
+    "id": "FOLLOWEROFDEITY",
+    "unique": true,
+    "traits": [
+      {
+        "name":"Bahamut",
+        "id": "BAHAMUTTRAIT",
+        "description":"The God of Light",
+        "points": "-1"
+      },
+      {
+        "name":"Morrhigan",
+        "id": "MORRHIGANTRAIT",
+        "description":"The Goddess of Death",
+        "points": "-1"
+      }
+    ]
+  }
+]

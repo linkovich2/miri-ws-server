@@ -5,3 +5,7 @@ Make sure you have MongoDB installed and running, then just `go build && ./miri-
 
 ### @todo
 - CC: traits, backgrounds, name, save
+- CC: Other trait rules not yet covered:
+  - functional points (debt for positive, points for negative, should equal to 0)
+  - functional default to selected
+  - at least one required rule

@@ -3,6 +3,7 @@
     "name": "Hair Color",
     "id": "HAIRCOLOR",
     "unique": true,
+    "min": 1,
     "traits": [
       {
         "name":"Brown Hair",
@@ -42,11 +43,12 @@
     "name": "Hair Style",
     "id": "HAIRSTYLE",
     "unique": true,
+    "min": 1,
     "traits": [
       {
         "name":"Messy Bun",
         "disallowed_races": [],
-        "disallowed_genders": ["M","NA"],
+        "disallowed_genders": ["M"],
         "id": "MESSYBUNHAIR",
         "image": 0,
         "description":"Your hair is loosely arranged in a bun above your head, strands falling about messily."
@@ -54,7 +56,7 @@
       {
         "name":"Long, Straight",
         "disallowed_races": [],
-        "disallowed_genders": ["M","NA"],
+        "disallowed_genders": ["M"],
         "id": "LONGSTRAIGHTHAIR",
         "image": 0,
         "description":"Your hair is long and straight, reaching just below shoulder-length."
@@ -62,7 +64,7 @@
       {
         "name":"Short",
         "disallowed_races": [],
-        "disallowed_genders": ["F","NA"],
+        "disallowed_genders": ["F"],
         "id": "SHORTHAIR",
         "image": 0,
         "description":"Your hair is kept neatly close to your head, less then half an inch long."
@@ -70,10 +72,48 @@
       {
         "name":"Bald",
         "disallowed_races": [],
-        "disallowed_genders": ["F","NA"],
+        "disallowed_genders": ["F"],
         "id": "BALDHEADED",
         "image": 0,
         "description":"You are bald, but at least you're aerodynamic."
+      }
+    ]
+  },
+  {
+    "name": "Facial Hair",
+    "id": "FACIALHAIR",
+    "unique": true,
+    "disallowed_races":["ELF"],
+    "disallowed_genders":["F"],
+    "traits": [
+      {
+        "name":"Long, braided beard",
+        "id": "LONGBRAIDEDBEARD",
+        "description":""
+      },
+      {
+        "name":"Unkempt Stubble",
+        "id": "STUBBLE",
+        "description":""
+      }
+    ]
+  },
+  {
+    "name": "Ears",
+    "id": "ELFEARS",
+    "unique": true,
+    "only": "ELF",
+    "min": 1,
+    "traits": [
+      {
+        "name":"Long, Pointed Up",
+        "id": "LONGUPELFEARS",
+        "description":"Your ears are long and point upwards."
+      },
+      {
+        "name":"Short, Pointed Up",
+        "id": "SHORTUPELFEARS",
+        "description":"Your ears are long and point upwards."
       }
     ]
   },
@@ -92,8 +132,7 @@
       },
       {
         "name":"Red-nosed",
-        "disallowed_races": ["ELF", "HUMAN"],
-        "disallowed_genders": [],
+        "only": "DWARF",
         "id": "REDNOSED",
         "image": 0,
         "description":"Your nose is red, probably from drinking too much."
