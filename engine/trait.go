@@ -1,6 +1,7 @@
 package engine
 
 import (
+	"github.com/jonathonharrell/miri-ws-server/engine/util"
 	"github.com/jonathonharrell/miri-ws-server/engine/util/loader"
 )
 
@@ -111,6 +112,22 @@ func InitFunctionalTraits() {
 			functionalTraits[t.ID] = t
 		}
 	}
+}
+
+func (ac *AestheticTraitCategory) AvailableForCharacter(c *Character) bool {
+	if in, _ := util.InArray(c.Race, ac.DisallowedRaces); in {
+		return false
+	}
+
+	if in, _ := util.InArray(c.Gender, ac.DisallowedGenders); in {
+		return false
+	}
+
+	if ac.Only != "" && c.Race != ac.Only && c.Gender != ac.Only {
+		return false
+	}
+
+	return true
 }
 
 func (a *AestheticTrait) Shorten() (short AestheticTraitShort) {

@@ -56,23 +56,20 @@
       {
         "name":"Long, Straight",
         "disallowed_races": [],
-        "disallowed_genders": ["M"],
+        "disallowed_genders": [],
         "id": "LONGSTRAIGHTHAIR",
         "image": 0,
         "description":"Your hair is long and straight, reaching just below shoulder-length."
       },
       {
         "name":"Short",
-        "disallowed_races": [],
-        "disallowed_genders": ["F"],
+        "disallowed_genders": [],
         "id": "SHORTHAIR",
         "image": 0,
         "description":"Your hair is kept neatly close to your head, less then half an inch long."
       },
       {
         "name":"Bald",
-        "disallowed_races": [],
-        "disallowed_genders": ["F"],
         "id": "BALDHEADED",
         "image": 0,
         "description":"You are bald, but at least you're aerodynamic."

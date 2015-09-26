@@ -157,8 +157,37 @@ func (f *CharacterForm) validateGender(c *Character) bool {
 }
 
 func (f *CharacterForm) validateAestheticTraits(c *Character) (valid bool, errors []string) {
-	errors = []string{"You must select at least one hair style."}
-	return
+	atLeastOneRequired := make(map[string]bool) // [categoryId]satisfied{false}, for at least one is required
+	hasOneIn := make(map[string]bool)           // for uniqueness validation, do we already have one in this field
+	for _, cat := range aestheticTraitsCategorized {
+		if cat.Minimum > 0 && cat.AvailableForCharacter(c) {
+			atLeastOneRequired[cat.ID] = false
+		}
+	}
+
+	for _, traitId := range c.AestheticTraits {
+		if _, exists := aestheticTraits[traitId]; !exists {
+			return false, []string{"Trait not found: " + traitId}
+		}
+
+		alreadyHad := hasOneIn[aestheticTraitsCategorized[aestheticTraits[traitId].Category].ID]
+		hasOneIn[aestheticTraitsCategorized[aestheticTraits[traitId].Category].ID] = true
+		if aestheticTraitsCategorized[aestheticTraits[traitId].Category].Unique && alreadyHad {
+			return false, []string{"You may only have one " + aestheticTraitsCategorized[aestheticTraits[traitId].Category].Name + " selected."}
+		}
+
+		atLeastOneRequired[aestheticTraits[traitId].Category] = true
+
+		// @todo also need to check this trait is valid for this race / gender
+	}
+
+	for i, cat := range atLeastOneRequired {
+		if !cat {
+			return false, []string{"You need to select at least one " + aestheticTraitsCategorized[i].Name}
+		}
+	}
+
+	return true, []string{}
 }
 
 func (f *CharacterForm) getAvailableRaces() []Race {
