@@ -17,5 +17,19 @@
         "points": "-1"
       }
     ]
+  },
+  {
+    "name": "Racial Abilities",
+    "id": "RACIALELF",
+    "only": "ELF",
+    "traits": [
+      {
+        "name":"Darkvision",
+        "id": "DARKVISION",
+        "description":"You don't have problems seeing in the dark.",
+        "points": "0",
+        "required": true
+      }
+    ]
   }
 ]

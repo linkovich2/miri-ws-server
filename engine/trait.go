@@ -72,6 +72,7 @@ type (
 		DisallowedGenders []string `json:"disallowed_genders"`
 		Only              string   `json:"only"`
 		Points            string   `json:"points"`
+		Required          bool     `json:"required"`
 	}
 
 	FunctionalTraitShort struct {
@@ -80,6 +81,7 @@ type (
 		Description string `json:"description"`
 		Image       int    `json:"image"`
 		Points      string `json:"points"`
+		Required    bool   `json:"required"`
 	}
 )
 
@@ -138,5 +140,18 @@ func (a *AestheticTrait) Shorten() (short AestheticTraitShort) {
 		Image:       a.Image,
 	}
 
-	return short
+	return
+}
+
+func (f *FunctionalTrait) Shorten() (short FunctionalTraitShort) {
+	short = FunctionalTraitShort{
+		Name:        f.Name,
+		ID:          f.ID,
+		Description: f.Description,
+		Image:       f.Image,
+		Points:      f.Points,
+		Required:    f.Required,
+	}
+
+	return
 }

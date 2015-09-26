@@ -264,5 +264,40 @@ func (f *CharacterForm) getAvailableAestheticTraits() map[string]AestheticTraitC
 
 func (f *CharacterForm) getAvailableFunctionalTraits() map[string]FunctionalTraitCategoryShort {
 	res := make(map[string]FunctionalTraitCategoryShort)
+
+	for _, cat := range functionalTraitsCategorized { // Category Level
+		if cat.Only != "" && f.Character.Race != cat.Only && f.Character.Gender != cat.Only {
+			continue
+		}
+
+		if exclude, _ := util.InArray(f.Character.Race, cat.DisallowedRaces); exclude {
+			continue
+		}
+
+		if exclude, _ := util.InArray(f.Character.Gender, cat.DisallowedGenders); exclude {
+			continue
+		}
+
+		list := []FunctionalTraitShort{}
+
+		for _, t := range cat.Traits { // Trait inner loop
+			if t.Only != "" && f.Character.Race != t.Only && f.Character.Gender != t.Only {
+				continue
+			}
+
+			if exclude, _ := util.InArray(f.Character.Gender, t.DisallowedGenders); exclude {
+				continue
+			}
+
+			if exclude, _ := util.InArray(f.Character.Race, t.DisallowedRaces); exclude {
+				continue
+			}
+
+			list = append(list, t.Shorten())
+		}
+
+		res[cat.ID] = FunctionalTraitCategoryShort{cat.Name, cat.Unique, cat.ID, list, cat.Minimum}
+	}
+
 	return res
 }
