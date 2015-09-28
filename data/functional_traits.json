@@ -1,17 +1,23 @@
 [
   {
-    "name": "I am a follower of... (optional)",
+    "name": "Religion",
     "id": "FOLLOWEROFDEITY",
     "unique": true,
     "traits": [
       {
-        "name":"Bahamut",
+        "name":"N/A",
+        "id": "NORELIGION",
+        "description":"You are not a particularly religious individual.",
+        "points": "0"
+      },
+      {
+        "name":"Follower of Bahamut",
         "id": "BAHAMUTTRAIT",
         "description":"The God of Light",
         "points": "-1"
       },
       {
-        "name":"Morrhigan",
+        "name":"Worshipper of Morrhigan",
         "id": "MORRHIGANTRAIT",
         "description":"The Goddess of Death",
         "points": "-1"
