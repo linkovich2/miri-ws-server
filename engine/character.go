@@ -16,10 +16,10 @@ const (
 
 type (
 	Character struct {
-		Race            string   `json:"race"`
-		Gender          string   `json:"gender"`
-		AestheticTraits []string `json:"aesthetic_traits"`
-		// FunctionalTraits []FunctionalTrait
+		Race             string            `json:"race"`
+		Gender           string            `json:"gender"`
+		AestheticTraits  []string          `json:"aesthetic_traits"`
+		FunctionalTraits []FunctionalTrait `json:"functional_traits"`
 		// Background string
 		// Name string
 	}
@@ -134,7 +134,12 @@ func (f *CharacterForm) stepBack() {
 			AestheticTraits: f.Character.AestheticTraits,
 		}
 	case CharCreate_Background:
-		// @todo character has race, gender, aesthetic and functional traits
+		f.Character = Character{
+			Race:             f.Character.Race,
+			Gender:           f.Character.Gender,
+			AestheticTraits:  f.Character.AestheticTraits,
+			FunctionalTraits: f.Character.FunctionalTraits,
+		}
 	}
 }
 
@@ -147,10 +152,8 @@ func (f *CharacterForm) validateRace(c *Character) bool {
 }
 
 func (f *CharacterForm) validateGender(c *Character) bool {
-	if f.validateRace(c) {
-		if _, exists := genders[c.Gender]; exists {
-			return true
-		}
+	if _, exists := genders[c.Gender]; exists {
+		return true
 	}
 
 	return false
@@ -188,6 +191,22 @@ func (f *CharacterForm) validateAestheticTraits(c *Character) (valid bool, error
 	}
 
 	return true, []string{}
+}
+
+func (f *CharacterForm) validateFunctionalTraits(c *Character) (valid bool, errors []string) {
+	return
+}
+
+func (f *CharacterForm) validateBackground(c *Character) bool {
+	return false
+}
+
+func (f *CharacterForm) validateName(c *Character) bool {
+	return false
+}
+
+func (f *CharacterForm) save() {
+	return
 }
 
 func (f *CharacterForm) getAvailableRaces() []Race {
@@ -300,4 +319,8 @@ func (f *CharacterForm) getAvailableFunctionalTraits() map[string]FunctionalTrai
 	}
 
 	return res
+}
+
+func (f *CharacterForm) getAvailableBackgrounds() {
+	return
 }
