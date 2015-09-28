@@ -19,16 +19,33 @@
     ]
   },
   {
-    "name": "Racial Abilities",
-    "id": "RACIALELF",
-    "only": "ELF",
+    "name": "Inherent Racial Ability",
+    "id": "RACIALTRAITS",
+    "disallowed_races": ["HUMAN"],
     "traits": [
       {
         "name":"Darkvision",
         "id": "DARKVISION",
+        "disallowed_races":[],
         "description":"You don't have problems seeing in the dark.",
         "points": "0",
         "required": true
+      },
+      {
+        "name":"Natural Attunement - Forests",
+        "id":"FTFORESTS",
+        "only":"ELF",
+        "description": "You have a natural ability to navigate forests.",
+        "required": true,
+        "points": "0"
+      },
+      {
+        "name":"Favored Terrain - Mountains",
+        "id":"FTCAVERNS",
+        "only":"DWARF",
+        "description": "You have a natural ability to navigate caverns, mountains, and other rocky terrain.",
+        "required": true,
+        "points": "0"
       }
     ]
   }

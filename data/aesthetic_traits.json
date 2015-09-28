@@ -96,7 +96,7 @@
     ]
   },
   {
-    "name": "Ears",
+    "name": "Ear Style",
     "id": "ELFEARS",
     "unique": true,
     "only": "ELF",
