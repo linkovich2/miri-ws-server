@@ -194,6 +194,14 @@ func (f *CharacterForm) validateAestheticTraits(c *Character) (valid bool, error
 }
 
 func (f *CharacterForm) validateFunctionalTraits(c *Character) (valid bool, errors []string) {
+	for _, ft := range functionalTraits {
+		if ft.Required {
+			if in, _ := util.InArray(ft.ID, c.FunctionalTraits); !in {
+				return false, []string{"'" + ft.Name + "' is a non-optional trait."}
+			}
+		}
+	}
+
 	return
 }
 
