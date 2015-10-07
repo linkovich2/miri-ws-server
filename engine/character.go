@@ -3,6 +3,7 @@ package engine
 import (
 	"encoding/json"
 	"github.com/jonathonharrell/miri-ws-server/engine/util"
+	"strconv"
 )
 
 const (
@@ -16,10 +17,10 @@ const (
 
 type (
 	Character struct {
-		Race             string            `json:"race"`
-		Gender           string            `json:"gender"`
-		AestheticTraits  []string          `json:"aesthetic_traits"`
-		FunctionalTraits []FunctionalTrait `json:"functional_traits"`
+		Race             string   `json:"race"`
+		Gender           string   `json:"gender"`
+		AestheticTraits  []string `json:"aesthetic_traits"`
+		FunctionalTraits []string `json:"functional_traits"`
 		// Background string
 		// Name string
 	}
@@ -79,7 +80,18 @@ func (h *HandlerInterface) CommandAuthenticated_CHARCREATE(u *User, args *json.R
 				hub.Send(&MessageResponse{Errors: errors, Success: false, ResponseTo: "charcreatestepup", Data: nil}, u.Connection)
 			}
 		case CharCreate_Functional:
-			hub.BasicSend("charcreatebackgrounds", nil, u.Connection)
+			c := &Character{}
+			_ = json.Unmarshal(*args, c)
+
+			valid, errors := form.validateFunctionalTraits(c)
+			if valid {
+				form.Step = CharCreate_Background
+				form.Character.FunctionalTraits = c.FunctionalTraits
+				hub.BasicSend("charcreatestepup", nil, u.Connection)
+				hub.BasicSend("charcreatebackgrounds", form.getAvailableBackgrounds(), u.Connection)
+			} else {
+				hub.Send(&MessageResponse{Errors: errors, Success: false, ResponseTo: "charcreatestepup", Data: nil}, u.Connection)
+			}
 		case CharCreate_Background:
 			hub.BasicSend("charcreatename", nil, u.Connection)
 		case CharCreate_Name:
@@ -194,15 +206,39 @@ func (f *CharacterForm) validateAestheticTraits(c *Character) (valid bool, error
 }
 
 func (f *CharacterForm) validateFunctionalTraits(c *Character) (valid bool, errors []string) {
-	for _, ft := range functionalTraits {
-		if ft.Required {
+	validTraits := f.getAvailableFunctionalTraits()
+	points := 0
+	list := []string{}
+
+	for _, ftc := range validTraits {
+		for _, ft := range ftc.Traits {
+			list = append(list, ft.ID)
+
 			if in, _ := util.InArray(ft.ID, c.FunctionalTraits); !in {
-				return false, []string{"'" + ft.Name + "' is a non-optional trait."}
+				if ft.Required { // it's not in but it's required
+					return false, []string{"'" + ft.Name + "' is a non-optional trait."}
+				}
+			} else {
+				// it is in, validate anything else against it
+				val, _ := strconv.Atoi(ft.Points)
+				points = points + val
+
+				// @todo need to validate for atleastonerequired, and any other constraints
 			}
 		}
 	}
 
-	return
+	if points < 0 {
+		return false, []string{"You must have at least 0 points to continue."}
+	}
+
+	for _, trait := range c.FunctionalTraits {
+		if in, _ := util.InArray(trait, list); !in {
+			return false, []string{"Illegal trait included."}
+		}
+	}
+
+	return true, []string{}
 }
 
 func (f *CharacterForm) validateBackground(c *Character) bool {
@@ -329,6 +365,6 @@ func (f *CharacterForm) getAvailableFunctionalTraits() map[string]FunctionalTrai
 	return res
 }
 
-func (f *CharacterForm) getAvailableBackgrounds() {
-	return
+func (f *CharacterForm) getAvailableBackgrounds() []Background {
+	return []Background{}
 }
