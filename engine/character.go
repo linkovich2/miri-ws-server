@@ -242,14 +242,17 @@ func (f *CharacterForm) validateFunctionalTraits(c *Character) (valid bool, erro
 }
 
 func (f *CharacterForm) validateBackground(c *Character) bool {
+	// @todo stub
 	return false
 }
 
 func (f *CharacterForm) validateName(c *Character) bool {
+	// @todo stub
 	return false
 }
 
 func (f *CharacterForm) save() {
+	// @todo stub
 	return
 }
 
@@ -365,6 +368,17 @@ func (f *CharacterForm) getAvailableFunctionalTraits() map[string]FunctionalTrai
 	return res
 }
 
-func (f *CharacterForm) getAvailableBackgrounds() []Background {
-	return []Background{}
+func (f *CharacterForm) getAvailableBackgrounds() []BackgroundShort {
+	res := []BackgroundShort{}
+
+	for _, bg := range backgrounds { // Category Level
+		if bg.AllowAll {
+			res = append(res, bg.Shorten())
+			continue
+		}
+
+		// check against prerequisites to see if allowed @todo
+	}
+
+	return res
 }

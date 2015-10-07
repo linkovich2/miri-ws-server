@@ -5,4 +5,5 @@ func LoadEverything() {
 	InitGenders()
 	InitAestheticTraits()
 	InitFunctionalTraits()
+	InitBackgrounds()
 }
