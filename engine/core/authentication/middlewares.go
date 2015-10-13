@@ -3,7 +3,6 @@ package authentication
 import (
 	"fmt"
 	jwt "github.com/dgrijalva/jwt-go"
-	"github.com/jonathonharrell/miri-ws-server/engine/logger"
 	"net/http"
 )
 
