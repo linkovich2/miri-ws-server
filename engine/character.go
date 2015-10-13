@@ -2,6 +2,7 @@ package engine
 
 import (
 	"encoding/json"
+	"github.com/jonathonharrell/miri-ws-server/engine/logger"
 	"github.com/jonathonharrell/miri-ws-server/engine/util"
 	"strconv"
 )
@@ -110,10 +111,10 @@ func (h *HandlerInterface) CommandAuthenticated_CHARCREATESTEPBACK(u *User, args
 			form.stepBack()
 			hub.BasicSend("charcreatestepback", nil, u.Connection)
 		} else {
-			logger.Warning(" -- received step back on step 0 CHARCREATE, weird.")
+			logger.Write.Warning(" -- received step back on step 0 CHARCREATE, weird.")
 		}
 	} else {
-		logger.Warning(" -- tried to step back CHARCREATE form that didn't exist, ignoring.")
+		logger.Write.Warning(" -- tried to step back CHARCREATE form that didn't exist, ignoring.")
 	}
 }
 
@@ -121,7 +122,7 @@ func (h *HandlerInterface) CommandAuthenticated_NEWCHAR(u *User, args *json.RawM
 	if _, exists := activeCharacterForms[u]; exists {
 		delete(activeCharacterForms, u)
 	} else {
-		logger.Warning(" -- tried to cancel CHARCREATE form that didn't exist, ignoring.")
+		logger.Write.Warning(" -- tried to cancel CHARCREATE form that didn't exist, ignoring.")
 	}
 }
 

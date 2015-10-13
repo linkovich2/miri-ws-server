@@ -3,6 +3,7 @@ package engine
 import (
 	"encoding/json"
 
+	"github.com/jonathonharrell/miri-ws-server/engine/logger"
 	"github.com/jonathonharrell/miri-ws-server/engine/util/filters"
 )
 
@@ -11,7 +12,7 @@ type ChatArgs struct {
 }
 
 func (h *HandlerInterface) Command_SAY(u *User, args *json.RawMessage) {
-	logger.Info("Called 'say'!")
+	logger.Write.Info("Called 'say'!")
 	chat := &ChatArgs{}
 	json.Unmarshal(*args, &chat)
 

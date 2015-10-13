@@ -11,7 +11,7 @@ type AuthenticateResponse struct {
 	IsAdmin bool `json:"is_admin"`
 }
 
-func (h *HandlerInterface) CommandNotAuthenticated_AUTHENTICATE(u *User, args *json.RawMessage) {
+func HTTP_Authenticate(u *User, args *json.RawMessage) {
 	form := &FormLogin{}
 	err := json.Unmarshal(*args, &form)
 
@@ -28,9 +28,10 @@ func (h *HandlerInterface) CommandNotAuthenticated_AUTHENTICATE(u *User, args *j
 	}
 
 	hub.Send(&MessageResponse{Errors: errors, Success: success, ResponseTo: "authenticate", Data: res}, u.Connection)
+	// @todo send HTTP response
 }
 
-func (h *HandlerInterface) CommandNotAuthenticated_CREATEUSER(u *User, args *json.RawMessage) {
+func HTTP_NewUser(u *User, args *json.RawMessage) {
 	form := &FormLogin{}
 	err := json.Unmarshal(*args, &form)
 
@@ -48,4 +49,5 @@ func (h *HandlerInterface) CommandNotAuthenticated_CREATEUSER(u *User, args *jso
 	}
 
 	hub.Send(&MessageResponse{Errors: errors, Success: success, ResponseTo: "createuser", Data: res}, u.Connection)
+	// @todo handle HTTP
 }

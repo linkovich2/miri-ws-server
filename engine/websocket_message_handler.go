@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"reflect"
 	"strings"
+
+	"github.com/jonathonharrell/miri-ws-server/engine/logger"
 )
 
 type HandlerInterface struct{} // empty struct to attach message handlers to
@@ -23,8 +25,8 @@ func AddAlias(alt string, cmd string) {
 }
 
 func routeToCommand(name string, u *User, args *json.RawMessage) {
-	LogNewLine()
-	logger.Info("Connection [%s]: Processing %s command...", u.Connection.ID, name)
+	logger.NewLine()
+	logger.Write.Info("Connection [%s]: Processing %s command...", u.Connection.ID, name)
 
 	var method string
 
@@ -42,7 +44,7 @@ func routeToCommand(name string, u *User, args *json.RawMessage) {
 	if cmd.IsValid() {
 		cmd.Call([]reflect.Value{reflect.ValueOf(u), reflect.ValueOf(args)})
 	} else {
-		logger.Error(" -- '%s' command wasn't found for the given state!", name)
+		logger.Write.Error(" -- '%s' command wasn't found for the given state!", name)
 		handlerNotFoundError(u, args)
 	}
 }
@@ -55,7 +57,7 @@ func interpret(m *Message, u *User) {
 	err := json.Unmarshal(m.Payload, &obj)
 	if err != nil {
 		// invalid JSON format?
-		logger.Error("Invalid JSON formatting") // @todo errors
+		logger.Write.Error("Invalid JSON formatting") // @todo errors
 		return
 	}
 
@@ -63,7 +65,7 @@ func interpret(m *Message, u *User) {
 
 	if !commandExists {
 		// no comand found in JSON payload, invalid JSON then
-		logger.Error("No command found in JSON payload") // @todo error handling
+		logger.Write.Error("No command found in JSON payload") // @todo error handling
 		return
 	}
 

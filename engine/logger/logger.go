@@ -1,4 +1,4 @@
-package engine
+package logger
 
 import (
 	"fmt"
@@ -6,11 +6,11 @@ import (
 )
 
 // set up logging
-var logger = logging.MustGetLogger("miri-logger")
+var Write  = logging.MustGetLogger("miri-logger")
 var format = logging.MustStringFormatter(
 	"%{color}%{time:15:04:05.000} %{shortfunc} ▶ %{level:.4s} %{id:03x}%{color:reset} %{message}",
 )
 
-func LogNewLine() {
+func NewLine() {
 	fmt.Printf("\n")
 }

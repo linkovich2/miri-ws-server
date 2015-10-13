@@ -2,6 +2,8 @@ package engine
 
 import (
 	"github.com/asaskevich/govalidator"
+	"github.com/jonathonharrell/miri-ws-server/engine/logger"
+	db "github.com/jonathonharrell/miri-ws-server/engine/core/database"
 	"golang.org/x/crypto/bcrypt"
 	"gopkg.in/mgo.v2/bson"
 )
@@ -27,7 +29,7 @@ type ModelUser struct {
 
 func CreateUser(email, password string, u *User) (errors []string) {
 	existing := ModelUser{}
-	err := db.C("users").Find(bson.M{"email": email}).One(&existing)
+	err := db.GetDB().C("users").Find(bson.M{"email": email}).One(&existing)
 
 	if err == nil { // checking for existing user
 		errors = append(errors, "A user already exists with that email.")
@@ -44,11 +46,11 @@ func CreateUser(email, password string, u *User) (errors []string) {
 	if len(errors) <= 0 {
 		hashed, _ := HashPassword(password)
 		user := &ModelUser{Email: email, HashedPassword: string(hashed), IsAdmin: false}
-		db.C("users").Insert(user)
+		db.GetDB().C("users").Insert(user)
 
 		u.State = Authenticated
 		u.Account = user
-		logger.Info("New User Created: %s", email)
+		logger.Write.Info("New User Created: %s", email)
 	}
 
 	return errors
@@ -56,7 +58,7 @@ func CreateUser(email, password string, u *User) (errors []string) {
 
 func Authenticate(email, password string, u *User) (success bool, errors []string) {
 	existing := ModelUser{}
-	err := db.C("users").Find(bson.M{"email": email}).One(&existing)
+	err := db.GetDB().C("users").Find(bson.M{"email": email}).One(&existing)
 
 	if err != nil { // no existing user
 		errors = append(errors, "Invalid email or password.")
@@ -70,7 +72,7 @@ func Authenticate(email, password string, u *User) (success bool, errors []strin
 	} else {
 		u.State = Authenticated
 		u.Account = &existing
-		logger.Info("User logged in: %s", email)
+		logger.Write.Info("User logged in: %s", email)
 	}
 
 	return success, errors

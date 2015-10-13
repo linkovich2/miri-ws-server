@@ -1,4 +1,4 @@
-package engine
+package database
 
 import (
 	"gopkg.in/mgo.v2"

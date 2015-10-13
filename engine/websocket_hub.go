@@ -1,6 +1,9 @@
 package engine
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"github.com/jonathonharrell/miri-ws-server/engine/logger"
+)
 
 // hub maintains the set of active connections and broadcasts messages to the
 // connections.
@@ -34,7 +37,7 @@ func (h *ConnectionHub) run() {
 		case c := <-h.register:
 			h.Connections[c] = true
 
-			logger.Info("New Connection [%s]", c.ID)
+			logger.Write.Info("New Connection [%s]", c.ID)
 			users[c.ID] = &User{Connection: c, State: NotAuthenticated}
 			// @todo FUTURE FEATURE we should also try to authenticate here based on cookie / json web token / session
 
@@ -44,7 +47,7 @@ func (h *ConnectionHub) run() {
 				// for now we just close out the connection and it is no longer authenticated
 
 				// run any other logic on disconnect we need here
-				logger.Notice("Connection [%s] disconnected", c.ID)
+				logger.Write.Notice("Connection [%s] disconnected", c.ID)
 
 				delete(h.Connections, c)
 				close(c.send)

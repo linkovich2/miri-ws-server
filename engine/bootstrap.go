@@ -1,6 +1,10 @@
 package engine
 
-import "gopkg.in/mgo.v2/bson"
+import (
+	"github.com/jonathonharrell/miri-ws-server/engine/logger"
+	db "github.com/jonathonharrell/miri-ws-server/engine/core/database"
+	"gopkg.in/mgo.v2/bson"
+)
 
 func Bootstrap() {
 	BootstrapSuperAdmin()
@@ -9,16 +13,16 @@ func Bootstrap() {
 func BootstrapSuperAdmin() {
 	errors := CreateUser("superadmin@minimiri.com", "superadmin", &User{})
 	if len(errors) > 0 {
-		logger.Info("Admin already existed.")
+		logger.Write.Info("Admin already existed.")
 		return
 	}
 
 	q := bson.M{"email": "superadmin@minimiri.com"}
 	change := bson.M{"$set": bson.M{"isadmin": true}}
-	err := db.C("users").Update(q, change)
+	err := db.GetDB().C("users").Update(q, change)
 	if err != nil {
 		panic(err)
 	}
 
-	logger.Info("Created Super Admin user.\n")
+	logger.Write.Info("Created Super Admin user.\n")
 }
