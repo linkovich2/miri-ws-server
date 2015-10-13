@@ -2,8 +2,8 @@ package engine
 
 import (
 	"github.com/asaskevich/govalidator"
-	"github.com/jonathonharrell/miri-ws-server/engine/logger"
 	db "github.com/jonathonharrell/miri-ws-server/engine/core/database"
+	"github.com/jonathonharrell/miri-ws-server/engine/logger"
 	"golang.org/x/crypto/bcrypt"
 	"gopkg.in/mgo.v2/bson"
 )

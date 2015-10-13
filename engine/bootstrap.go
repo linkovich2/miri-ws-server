@@ -1,8 +1,8 @@
 package engine
 
 import (
-	"github.com/jonathonharrell/miri-ws-server/engine/logger"
 	db "github.com/jonathonharrell/miri-ws-server/engine/core/database"
+	"github.com/jonathonharrell/miri-ws-server/engine/logger"
 	"gopkg.in/mgo.v2/bson"
 )
 

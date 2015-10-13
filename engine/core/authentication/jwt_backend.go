@@ -1,10 +1,10 @@
 package authentication
 
 import (
+	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/jonathonharrell/miri-ws-server/engine/core/database"
 	"github.com/jonathonharrell/miri-ws-server/engine/models"
 	"github.com/jonathonharrell/miri-ws-server/engine/settings"
-	jwt "github.com/dgrijalva/jwt-go"
 	"golang.org/x/crypto/bcrypt"
 	"gopkg.in/mgo.v2/bson"
 	"time"
@@ -38,7 +38,7 @@ func (backend *JWTAuthenticationBackend) GenerateToken(userId string) (string, e
 	token.Claims["sub"] = userId
 	tokenString, err := token.SignedString(backend.Key)
 	if err != nil {
-		panic(err)
+		panic(err) // @todo this should probably just call logger
 		return "", err
 	}
 	return tokenString, nil
@@ -84,5 +84,5 @@ func (backend *JWTAuthenticationBackend) IsInBlacklist(token string) bool {
 	//
 	// return true
 
-  return false
+	return false
 }

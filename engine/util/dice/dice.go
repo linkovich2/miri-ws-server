@@ -1,8 +1,8 @@
 package dice
 
 import (
-	"math/rand"
 	"math"
+	"math/rand"
 	"strconv"
 	"strings"
 	"time"
@@ -50,7 +50,7 @@ func (dice *Dice) RollWithAdvantageAndModifier(mod string) int {
 
 // Helper random method
 func (dice *Dice) Random(min, max int) int {
-	return rand.Intn(max - min) + min
+	return rand.Intn(max-min) + min
 }
 
 // Helper seed method

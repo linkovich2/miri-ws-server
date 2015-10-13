@@ -3,15 +3,15 @@ package settings
 import (
 	"log"
 
-	"github.com/kelseyhightower/envconfig"
 	"github.com/jonathonharrell/miri-ws-server/engine/logger"
+	"github.com/kelseyhightower/envconfig"
 )
 
 type Environment struct {
-	Port   int    `envconfig:"PORT"`
-	DBHost string `envconfig:"DB_HOST"`
-	DBName string `envconfig:"DB_NAME"`
-	JWTExpirationDelta int `envconfig:"JWT_EXPIRY_DELTA"`
+	Port               int    `envconfig:"PORT"`
+	DBHost             string `envconfig:"DB_HOST"`
+	DBName             string `envconfig:"DB_NAME"`
+	JWTExpirationDelta int    `envconfig:"JWT_EXPIRY_DELTA"`
 }
 
 var env Environment
@@ -32,5 +32,5 @@ func LoadEnv() {
 }
 
 func GetEnv() Environment {
-  return env
+	return env
 }

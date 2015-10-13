@@ -1,15 +1,15 @@
 package loader
 
 import (
-  "io/ioutil"
-  "encoding/json"
+	"encoding/json"
+	"io/ioutil"
 )
 
 func Grab(filename string, marshalTo interface{}) {
-  res, err := ioutil.ReadFile("./data/" + filename)
-  if err != nil {
-    panic(err)
-  }
+	res, err := ioutil.ReadFile("./data/" + filename)
+	if err != nil {
+		panic(err)
+	}
 
-  json.Unmarshal(res, marshalTo)
+	json.Unmarshal(res, marshalTo)
 }
