@@ -1,5 +1,9 @@
 package engine
 
+import (
+	"github.com/jonathonharrell/miri-ws-server/engine/models"
+)
+
 const (
 	NotAuthenticated = iota
 	Authenticated
@@ -18,7 +22,7 @@ func StateString(s int) string {
 }
 
 type User struct {
-	Account    *ModelUser
+	Account    *models.User
 	Connection *Connection
 	State      int
 	Character  *Character

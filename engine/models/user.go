@@ -15,7 +15,7 @@ type (
 		Email          string
 		HashedPassword string
 		IsAdmin        bool
-		// Characters     [3]*Character
+		Characters     [3]*interface{} // @todo need to change back to "Character" struct
 
 		// @todo Future stuff
 		// LastLoginDate
