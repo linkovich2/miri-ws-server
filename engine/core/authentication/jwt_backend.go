@@ -4,6 +4,7 @@ import (
 	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/jonathonharrell/miri-ws-server/engine/core/database"
 	"github.com/jonathonharrell/miri-ws-server/engine/models"
+	"github.com/jonathonharrell/miri-ws-server/engine/api/parameters"
 	"github.com/jonathonharrell/miri-ws-server/engine/settings"
 	"golang.org/x/crypto/bcrypt"
 	"gopkg.in/mgo.v2/bson"
@@ -44,7 +45,7 @@ func (backend *JWTAuthenticationBackend) GenerateToken(userId string) (string, e
 	return tokenString, nil
 }
 
-func (backend *JWTAuthenticationBackend) Authenticate(user *models.UserForm) bool {
+func (backend *JWTAuthenticationBackend) Authenticate(user *parameters.User) bool {
 	existing := models.User{}
 	err := database.GetDB().C("users").Find(bson.M{"email": user.Email}).One(&existing)
 

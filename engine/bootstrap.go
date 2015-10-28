@@ -3,7 +3,7 @@ package engine
 import (
 	db "github.com/jonathonharrell/miri-ws-server/engine/core/database"
 	"github.com/jonathonharrell/miri-ws-server/engine/services"
-	"github.com/jonathonharrell/miri-ws-server/engine/models"
+	"github.com/jonathonharrell/miri-ws-server/engine/api/parameters"
 	"github.com/jonathonharrell/miri-ws-server/engine/logger"
 	"gopkg.in/mgo.v2/bson"
 )
@@ -13,7 +13,7 @@ func Bootstrap() {
 }
 
 func BootstrapSuperAdmin() {
-	status, _ := services.CreateUser(&models.UserForm{"superadmin@minimiri.com", "superadmin"})
+	status, _ := services.CreateUser(&parameters.User{"superadmin@minimiri.com", "superadmin"})
 	if status != 200 { // we got an error back, likely that the admin account already exists
 		logger.Write.Info("Admin already existed.")
 		return

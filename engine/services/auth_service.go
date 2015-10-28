@@ -20,7 +20,7 @@ type errorResponse struct {
 	Error string `json:"error"`
 }
 
-func Login(requestUser *models.UserForm) (int, []byte) {
+func Login(requestUser *parameters.User) (int, []byte) {
 	authBackend := authentication.InitJWTAuthenticationBackend()
 
 	if authBackend.Authenticate(requestUser) {
@@ -36,7 +36,7 @@ func Login(requestUser *models.UserForm) (int, []byte) {
 	return http.StatusUnauthorized, []byte("")
 }
 
-func CreateUser(requestUser *models.UserForm) (int, []byte) {
+func CreateUser(requestUser *parameters.User) (int, []byte) {
 	authBackend := authentication.InitJWTAuthenticationBackend()
 
 	existing := &models.User{}
@@ -71,7 +71,7 @@ func CreateUser(requestUser *models.UserForm) (int, []byte) {
 	}
 }
 
-func RefreshToken(requestUser *models.UserForm) []byte {
+func RefreshToken(requestUser *parameters.User) []byte {
 	authBackend := authentication.InitJWTAuthenticationBackend()
 	token, err := authBackend.GenerateToken(requestUser.Email)
 	if err != nil {

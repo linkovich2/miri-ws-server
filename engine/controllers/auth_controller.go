@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"github.com/jonathonharrell/miri-ws-server/engine/models"
+	"github.com/jonathonharrell/miri-ws-server/engine/api/parameters"
 	"github.com/jonathonharrell/miri-ws-server/engine/services"
 
 	"encoding/json"
@@ -9,7 +9,7 @@ import (
 )
 
 func Login(w http.ResponseWriter, r *http.Request) {
-	requestUser := new(models.UserForm)
+	requestUser := new(parameters.User)
 	decoder := json.NewDecoder(r.Body)
 	decoder.Decode(&requestUser)
 
@@ -20,7 +20,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 }
 
 func Signup(w http.ResponseWriter, r *http.Request) {
-	requestUser := new(models.UserForm)
+	requestUser := new(parameters.User)
 	decoder := json.NewDecoder(r.Body)
 	decoder.Decode(&requestUser)
 
@@ -31,7 +31,7 @@ func Signup(w http.ResponseWriter, r *http.Request) {
 }
 
 func RefreshToken(w http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
-	requestUser := new(models.UserForm)
+	requestUser := new(parameters.User)
 	decoder := json.NewDecoder(r.Body)
 	decoder.Decode(&requestUser)
 
