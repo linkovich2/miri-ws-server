@@ -3,11 +3,13 @@ package controllers
 import (
 	"github.com/jonathonharrell/miri-ws-server/engine/api/parameters"
 	"github.com/jonathonharrell/miri-ws-server/engine/services"
+	"github.com/jonathonharrell/miri-ws-server/engine/logger"
 	"github.com/jonathonharrell/miri-ws-server/engine/core/authentication"
   jwt "github.com/dgrijalva/jwt-go"
-
 	"encoding/json"
 	"net/http"
+	"errors"
+	"gopkg.in/mgo.v2/bson"
 )
 
 func CreateCharacter(w http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
@@ -17,6 +19,7 @@ func CreateCharacter(w http.ResponseWriter, r *http.Request, next http.HandlerFu
 
 	userId, err := getUserId(r)
 	if err != nil {
+		logger.Write.Error(err.Error())
 		w.WriteHeader(http.StatusUnauthorized)
 		return
 	}
@@ -30,6 +33,7 @@ func CreateCharacter(w http.ResponseWriter, r *http.Request, next http.HandlerFu
 func ListCharacters(w http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
 	userId, err := getUserId(r)
 	if err != nil {
+		logger.Write.Error(err.Error())
 		w.WriteHeader(http.StatusUnauthorized)
 		return
 	}
@@ -47,6 +51,10 @@ func getUserId(r *http.Request) (string, error) {
 	})
 	if err != nil {
 		return "", err
+	}
+
+	if !bson.IsObjectIdHex(token.Claims["sub"].(string)) {
+		return "", errors.New("Invalid hex value for user ID found. Hacking attempt?")
 	}
 
 	return token.Claims["sub"].(string), nil

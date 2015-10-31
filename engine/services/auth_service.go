@@ -23,8 +23,8 @@ type errorResponse struct {
 func Login(requestUser *parameters.User) (int, []byte) {
 	authBackend := authentication.InitJWTAuthenticationBackend()
 
-	if authBackend.Authenticate(requestUser) {
-		token, err := authBackend.GenerateToken(requestUser.Email)
+	if user, err := authBackend.Authenticate(requestUser); err == nil {
+		token, err := authBackend.GenerateToken(user.ID.Hex())
 		if err != nil {
 			return http.StatusInternalServerError, []byte("")
 		} else {
@@ -58,11 +58,11 @@ func CreateUser(requestUser *parameters.User) (int, []byte) {
 	}
 
 	hashed, _ := bcrypt.GenerateFromPassword([]byte(requestUser.Password), 10)
-	user := &models.User{Email: requestUser.Email, HashedPassword: string(hashed), IsAdmin: false}
+	user := &models.User{ID: bson.NewObjectId(), Email: requestUser.Email, HashedPassword: string(hashed), IsAdmin: false}
 	db.GetDB().C("users").Insert(user)
-	logger.Write.Info("New User Created: %s", requestUser.Email)
+	logger.Write.Info("New User Created: %s", user.ID.String())
 
-	token, err := authBackend.GenerateToken(requestUser.Email)
+	token, err := authBackend.GenerateToken(user.ID.Hex())
 	if err != nil {
 		return http.StatusInternalServerError, []byte("")
 	} else {

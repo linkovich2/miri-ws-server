@@ -9,6 +9,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 	"gopkg.in/mgo.v2/bson"
 	"time"
+	"errors"
 )
 
 type JWTAuthenticationBackend struct {
@@ -45,15 +46,19 @@ func (backend *JWTAuthenticationBackend) GenerateToken(userId string) (string, e
 	return tokenString, nil
 }
 
-func (backend *JWTAuthenticationBackend) Authenticate(user *parameters.User) bool {
+func (backend *JWTAuthenticationBackend) Authenticate(user *parameters.User) (models.User, error) {
 	existing := models.User{}
 	err := database.GetDB().C("users").Find(bson.M{"email": user.Email}).One(&existing)
 
 	if err != nil { // no existing user
-		return false
+		return models.User{}, err
 	}
 
-	return bcrypt.CompareHashAndPassword([]byte(existing.HashedPassword), []byte(user.Password)) == nil
+	if bcrypt.CompareHashAndPassword([]byte(existing.HashedPassword), []byte(user.Password)) == nil {
+		return existing, nil
+	} else {
+		return models.User{}, errors.New("Authentication Error: Passwords did not match")
+	}
 }
 
 func (backend *JWTAuthenticationBackend) getTokenRemainingValidity(timestamp interface{}) int {
