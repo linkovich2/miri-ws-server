@@ -9,7 +9,7 @@ type User struct {
 	Email          string
 	HashedPassword string
 	IsAdmin        bool
-	Characters     [3]*interface{} // @todo need to change back to "Character" struct
+	Characters     [3]Character
 
 	// @todo Future stuff
 	// LastLoginDate
