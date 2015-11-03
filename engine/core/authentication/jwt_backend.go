@@ -1,15 +1,15 @@
 package authentication
 
 import (
+	"errors"
 	jwt "github.com/dgrijalva/jwt-go"
+	"github.com/jonathonharrell/miri-ws-server/engine/api/parameters"
 	"github.com/jonathonharrell/miri-ws-server/engine/core/database"
 	"github.com/jonathonharrell/miri-ws-server/engine/models"
-	"github.com/jonathonharrell/miri-ws-server/engine/api/parameters"
 	"github.com/jonathonharrell/miri-ws-server/engine/settings"
 	"golang.org/x/crypto/bcrypt"
 	"gopkg.in/mgo.v2/bson"
 	"time"
-	"errors"
 )
 
 type JWTAuthenticationBackend struct {

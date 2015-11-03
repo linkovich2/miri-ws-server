@@ -1,29 +1,29 @@
 package services
 
 import (
-  "net/http"
+	"net/http"
 
-  "github.com/jonathonharrell/miri-ws-server/engine/api/parameters"
-  "github.com/jonathonharrell/miri-ws-server/engine/models"
-  "github.com/jonathonharrell/miri-ws-server/engine/core/database"
+	"github.com/jonathonharrell/miri-ws-server/engine/api/parameters"
+	"github.com/jonathonharrell/miri-ws-server/engine/core/database"
+	"github.com/jonathonharrell/miri-ws-server/engine/models"
 
-  "gopkg.in/mgo.v2/bson"
+	"gopkg.in/mgo.v2/bson"
 )
 
 func CreateCharacter(character *parameters.Character, userId string) (status int, body []byte) {
-  // @todo stub
-  return http.StatusCreated, []byte("Whatever")
+	// @todo stub
+	return http.StatusCreated, []byte("Whatever")
 }
 
 func ListCharacters(userId string) (status int, body []byte) {
-  u := models.User{}
+	u := models.User{}
 	err := database.GetDB().C("users").Find(bson.M{"_id": bson.ObjectIdHex(userId)}).One(&u)
 
 	if err != nil { // no existing user
 		return http.StatusUnauthorized, nil
 	}
 
-  // @todo list characters
+	// @todo list characters
 
-  return http.StatusOK, []byte("Whatever")
+	return http.StatusOK, []byte("Whatever")
 }

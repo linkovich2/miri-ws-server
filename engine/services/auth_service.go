@@ -7,13 +7,13 @@ import (
 	"github.com/jonathonharrell/miri-ws-server/engine/api/parameters"
 	"github.com/jonathonharrell/miri-ws-server/engine/core/authentication"
 	db "github.com/jonathonharrell/miri-ws-server/engine/core/database"
-	"github.com/jonathonharrell/miri-ws-server/engine/models"
 	"github.com/jonathonharrell/miri-ws-server/engine/logger"
+	"github.com/jonathonharrell/miri-ws-server/engine/models"
 
-	jwt "github.com/dgrijalva/jwt-go"
-	"gopkg.in/mgo.v2/bson"
 	"github.com/asaskevich/govalidator"
+	jwt "github.com/dgrijalva/jwt-go"
 	"golang.org/x/crypto/bcrypt"
+	"gopkg.in/mgo.v2/bson"
 )
 
 type errorResponse struct {
