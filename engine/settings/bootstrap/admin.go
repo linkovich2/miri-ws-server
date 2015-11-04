@@ -1,4 +1,4 @@
-package engine
+package bootstrap
 
 import (
 	"github.com/jonathonharrell/miri-ws-server/engine/api/parameters"
@@ -8,11 +8,7 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
-func Bootstrap() {
-	BootstrapSuperAdmin()
-}
-
-func BootstrapSuperAdmin() {
+func bootstrapSuperAdmin() {
 	status, _ := services.CreateUser(&parameters.User{"superadmin@minimiri.com", "superadmin"})
 	if status != 200 { // we got an error back, likely that the admin account already exists
 		logger.Write.Info("Admin already existed.")

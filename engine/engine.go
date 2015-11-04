@@ -6,6 +6,7 @@ import (
 
 	db "github.com/jonathonharrell/miri-ws-server/engine/core/database"
 	"github.com/jonathonharrell/miri-ws-server/engine/settings"
+	"github.com/jonathonharrell/miri-ws-server/engine/settings/bootstrap"
 	"github.com/jonathonharrell/miri-ws-server/engine/util"
 	"github.com/jonathonharrell/miri-ws-server/engine/util/dice"
 	"github.com/jonathonharrell/miri-ws-server/engine/util/filters"
@@ -27,7 +28,7 @@ func Start() {
 	db.ConnectToDatabase(settings.GetEnv().DBHost, settings.GetEnv().DBName)
 	defer db.CloseDatabaseConnection()
 
-	Bootstrap()
+	bootstrap.Init()
 
 	StartWebsocketServer(env.Port)
 	RegisterCommandAliases()
