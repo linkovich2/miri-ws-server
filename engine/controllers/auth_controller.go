@@ -48,3 +48,25 @@ func Logout(w http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
 		w.WriteHeader(http.StatusOK)
 	}
 }
+
+func ForgotPassword(w http.ResponseWriter, r *http.Request) {
+	requestUser := new(parameters.ForgotPassword)
+	decoder := json.NewDecoder(r.Body)
+	decoder.Decode(&requestUser)
+
+	status, response := services.ForgotPassword(requestUser.Email)
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(status)
+	w.Write(response)
+}
+
+func ResetPassword(w http.ResponseWriter, r *http.Request) {
+	requestUser := new(parameters.ResetPassword)
+	decoder := json.NewDecoder(r.Body)
+	decoder.Decode(&requestUser)
+
+	status, response := services.ResetPassword(requestUser.Password)
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(status)
+	w.Write(response)
+}

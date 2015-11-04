@@ -11,6 +11,8 @@ import (
 func SetAuthenticationRoutes(router *mux.Router) *mux.Router {
 	router.HandleFunc("/login", controllers.Login).Methods("POST")
 	router.HandleFunc("/signup", controllers.Signup).Methods("POST")
+	router.HandleFunc("/forgot_password", controllers.ForgotPassword).Methods("POST")
+	router.HandleFunc("/reset_password", controllers.ResetPassword).Methods("POST")
 
 	router.Handle("/refresh-token",
 		negroni.New(
@@ -24,7 +26,7 @@ func SetAuthenticationRoutes(router *mux.Router) *mux.Router {
 			negroni.HandlerFunc(controllers.Logout),
 		)).Methods("GET")
 
-	// @ todo forgot password, password reset, update account actions
+	// @ todo update account actions
 
 	return router
 }

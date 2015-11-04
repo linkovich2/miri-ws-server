@@ -95,3 +95,11 @@ func Logout(req *http.Request) error {
 	tokenString := req.Header.Get("Authorization")
 	return authBackend.Logout(tokenString, tokenRequest)
 }
+
+func ForgotPassword(email string) (int, []byte) {
+	return http.StatusTeapot, []byte("")
+}
+
+func ResetPassword(pwd string) (int, []byte) {
+	return http.StatusTeapot, []byte("")
+}
