@@ -1,10 +1,5 @@
 package engine
 
-import (
-	// "github.com/jonathonharrell/miri-ws-server/engine/util"
-	"github.com/jonathonharrell/miri-ws-server/engine/util/loader"
-)
-
 type (
 	Background struct {
 		Name          string                  `json:"name"`
@@ -31,14 +26,6 @@ type (
 )
 
 var backgrounds = make(map[string]Background)
-
-func InitBackgrounds() {
-	arr := []Background{}
-	loader.Grab("backgrounds.json", &arr)
-	for _, val := range arr {
-		backgrounds[val.ID] = val
-	}
-}
 
 func (bg *Background) Shorten() BackgroundShort {
 	short := BackgroundShort{

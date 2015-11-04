@@ -1,9 +1,5 @@
 package engine
 
-import (
-// "github.com/jonathonharrell/miri-ws-server/engine/util/loader"
-)
-
 type Race struct {
 	Name            string `json:"name"`
 	Description     string `json:"description"`
