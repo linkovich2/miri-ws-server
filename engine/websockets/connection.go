@@ -17,18 +17,6 @@ const (
 var upgrader = websocket.Upgrader{
 	ReadBufferSize:  1024,
 	WriteBufferSize: 1024,
-
-	// I'm betting we'll need to remove this at some point so that we only accept connections
-	// from specific cross-origins
-	// We don't want users connecting from other locations with (potentially) malintent
-	CheckOrigin: func(r *http.Request) bool {
-		// @todo make this a little more strict
-		if strings.Contains(r.Header.Get("Origin"), "9000") {
-			return true
-		} else {
-			return false
-		}
-	},
 }
 
 // connection is an middleman between the websocket connection and the hub.
