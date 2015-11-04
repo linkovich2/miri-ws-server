@@ -5,6 +5,7 @@ import (
 	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/jonathonharrell/miri-ws-server/engine/api/parameters"
 	"github.com/jonathonharrell/miri-ws-server/engine/core/database"
+	"github.com/jonathonharrell/miri-ws-server/engine/logger"
 	"github.com/jonathonharrell/miri-ws-server/engine/models"
 	"github.com/jonathonharrell/miri-ws-server/engine/settings"
 	"golang.org/x/crypto/bcrypt"
@@ -38,7 +39,7 @@ func (backend *JWTAuthenticationBackend) GenerateToken(userId string) (string, e
 	token.Claims["sub"] = userId
 	tokenString, err := token.SignedString(backend.Key)
 	if err != nil {
-		panic(err) // @todo this should probably just call logger
+		logger.Write.Error(err.Error())
 		return "", err
 	}
 	return tokenString, nil
