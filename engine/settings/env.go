@@ -12,6 +12,7 @@ type Environment struct {
 	DBHost             string `envconfig:"DB_HOST"`
 	DBName             string `envconfig:"DB_NAME"`
 	JWTExpirationDelta int    `envconfig:"JWT_EXPIRY_DELTA"`
+	JWTSecretKey       string `envconfig:"JWT_SECRET_KEY"`
 }
 
 var env Environment
@@ -21,6 +22,7 @@ func LoadEnv() {
 	env.DBHost = "localhost:27017"
 	env.DBName = "miri-dev"
 	env.JWTExpirationDelta = 72
+	env.JWTSecretKey = "i23k8jnTghdfadGGrt32hgSGH42zSD53HaraaR48990A"
 
 	err := envconfig.Process("MIRI", &env)
 	if err != nil {

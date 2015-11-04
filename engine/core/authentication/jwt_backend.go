@@ -25,9 +25,7 @@ var authBackendInstance *JWTAuthenticationBackend = nil
 
 func InitJWTAuthenticationBackend() *JWTAuthenticationBackend {
 	if authBackendInstance == nil {
-		authBackendInstance = &JWTAuthenticationBackend{
-			Key: []byte("i23k8jnTghdfadGGrt32hgSGH42zSD53HaraaR48990A"), // @todo move to env var
-		}
+		authBackendInstance = &JWTAuthenticationBackend{[]byte(settings.GetEnv().JWTSecretKey)}
 	}
 
 	return authBackendInstance
