@@ -8,7 +8,7 @@ type (
 	}
 )
 
-type DefaultConnectionHandler struct {}
+type DefaultConnectionHandler struct{}
 
 func (d *DefaultConnectionHandler) Connect(c *Connection) bool {
 	return false

@@ -2,8 +2,8 @@ package websockets
 
 import (
 	"encoding/json"
-  "log"
 	"github.com/jonathonharrell/miri-ws-server/engine/logger"
+	"log"
 )
 
 // hub maintains the set of active connections and broadcasts messages to the
@@ -17,18 +17,18 @@ type ConnectionHub struct {
 }
 
 var Hub = ConnectionHub{
-	Connections: make(map[*Connection]bool),
-  connectionHandler: &DefaultConnectionHandler{},
-	inbound:     make(chan *Message),
-	register:    make(chan *Connection),
-	unregister:  make(chan *Connection),
+	Connections:       make(map[*Connection]bool),
+	connectionHandler: &DefaultConnectionHandler{},
+	inbound:           make(chan *Message),
+	register:          make(chan *Connection),
+	unregister:        make(chan *Connection),
 }
 
 func (h *ConnectionHub) Run() {
-  if h.connectionHandler == nil {
-    log.Fatal("Connection Handler must be set for websocket hub to function.")
-    return
-  }
+	if h.connectionHandler == nil {
+		log.Fatal("Connection Handler must be set for websocket hub to function.")
+		return
+	}
 
 	for {
 		select {
@@ -42,7 +42,7 @@ func (h *ConnectionHub) Run() {
 			if _, ok := h.Connections[c]; ok {
 				// run any other logic on disconnect we need here
 				logger.Write.Notice("Connection [%s] disconnected", c.ID)
-        h.connectionHandler.Disconnect(c)
+				h.connectionHandler.Disconnect(c)
 
 				delete(h.Connections, c)
 				close(c.send)
