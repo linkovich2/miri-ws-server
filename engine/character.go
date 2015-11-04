@@ -2,7 +2,6 @@ package engine
 
 import (
 	"encoding/json"
-	"github.com/jonathonharrell/miri-ws-server/engine/logger"
 	"github.com/jonathonharrell/miri-ws-server/engine/util"
 	"strconv"
 )
@@ -33,10 +32,6 @@ type (
 )
 
 var activeCharacterForms = make(map[*User]*CharacterForm)
-
-func (h *HandlerInterface) CommandAuthenticated_CHARLIST(u *User, args *json.RawMessage) {
-	hub.BasicSend("charlist", u.Account.Characters, u.Connection)
-}
 
 func (h *HandlerInterface) CommandAuthenticated_CHARCREATE(u *User, args *json.RawMessage) {
 	if form, exists := activeCharacterForms[u]; exists {
@@ -102,57 +97,6 @@ func (h *HandlerInterface) CommandAuthenticated_CHARCREATE(u *User, args *json.R
 	} else {
 		activeCharacterForms[u] = &CharacterForm{Step: CharCreate_Start}
 		hub.BasicSend("charcreateraces", activeCharacterForms[u].getAvailableRaces(), u.Connection)
-	}
-}
-
-func (h *HandlerInterface) CommandAuthenticated_CHARCREATESTEPBACK(u *User, args *json.RawMessage) {
-	if form, exists := activeCharacterForms[u]; exists {
-		if form.Step >= 1 {
-			form.stepBack()
-			hub.BasicSend("charcreatestepback", nil, u.Connection)
-		} else {
-			logger.Write.Warning(" -- received step back on step 0 CHARCREATE, weird.")
-		}
-	} else {
-		logger.Write.Warning(" -- tried to step back CHARCREATE form that didn't exist, ignoring.")
-	}
-}
-
-func (h *HandlerInterface) CommandAuthenticated_NEWCHAR(u *User, args *json.RawMessage) {
-	if _, exists := activeCharacterForms[u]; exists {
-		delete(activeCharacterForms, u)
-	} else {
-		logger.Write.Warning(" -- tried to cancel CHARCREATE form that didn't exist, ignoring.")
-	}
-}
-
-func (f *CharacterForm) stepBack() {
-	f.Step = f.Step - 1
-	switch f.Step {
-	case CharCreate_Start:
-		f.Character = Character{}
-	case CharCreate_Gender:
-		f.Character = Character{
-			Race: f.Character.Race,
-		}
-	case CharCreate_Aesthetic:
-		f.Character = Character{
-			Race:   f.Character.Race,
-			Gender: f.Character.Gender,
-		}
-	case CharCreate_Functional:
-		f.Character = Character{
-			Race:            f.Character.Race,
-			Gender:          f.Character.Gender,
-			AestheticTraits: f.Character.AestheticTraits,
-		}
-	case CharCreate_Background:
-		f.Character = Character{
-			Race:             f.Character.Race,
-			Gender:           f.Character.Gender,
-			AestheticTraits:  f.Character.AestheticTraits,
-			FunctionalTraits: f.Character.FunctionalTraits,
-		}
 	}
 }
 

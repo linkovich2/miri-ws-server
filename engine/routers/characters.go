@@ -21,5 +21,13 @@ func SetCharacterRoutes(router *mux.Router) *mux.Router {
 			negroni.HandlerFunc(controllers.ListCharacters),
 		)).Methods("GET")
 
+	router.Handle("/characters/options",
+		negroni.New(
+			negroni.HandlerFunc(authentication.RequireTokenAuthentication),
+			negroni.HandlerFunc(controllers.CharacterOptions),
+		)).Methods("GET")
+
+	// @todo delete character
+
 	return router
 }

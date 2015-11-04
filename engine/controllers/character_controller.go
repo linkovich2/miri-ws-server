@@ -30,6 +30,13 @@ func CreateCharacter(w http.ResponseWriter, r *http.Request, next http.HandlerFu
 	w.Write(responseBody)
 }
 
+func CharacterOptions(w http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
+	responseStatus, options := services.CharacterOptions()
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(responseStatus)
+	w.Write(options)
+}
+
 func ListCharacters(w http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
 	userId, err := getUserId(r)
 	if err != nil {

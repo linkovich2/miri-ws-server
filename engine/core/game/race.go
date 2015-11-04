@@ -1,8 +1,4 @@
-package engine
-
-import (
-// "github.com/jonathonharrell/miri-ws-server/engine/util/loader"
-)
+package game
 
 type Race struct {
 	Name            string `json:"name"`
@@ -10,5 +6,3 @@ type Race struct {
 	LongDescription string `json:"long_description"`
 	ID              string `json:"id, omitempty"`
 }
-
-var races = make(map[string]Race)

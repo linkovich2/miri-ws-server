@@ -28,7 +28,6 @@ func Start() {
 	defer db.CloseDatabaseConnection()
 
 	Bootstrap()
-	LoadEverything()
 
 	StartWebsocketServer(env.Port)
 	RegisterCommandAliases()
