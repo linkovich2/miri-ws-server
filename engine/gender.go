@@ -1,8 +1,6 @@
 package engine
 
-import (
-	"github.com/jonathonharrell/miri-ws-server/engine/util/loader"
-)
+import ()
 
 type Gender struct {
 	Name            string   `json:"name"`
@@ -17,11 +15,3 @@ type GenderShort struct {
 }
 
 var genders = make(map[string]Gender)
-
-func InitGenders() {
-	arr := []Gender{}
-	loader.Grab("genders.json", &arr)
-	for _, val := range arr {
-		genders[val.ID] = val
-	}
-}

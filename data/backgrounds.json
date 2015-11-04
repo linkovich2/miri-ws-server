@@ -1,9 +1,0 @@
-[
-  {
-    "name":"Nomad - Ara Desert",
-    "id":"BGNOMADARADESERT",
-    "description":"You are a nomad, wandering the Ara Wastes.",
-    "prerequisites": {},
-    "allow_all": true
-  }
-]

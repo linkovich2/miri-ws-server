@@ -2,7 +2,6 @@ package engine
 
 import (
 	"github.com/jonathonharrell/miri-ws-server/engine/util"
-	"github.com/jonathonharrell/miri-ws-server/engine/util/loader"
 )
 
 type (
@@ -91,30 +90,6 @@ var (
 	aestheticTraitsCategorized  = make(map[string]AestheticTraitCategory)
 	functionalTraitsCategorized = make(map[string]FunctionalTraitCategory)
 )
-
-func InitAestheticTraits() {
-	arr := []AestheticTraitCategory{}
-	loader.Grab("aesthetic_traits.json", &arr)
-	for _, val := range arr {
-		aestheticTraitsCategorized[val.ID] = val
-		for _, t := range val.Traits {
-			t.Category = val.ID
-			aestheticTraits[t.ID] = t
-		}
-	}
-}
-
-func InitFunctionalTraits() {
-	arr := []FunctionalTraitCategory{}
-	loader.Grab("functional_traits.json", &arr)
-	for _, val := range arr {
-		functionalTraitsCategorized[val.ID] = val
-		for _, t := range val.Traits {
-			t.Category = val.ID
-			functionalTraits[t.ID] = t
-		}
-	}
-}
 
 func (ac *AestheticTraitCategory) AvailableForCharacter(c *Character) bool {
 	if in, _ := util.InArray(c.Race, ac.DisallowedRaces); in {

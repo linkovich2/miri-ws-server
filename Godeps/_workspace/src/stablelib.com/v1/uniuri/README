@@ -1,0 +1,31 @@
+uniuri
+------
+
+Package uniuri generates random strings good for use in URIs to identify
+unique objects.
+
+
+Usage:
+
+    import "stablelib.com/v1/uniuri"
+
+
+Documentation:
+
+    https://stablelib.com/doc/v1/uniuri
+
+
+Upstream:
+
+    https://github.com/dchest/uniuri
+
+
+StableLib package version:
+
+    1.0.0
+
+
+Use is subject to StableLib Terms of Service: https://stablelib.com/terms/
+
+StableLib is a distribution of open source Go packages with long-term support.
+Learn more at https://stablelib.com
