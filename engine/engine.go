@@ -28,7 +28,7 @@ func Start() {
 	db.ConnectToDatabase(settings.GetEnv().DBHost, settings.GetEnv().DBName)
 	defer db.CloseDatabaseConnection()
 
-	bootstrap.Init()
+	bootstrap.Start()
 
 	StartWebsocketServer(env.Port)
 	RegisterCommandAliases()

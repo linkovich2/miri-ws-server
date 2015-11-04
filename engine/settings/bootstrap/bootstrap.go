@@ -1,5 +1,5 @@
 package bootstrap
 
-func Init() {
+func Start() {
 	bootstrapSuperAdmin()
 }
