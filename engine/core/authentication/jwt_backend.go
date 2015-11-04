@@ -22,7 +22,10 @@ const (
 	expireOffset  = 3600
 )
 
-var authBackendInstance *JWTAuthenticationBackend = nil
+var (
+	authBackendInstance *JWTAuthenticationBackend = nil
+	blacklist = make(map[string]bool)
+)
 
 func InitJWTAuthenticationBackend() *JWTAuthenticationBackend {
 	if authBackendInstance == nil {
@@ -60,34 +63,15 @@ func (backend *JWTAuthenticationBackend) Authenticate(user *parameters.User) (mo
 	}
 }
 
-func (backend *JWTAuthenticationBackend) getTokenRemainingValidity(timestamp interface{}) int {
-	if validity, ok := timestamp.(float64); ok {
-		tm := time.Unix(int64(validity), 0)
-		remainer := tm.Sub(time.Now())
-		if remainer > 0 {
-			return int(remainer.Seconds() + expireOffset)
-		}
-	}
-	return expireOffset
-}
-
 func (backend *JWTAuthenticationBackend) Logout(tokenString string, token *jwt.Token) error {
-	// redisConn := redis.Connect()
-	// return redisConn.SetValue(tokenString, tokenString, backend.getTokenRemainingValidity(token.Claims["exp"]))
-	// @todo remove token?
+	blacklist[tokenString] = true
 	return nil
 }
 
 func (backend *JWTAuthenticationBackend) IsInBlacklist(token string) bool {
-	// @todo check if token exists in mongo ?
-	// redisConn := redis.Connect()
-	// redisToken, _ := redisConn.GetValue(token)
-	//
-	// if redisToken == nil {
-	// 	return false
-	// }
-	//
-	// return true
+	if _, ok := blacklist[token]; ok {
+		return true
+	}
 
 	return false
 }

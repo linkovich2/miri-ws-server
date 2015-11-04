@@ -12,7 +12,7 @@ func SetAuthenticationRoutes(router *mux.Router) *mux.Router {
 	router.HandleFunc("/login", controllers.Login).Methods("POST")
 	router.HandleFunc("/signup", controllers.Signup).Methods("POST")
 
-	router.Handle("/refresh-token", // @todo do we need this route? probably not
+	router.Handle("/refresh-token",
 		negroni.New(
 			negroni.HandlerFunc(authentication.RequireTokenAuthentication),
 			negroni.HandlerFunc(controllers.RefreshToken),
