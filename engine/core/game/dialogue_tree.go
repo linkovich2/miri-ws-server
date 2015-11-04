@@ -1,6 +1,6 @@
-package engine
+package game
 
-// this is just a prelim for dialogue trees, hoping I won't forget about this structure
+// just a prelim for dialogue trees
 type DialogueTree struct {
 	ID           string
 	Text         string
