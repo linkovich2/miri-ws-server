@@ -24,7 +24,7 @@ const (
 
 var (
 	authBackendInstance *JWTAuthenticationBackend = nil
-	blacklist = make(map[string]bool)
+	blacklist                                     = make(map[string]bool)
 )
 
 func InitJWTAuthenticationBackend() *JWTAuthenticationBackend {
