@@ -23,6 +23,7 @@ func CharacterOptions() (status int, body []byte) {
 	options["genders"] = content.Genders
 	options["aesthetic_traits"] = content.AestheticTraits
 	options["functional_traits"] = content.FunctionalTraits
+	options["backgrounds"] = content.Backgrounds
 
 	res, _ := json.Marshal(options)
 

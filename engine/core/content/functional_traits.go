@@ -31,8 +31,8 @@ var FunctionalTraits = map[string]game.FunctionalTraitCategory{
 		},
 	},
 	"RACIAL": game.FunctionalTraitCategory{
-		Name:   "Inherent Racial Ability",
-		ID:     "RACIAL",
+		Name:            "Inherent Racial Ability",
+		ID:              "RACIAL",
 		DisallowedRaces: []string{"HUMAN"},
 		Traits: map[string]game.FunctionalTrait{
 			"DARKVISION": game.FunctionalTrait{
