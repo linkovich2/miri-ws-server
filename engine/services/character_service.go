@@ -13,20 +13,18 @@ import (
 )
 
 func CreateCharacter(character *parameters.Character, userId string) (status int, body []byte) {
+	// valid, errors := validate(character)
 	// @todo stub
 	return http.StatusCreated, []byte("Whatever")
 }
 
-func CharacterOptions() (status int, body []byte) {
-	options := make(map[string]interface{})
-	options["races"] = content.Races
-	options["genders"] = content.Genders
-	options["aesthetic_traits"] = content.AestheticTraits
-	options["functional_traits"] = content.FunctionalTraits
-	options["backgrounds"] = content.Backgrounds
+func CharacterOptions(request *http.Request) (status int, body []byte) {
+	options := getOptions(request.URL.Query().Get("for"))
+	if options == nil {
+		return http.StatusBadRequest, []byte{}
+	}
 
 	res, _ := json.Marshal(options)
-
 	return http.StatusOK, res
 }
 
@@ -38,7 +36,27 @@ func ListCharacters(userId string) (status int, body []byte) {
 		return http.StatusUnauthorized, nil
 	}
 
-	// @todo list characters
+	res, _ := json.Marshal(u.Characters)
+	return http.StatusOK, res
+}
 
-	return http.StatusOK, []byte("Whatever")
+func DeleteCharacter() {
+	// @todo stub
+}
+
+func getOptions(query string) interface{} {
+	switch query {
+	case "races":
+		return content.Races
+	case "genders":
+		return content.Genders
+	case "aesthetic_traits":
+		return content.AestheticTraits
+	case "functional_traits":
+		return content.FunctionalTraits
+	case "backgrounds":
+		return content.Backgrounds
+	default:
+		return nil
+	}
 }

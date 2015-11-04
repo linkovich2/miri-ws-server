@@ -31,7 +31,7 @@ func CreateCharacter(w http.ResponseWriter, r *http.Request, next http.HandlerFu
 }
 
 func CharacterOptions(w http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
-	responseStatus, options := services.CharacterOptions()
+	responseStatus, options := services.CharacterOptions(r)
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(responseStatus)
 	w.Write(options)
