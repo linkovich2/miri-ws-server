@@ -1,12 +1,16 @@
 package engine
 
+import (
+	ws "github.com/jonathonharrell/miri-ws-server/engine/websockets"
+)
+
 type Room struct {
 	ID          int
 	Name        string
 	Realm       string
 	Pos         Position
 	Active      bool
-	Connections []*Connection
+	Connections []*ws.Connection
 }
 
 func (r *Room) Init() {

@@ -10,5 +10,4 @@ Make sure you have MongoDB installed and running, then just `go build && ./miri-
   - functional default to selected
   - at least one required rule
 - CC: Character delete function
-- Controllers: Play, Account actions
-- Move websocket lib into own package
+- Controllers: Account actions, Additional authentication methods (forgot/reset password system)

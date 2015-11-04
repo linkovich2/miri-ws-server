@@ -1,4 +1,4 @@
-package engine
+package websockets
 
 import (
 	"github.com/gorilla/websocket"
@@ -46,7 +46,7 @@ type Message struct {
 // ReadPump pumps messages from the websocket connection to the hub.
 func (c *Connection) readPump() {
 	defer func() {
-		hub.unregister <- c
+		Hub.unregister <- c
 		c.webSocket.Close()
 	}()
 	c.webSocket.SetReadLimit(MaxMessageSize)
@@ -58,7 +58,7 @@ func (c *Connection) readPump() {
 		if err != nil {
 			break
 		}
-		hub.inbound <- &Message{msg, c}
+		Hub.inbound <- &Message{msg, c}
 	}
 }
 
