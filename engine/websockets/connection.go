@@ -2,8 +2,6 @@ package websockets
 
 import (
 	"github.com/gorilla/websocket"
-	"net/http"
-	"strings"
 	"time"
 )
 
