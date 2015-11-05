@@ -4,12 +4,12 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"gopkg.in/mgo.v2/bson"
+
 	"github.com/jonathonharrell/miri-ws-server/engine/api/parameters"
 	"github.com/jonathonharrell/miri-ws-server/engine/core/content"
 	"github.com/jonathonharrell/miri-ws-server/engine/core/database"
 	"github.com/jonathonharrell/miri-ws-server/engine/models"
-
-	"gopkg.in/mgo.v2/bson"
 )
 
 func CreateCharacter(character *parameters.Character, userId string) (status int, body []byte) {

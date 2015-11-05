@@ -24,7 +24,7 @@ func Login(requestUser *parameters.User) (int, []byte) {
 	authBackend := authentication.InitJWTAuthenticationBackend()
 
 	if user, err := authBackend.Authenticate(requestUser); err == nil {
-		token, err := authBackend.GenerateToken(user.ID.Hex())
+		token, err := authBackend.GenerateToken(user.ID.String())
 		if err != nil {
 			return http.StatusInternalServerError, []byte("")
 		} else {
@@ -62,7 +62,7 @@ func CreateUser(requestUser *parameters.User) (int, []byte) {
 	db.GetDB().C("users").Insert(user)
 	logger.Write.Info("New User Created: %s", user.ID.String())
 
-	token, err := authBackend.GenerateToken(user.ID.Hex())
+	token, err := authBackend.GenerateToken(user.ID.String())
 	if err != nil {
 		return http.StatusInternalServerError, []byte("")
 	} else {
