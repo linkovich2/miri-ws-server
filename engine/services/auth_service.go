@@ -64,7 +64,6 @@ func CreateUser(requestUser *parameters.User) (int, []byte) {
 	hashed, _ := bcrypt.GenerateFromPassword([]byte(requestUser.Password), 10)
 	i := bson.NewObjectId()
 	user := &models.User{ID: i, Email: requestUser.Email, HashedPassword: string(hashed), IsAdmin: false}
-	logger.Write.Info("%v", user.ID)
 	database.C("users").Insert(user)
 	logger.Write.Info("New User Created: %s", user.ID.Hex())
 
