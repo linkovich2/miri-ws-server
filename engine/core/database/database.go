@@ -1,12 +1,12 @@
 package database
 
 import (
-	"gopkg.in/mgo.v2"
 	"github.com/jonathonharrell/miri-ws-server/engine/settings"
+	"gopkg.in/mgo.v2"
 )
 
 var (
-  env settings.Environment
+	env     settings.Environment
 	session *mgo.Session
 )
 
