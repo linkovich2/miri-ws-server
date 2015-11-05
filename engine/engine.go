@@ -28,7 +28,7 @@ func Start() {
 	settings.LoadEnv()
 	env := settings.GetEnv()
 
-	db.ConnectToDatabase(settings.GetEnv().DBHost, settings.GetEnv().DBName)
+	db.ConnectToDatabase() // create master DB session
 	defer db.CloseDatabaseConnection()
 
 	bootstrap.Start()

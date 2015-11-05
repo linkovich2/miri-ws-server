@@ -15,9 +15,13 @@ func bootstrapSuperAdmin() {
 		return
 	}
 
+	session, dbName := db.GetSession() // connect
+	database := session.DB(dbName)
+	defer session.Close()
+
 	q := bson.M{"email": "superadmin@minimiri.com"}
 	change := bson.M{"$set": bson.M{"isadmin": true}}
-	err := db.GetDB().C("users").Update(q, change)
+	err := database.C("users").Update(q, change)
 	if err != nil {
 		panic(err)
 	}

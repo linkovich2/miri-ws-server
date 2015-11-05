@@ -29,8 +29,12 @@ func CharacterOptions(request *http.Request) (status int, body []byte) {
 }
 
 func ListCharacters(userId string) (status int, body []byte) {
+	session, dbName := database.GetSession() // connect
+	db := session.DB(dbName)
+	defer session.Close()
+
 	u := models.User{}
-	err := database.GetDB().C("users").Find(bson.M{"_id": bson.ObjectIdHex(userId)}).One(&u)
+	err := db.C("users").Find(bson.M{"_id": bson.ObjectIdHex(userId)}).One(&u)
 
 	if err != nil { // no existing user
 		return http.StatusUnauthorized, nil

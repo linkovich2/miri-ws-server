@@ -2,29 +2,30 @@ package database
 
 import (
 	"gopkg.in/mgo.v2"
+	"github.com/jonathonharrell/miri-ws-server/engine/settings"
 )
 
 var (
-	db      *mgo.Database
+  env settings.Environment
 	session *mgo.Session
 )
 
-func ConnectToDatabase(host string, database string) {
-	s, err := mgo.Dial(host)
+func ConnectToDatabase() {
+	env = settings.GetEnv()
+
+	s, err := mgo.Dial(env.DBHost)
 	if err != nil {
 		panic(err)
 	}
 
 	session = s
 	session.SetMode(mgo.Monotonic, true) // @resource http://godoc.org/labix.org/v2/mgo#Session.SetMode
-
-	db = session.DB(database)
 }
 
 func CloseDatabaseConnection() {
 	session.Close()
 }
 
-func GetDB() *mgo.Database {
-	return db
+func GetSession() (*mgo.Session, string) {
+	return session.Copy(), env.DBName
 }

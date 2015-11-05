@@ -37,10 +37,14 @@ func Login(requestUser *parameters.User) (int, []byte) {
 }
 
 func CreateUser(requestUser *parameters.User) (int, []byte) {
+	session, dbName := db.GetSession() // connect
+	database := session.DB(dbName)
+	defer session.Close()
+
 	authBackend := authentication.InitJWTAuthenticationBackend()
 
 	existing := &models.User{}
-	err := db.GetDB().C("users").Find(bson.M{"email": requestUser.Email}).One(&existing)
+	err := database.C("users").Find(bson.M{"email": requestUser.Email}).One(&existing)
 
 	if err == nil { // checking for existing user
 		response, _ := json.Marshal(errorResponse{"A user already exists with that email."})
@@ -59,7 +63,7 @@ func CreateUser(requestUser *parameters.User) (int, []byte) {
 
 	hashed, _ := bcrypt.GenerateFromPassword([]byte(requestUser.Password), 10)
 	user := &models.User{ID: bson.NewObjectId(), Email: requestUser.Email, HashedPassword: string(hashed), IsAdmin: false}
-	db.GetDB().C("users").Insert(user)
+	database.C("users").Insert(user)
 	logger.Write.Info("New User Created: %s", user.ID.String())
 
 	token, err := authBackend.GenerateToken(user.ID.String())

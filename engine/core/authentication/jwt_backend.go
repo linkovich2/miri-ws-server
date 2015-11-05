@@ -49,8 +49,12 @@ func (backend *JWTAuthenticationBackend) GenerateToken(userId string) (string, e
 }
 
 func (backend *JWTAuthenticationBackend) Authenticate(user *parameters.User) (models.User, error) {
+	session, dbName := database.GetSession() // connect
+	db := session.DB(dbName)
+	defer session.Close()
+
 	existing := models.User{}
-	err := database.GetDB().C("users").Find(bson.M{"email": user.Email}).One(&existing)
+	err := db.C("users").Find(bson.M{"email": user.Email}).One(&existing)
 
 	if err != nil { // no existing user
 		return models.User{}, err
