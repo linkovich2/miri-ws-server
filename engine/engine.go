@@ -37,7 +37,7 @@ func Start() {
 
 	router := routers.InitRoutes()
 	n := negroni.Classic()
-	n.UseHandler(router)
+	n.UseHandler(&util.WithCORS{router})
 	addr := ":" + strconv.Itoa(env.Port)
 	go http.ListenAndServe(addr, n)
 
