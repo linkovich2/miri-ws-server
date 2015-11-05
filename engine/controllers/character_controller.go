@@ -2,13 +2,9 @@ package controllers
 
 import (
 	"encoding/json"
-	"errors"
-	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/jonathonharrell/miri-ws-server/engine/api/parameters"
-	"github.com/jonathonharrell/miri-ws-server/engine/core/authentication"
 	"github.com/jonathonharrell/miri-ws-server/engine/logger"
 	"github.com/jonathonharrell/miri-ws-server/engine/services"
-	"gopkg.in/mgo.v2/bson"
 	"net/http"
 )
 
@@ -49,20 +45,4 @@ func ListCharacters(w http.ResponseWriter, r *http.Request, next http.HandlerFun
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(responseStatus)
 	w.Write(list)
-}
-
-func getUserId(r *http.Request) (string, error) {
-	authBackend := authentication.InitJWTAuthenticationBackend()
-	token, err := jwt.ParseFromRequest(r, func(token *jwt.Token) (interface{}, error) {
-		return authBackend.Key, nil
-	})
-	if err != nil {
-		return "", err
-	}
-
-	if !bson.IsObjectIdHex(token.Claims["sub"].(string)) {
-		return "", errors.New("Invalid hex value for user ID found. Hacking attempt?")
-	}
-
-	return token.Claims["sub"].(string), nil
 }

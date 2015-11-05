@@ -2,6 +2,7 @@ package websockets
 
 import (
 	"github.com/gorilla/websocket"
+	"github.com/jonathonharrell/miri-ws-server/engine/models"
 	"time"
 )
 
@@ -22,6 +23,8 @@ type Connection struct {
 	webSocket *websocket.Conn // The websocket connection.
 	send      chan []byte     // Buffered channel of outbound messages.
 	ID        string
+	IsAdmin   bool
+	Character *models.Character
 }
 
 type Message struct {
