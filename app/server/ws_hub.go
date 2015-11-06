@@ -1,8 +1,8 @@
 package server
 
 import (
-	"log"
 	"github.com/jonathonharrell/miri-ws-server/app/logger"
+	"log"
 )
 
 // hub maintains the set of active connections and broadcasts messages to the
@@ -11,8 +11,8 @@ type ConnectionHub struct {
 	connections       map[*Connection]bool // Registered connections.
 	connectionHandler ConnectionHandler
 	inbound           chan *InboundMessage // Inbound messages from the connections.
-	register          chan *Connection // Register requests from the connections.
-	unregister        chan *Connection // Unregister requests from connections.
+	register          chan *Connection     // Register requests from the connections.
+	unregister        chan *Connection     // Unregister requests from connections.
 }
 
 var hub = ConnectionHub{

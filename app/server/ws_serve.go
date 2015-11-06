@@ -3,9 +3,9 @@ package server
 import (
 	"fmt"
 	jwt "github.com/dgrijalva/jwt-go"
+	"github.com/jonathonharrell/miri-ws-server/app/core"
 	"github.com/jonathonharrell/miri-ws-server/app/database"
 	"github.com/jonathonharrell/miri-ws-server/app/logger"
-	"github.com/jonathonharrell/miri-ws-server/app/core"
 	"gopkg.in/mgo.v2/bson"
 	"net/http"
 	"stablelib.com/v1/uniuri"

@@ -3,8 +3,8 @@ package app
 import (
 	"log"
 
-	"github.com/kelseyhightower/envconfig"
 	"github.com/jonathonharrell/miri-ws-server/app/logger"
+	"github.com/kelseyhightower/envconfig"
 )
 
 type Environment struct {

@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/jonathonharrell/miri-ws-server/app/core"
 	db "github.com/jonathonharrell/miri-ws-server/app/database"
 	"github.com/jonathonharrell/miri-ws-server/app/server"
-	"github.com/jonathonharrell/miri-ws-server/app/core"
 	"github.com/jonathonharrell/miri-ws-server/app/util"
 	"github.com/jonathonharrell/miri-ws-server/app/util/dice"
 	"github.com/jonathonharrell/miri-ws-server/app/util/filters"
@@ -18,7 +18,7 @@ func Start() {
 	dice.SeedRandom() // seed rand for dice
 	filters.Init()    // init filter libs (RP filter, profanity filter, language filter, etc)
 
-	miri := &core.World{"Miri", make(map[string]core.Realm)}                  // load in the world, rooms, etc
+	miri := &core.World{"Miri", make(map[string]core.Realm)}             // load in the world, rooms, etc
 	go util.RunEvery(core.WorldUpdateLoopTimer*time.Second, miri.Update) // start the world update loop
 
 	db.ConnectToDatabase(env.DBHost, env.DBName) // create master DB session
