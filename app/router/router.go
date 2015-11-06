@@ -20,12 +20,12 @@ type (
 var connections = make(map[string]*game.Connection)
 
 func (r *Router) Connect(c *server.Connection) {
-	// connections[c.ID] = &game.Connection{socket: c}
+	connections[c.ID] = &game.Connection{Socket: c}
 	// do we even need to do anything on connect? @todo
 }
 
 func (r *Router) Disconnect(c *server.Connection) {
-	// delete(connections, c.ID)
+	delete(connections, c.ID)
 
 	// @todo we should also pass this to the game goroutine,
 	// and it should check if the connection is in-game
@@ -66,12 +66,12 @@ func (r *Router) Handle(m *server.InboundMessage) {
 	if c.Character != nil {
 		r.game.Input <- &game.Command{Value: method, Args: args, Character: c.Character, Connection: c.Socket}
 	} else {
-		command := reflect.ValueOf(characters.Controller).MethodByName(method)
+		command := reflect.ValueOf(&characters.Controller).MethodByName(method)
 
 		if command.IsValid() {
 			command.Call([]reflect.Value{reflect.ValueOf(c), reflect.ValueOf(r.game), reflect.ValueOf(args)})
 		} else {
-			logger.Write.Error("Handler not found for %v", args)
+			logger.Write.Error("Handler not found for %v", method)
 		}
 	}
 }
