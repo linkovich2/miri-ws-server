@@ -2,6 +2,7 @@ package server
 
 import (
 	"github.com/gorilla/websocket"
+	"gopkg.in/mgo.v2/bson"
 	"net/http"
 	"time"
 )
@@ -27,11 +28,12 @@ type Connection struct {
 	send      chan []byte     // Buffered channel of outbound messages.
 	ID        string
 	Admin     bool
+	UserID    bson.ObjectId
 }
 
 type InboundMessage struct {
-	payload    []byte
-	connection *Connection
+	Payload    []byte
+	Connection *Connection
 }
 
 // ReadPump pumps messages from the websocket connection to the hub.
@@ -82,4 +84,8 @@ func (c *Connection) writePump() {
 			}
 		}
 	}
+}
+
+func (c *Connection) Send(m []byte) {
+	c.send <- m
 }

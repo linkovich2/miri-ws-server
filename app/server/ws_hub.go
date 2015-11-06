@@ -59,15 +59,3 @@ func (h *ConnectionHub) Run() {
 func (h *ConnectionHub) SetHandler(c ConnectionHandler) {
 	h.connectionHandler = c
 }
-
-// Send a message to a lot of connections
-func (h *ConnectionHub) Broadcast(m []byte, targets []*Connection) {
-	for _, c := range targets {
-		c.send <- m
-	}
-}
-
-// Send a message to one connection
-func (h *ConnectionHub) Send(m []byte, c *Connection) {
-	c.send <- m
-}
