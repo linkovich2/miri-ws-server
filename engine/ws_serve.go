@@ -1,15 +1,15 @@
 package engine
 
 import (
+	"fmt"
+	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/jonathonharrell/miri-ws-server/engine/database"
 	"github.com/jonathonharrell/miri-ws-server/engine/logger"
 	"github.com/jonathonharrell/miri-ws-server/engine/models"
 	"gopkg.in/mgo.v2/bson"
 	"net/http"
-	"strconv"
-	"fmt"
 	"stablelib.com/v1/uniuri"
-	jwt "github.com/dgrijalva/jwt-go"
+	"strconv"
 )
 
 type ConnectionData struct {
@@ -18,7 +18,7 @@ type ConnectionData struct {
 }
 
 func serve() {
-	http.HandleFunc("/", func (w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != "GET" {
 			w.WriteHeader(http.StatusMethodNotAllowed)
 			return
