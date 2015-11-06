@@ -1,4 +1,4 @@
-package app
+package core
 
 const (
 	MaxRoomsPerRealm = 512 // max number of rooms per realm

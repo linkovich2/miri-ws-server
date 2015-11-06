@@ -4,6 +4,7 @@ import (
 	"log"
 
 	"github.com/kelseyhightower/envconfig"
+	"github.com/jonathonharrell/miri-ws-server/app/logger"
 )
 
 type Environment struct {
@@ -28,6 +29,6 @@ func init() {
 		log.Fatal(err.Error())
 	}
 
-	logger.Info("\nEnvironment\n-----------\nPort: %v\nDB Host: %s\nDB Name: %s\n",
+	logger.Write.Info("\nEnvironment\n-----------\nPort: %v\nDB Host: %s\nDB Name: %s\n",
 		env.Port, env.DBHost, env.DBName)
 }

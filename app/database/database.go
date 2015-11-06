@@ -25,6 +25,6 @@ func CloseDatabaseConnection() {
 	session.Close()
 }
 
-func GetSession() *mgo.Session {
-	return session.Copy()
+func GetSession() (*mgo.Session, string) {
+	return session.Copy(), name
 }

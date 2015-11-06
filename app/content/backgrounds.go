@@ -1,11 +1,11 @@
 package content
 
 import (
-	"github.com/jonathonharrell/miri-ws-server/app/core/game"
+	"github.com/jonathonharrell/miri-ws-server/app/core"
 )
 
-var Backgrounds = map[string]game.Background{
-	"NOMADDESERT": game.Background{
+var Backgrounds = map[string]core.Background{
+	"NOMADDESERT": core.Background{
 		Name:        "Nomad - Kai Ara",
 		ID:          "NOMADDESERT",
 		Description: "You are a nomad, wandering the Ara Wastes.",

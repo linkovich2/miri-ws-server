@@ -1,4 +1,4 @@
-package app
+package core
 
 type Room struct {
 	ID          int
@@ -6,7 +6,7 @@ type Room struct {
 	Realm       string
 	Pos         Position
 	Active      bool
-	Connections []*connection
+	Connections []string
 }
 
 func (r *Room) Init() {

@@ -1,11 +1,11 @@
 package content
 
 import (
-	"github.com/jonathonharrell/miri-ws-server/app/core/game"
+	"github.com/jonathonharrell/miri-ws-server/app/core"
 )
 
-var Races = map[string]game.Race{
-	"HUMAN": game.Race{
+var Races = map[string]core.Race{
+	"HUMAN": core.Race{
 		Name: "Human",
 		ID:   "HUMAN",
 		LongDescription: "<p><strong>Distinct Groups:</strong> The Eldorei, The Fox-Ear Clan, The Kai-Ara, and The Briree</p>" +
@@ -17,7 +17,7 @@ var Races = map[string]game.Race{
 			"<p><strong>History: </strong>Humans have, since the days of Fae, been masters of conquering and migrating. Their civilizations are among the largest in the Miri, and their number is several times as great as that of the other races. They are masters of trade and diplomacy, also having a large number of allies. Whether that is due to their personable natures one cannot be certain. Whatever drives them, humans endeavor to succeed.</p>",
 		Description: "The most diverse race in The Miri.",
 	},
-	"ELF": game.Race{
+	"ELF": core.Race{
 		Name:        "Elf",
 		ID:          "ELF",
 		Description: "A graceful people, typically well-mannered and empathetic.",
@@ -29,7 +29,7 @@ var Races = map[string]game.Race{
 			"<p><strong>Personality: </strong>Varied, but commonly curious, polite, or haughty.</p>" +
 			"<p><strong>History: </strong></p>",
 	},
-	"DWARF": game.Race{
+	"DWARF": core.Race{
 		Name:        "Dwarf",
 		ID:          "DWARF",
 		Description: "Stout, stoic and enduring, like the mountains they adore.",

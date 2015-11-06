@@ -1,4 +1,4 @@
-package game
+package core
 
 // just a prelim for dialogue trees
 type DialogueTree struct {

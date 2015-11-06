@@ -1,4 +1,4 @@
-package app
+package core
 
 const (
 	WorldUpdateLoopTimer = 5

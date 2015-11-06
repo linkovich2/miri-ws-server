@@ -1,4 +1,4 @@
-package game
+package core
 
 type Gender struct {
 	Name            string   `json:"name"`

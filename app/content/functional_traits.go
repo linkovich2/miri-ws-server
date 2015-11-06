@@ -1,28 +1,28 @@
 package content
 
 import (
-	"github.com/jonathonharrell/miri-ws-server/app/core/game"
+	"github.com/jonathonharrell/miri-ws-server/app/core"
 )
 
-var FunctionalTraits = map[string]game.FunctionalTraitCategory{
-	"RELIGION": game.FunctionalTraitCategory{
+var FunctionalTraits = map[string]core.FunctionalTraitCategory{
+	"RELIGION": core.FunctionalTraitCategory{
 		Name:   "Religion",
 		ID:     "RELIGION",
 		Unique: true,
-		Traits: map[string]game.FunctionalTrait{
-			"NORELIGION": game.FunctionalTrait{
+		Traits: map[string]core.FunctionalTrait{
+			"NORELIGION": core.FunctionalTrait{
 				Name:        "N/A",
 				ID:          "NORELIGION",
 				Description: "You are not a particularly religious individual",
 				Points:      "0",
 			},
-			"BAHAMUT": game.FunctionalTrait{
+			"BAHAMUT": core.FunctionalTrait{
 				Name:        "Follower of Bahamut",
 				ID:          "BAHAMUT",
 				Description: "The God of Light",
 				Points:      "-1",
 			},
-			"MORRHIGAN": game.FunctionalTrait{
+			"MORRHIGAN": core.FunctionalTrait{
 				Name:        "Worshipper of Morrhigan",
 				ID:          "MORRHIGAN",
 				Description: "The Goddess of Death",
@@ -30,19 +30,19 @@ var FunctionalTraits = map[string]game.FunctionalTraitCategory{
 			},
 		},
 	},
-	"RACIAL": game.FunctionalTraitCategory{
+	"RACIAL": core.FunctionalTraitCategory{
 		Name:            "Inherent Racial Ability",
 		ID:              "RACIAL",
 		DisallowedRaces: []string{"HUMAN"},
-		Traits: map[string]game.FunctionalTrait{
-			"DARKVISION": game.FunctionalTrait{
+		Traits: map[string]core.FunctionalTrait{
+			"DARKVISION": core.FunctionalTrait{
 				Name:        "Darkvision",
 				ID:          "DARKVISION",
 				Description: "Your vision is fair even in dim light and partial darkness.",
 				Points:      "0",
 				Required:    true,
 			},
-			"FTFORESTS": game.FunctionalTrait{
+			"FTFORESTS": core.FunctionalTrait{
 				Name:        "Natural Attunement - Forests",
 				ID:          "FTFORESTS",
 				Only:        "ELF",
@@ -50,7 +50,7 @@ var FunctionalTraits = map[string]game.FunctionalTraitCategory{
 				Description: "You have a natural ability to navigate forests.",
 				Points:      "0",
 			},
-			"FTCAVERNS": game.FunctionalTrait{
+			"FTCAVERNS": core.FunctionalTrait{
 				Name:        "Favored Terrain - Mountains",
 				ID:          "FTCAVERNS",
 				Only:        "DWARF",

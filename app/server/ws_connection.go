@@ -1,8 +1,7 @@
-package app
+package server
 
 import (
 	"github.com/gorilla/websocket"
-	"github.com/jonathonharrell/miri-ws-server/app/models"
 	"net/http"
 	"time"
 )
@@ -23,21 +22,20 @@ var upgrader = websocket.Upgrader{
 }
 
 // connection is an middleman between the websocket connection and the hub.
-type connection struct {
+type Connection struct {
 	webSocket *websocket.Conn // The websocket connection.
 	send      chan []byte     // Buffered channel of outbound messages.
-	id        string
-	admin     bool
-	character *models.Character
+	ID        string
+	Admin     bool
 }
 
-type message struct {
+type InboundMessage struct {
 	payload    []byte
-	connection *connection
+	connection *Connection
 }
 
 // ReadPump pumps messages from the websocket connection to the hub.
-func (c *connection) readPump() {
+func (c *Connection) readPump() {
 	defer func() {
 		hub.unregister <- c
 		c.webSocket.Close()
@@ -51,18 +49,18 @@ func (c *connection) readPump() {
 		if err != nil {
 			break
 		}
-		hub.inbound <- &message{msg, c}
+		hub.inbound <- &InboundMessage{msg, c}
 	}
 }
 
 // Write writes a message with the given message type and payload.
-func (c *connection) write(mt int, payload []byte) error {
+func (c *Connection) write(mt int, payload []byte) error {
 	c.webSocket.SetWriteDeadline(time.Now().Add(WriteWait))
 	return c.webSocket.WriteMessage(mt, payload)
 }
 
 // WritePump pumps messages from the hub to the websocket connection.
-func (c *connection) writePump() {
+func (c *Connection) writePump() {
 	ticker := time.NewTicker(PingPeriod)
 	defer func() {
 		ticker.Stop()

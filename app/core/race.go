@@ -1,4 +1,4 @@
-package game
+package core
 
 type Race struct {
 	Name            string `json:"name"`
