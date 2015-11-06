@@ -9,7 +9,7 @@ import (
 	"github.com/jonathonharrell/miri-ws-server/app/server"
 )
 
-var hub server.ConnectionHub
+var hub *server.ConnectionHub
 
 func Start() {
 	g := game.NewGame()

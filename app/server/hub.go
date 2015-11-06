@@ -23,8 +23,8 @@ var hub = ConnectionHub{
 	unregister:        make(chan *Connection),
 }
 
-func GetHub() ConnectionHub {
-	return hub
+func GetHub() *ConnectionHub {
+	return &hub
 }
 
 func (h *ConnectionHub) Run() {
