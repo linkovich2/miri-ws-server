@@ -1,4 +1,4 @@
-package websockets
+package engine
 
 type (
 	ConnectionHandler interface {

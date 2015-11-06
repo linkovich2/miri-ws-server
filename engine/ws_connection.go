@@ -1,8 +1,9 @@
-package websockets
+package engine
 
 import (
 	"github.com/gorilla/websocket"
 	"github.com/jonathonharrell/miri-ws-server/engine/models"
+	"net/http"
 	"time"
 )
 
@@ -16,6 +17,9 @@ const (
 var upgrader = websocket.Upgrader{
 	ReadBufferSize:  1024,
 	WriteBufferSize: 1024,
+	CheckOrigin: func(r *http.Request) bool {
+		return true // @todo maybe make this a bit more strict?
+	},
 }
 
 // connection is an middleman between the websocket connection and the hub.

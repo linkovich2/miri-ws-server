@@ -1,4 +1,4 @@
-package settings
+package engine
 
 import (
 	"log"
@@ -17,7 +17,7 @@ type Environment struct {
 
 var env Environment
 
-func LoadEnv() {
+func init() {
 	env.Port = 8080
 	env.DBHost = "localhost:27017"
 	env.DBName = "miri-dev"
@@ -31,8 +31,4 @@ func LoadEnv() {
 
 	logger.Write.Info("\nEnvironment\n-----------\nPort: %v\nDB Host: %s\nDB Name: %s\n",
 		env.Port, env.DBHost, env.DBName)
-}
-
-func GetEnv() Environment {
-	return env
 }

@@ -1,19 +1,18 @@
 package database
 
 import (
-	"github.com/jonathonharrell/miri-ws-server/engine/settings"
 	"gopkg.in/mgo.v2"
 )
 
 var (
-	env     settings.Environment
+	name    string
 	session *mgo.Session
 )
 
-func ConnectToDatabase() {
-	env = settings.GetEnv()
+func ConnectToDatabase(host, db string) {
+	name = db
 
-	s, err := mgo.Dial(env.DBHost)
+	s, err := mgo.Dial(host)
 	if err != nil {
 		panic(err)
 	}
@@ -26,6 +25,6 @@ func CloseDatabaseConnection() {
 	session.Close()
 }
 
-func GetSession() (*mgo.Session, string) {
-	return session.Copy(), env.DBName
+func GetSession() *mgo.Session {
+	return session.Copy()
 }
