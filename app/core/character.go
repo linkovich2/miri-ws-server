@@ -1,38 +1,27 @@
 package core
 
 import (
-// "encoding/json"
-// "github.com/jonathonharrell/miri-ws-server/app/util"
-// "strconv"
+	// "encoding/json"
+	// "github.com/jonathonharrell/miri-ws-server/app/util"
+	// "strconv"
+	"gopkg.in/mgo.v2/bson"
+	"time"
 )
 
-const (
-	CharCreate_Start = iota
-	CharCreate_Gender
-	CharCreate_Aesthetic
-	CharCreate_Functional
-	CharCreate_Background
-	CharCreate_Name
-)
+type Character struct {
+	ID               bson.ObjectId       `bson:"_id,omitempty" json:"-"`
+	Race             string              `json:"race"`
+	Gender           string              `json:"gender"`
+	AestheticTraits  map[string][]string `json:"aesthetic_traits"`
+	FunctionalTraits map[string][]string `json:"functional_traits"`
+	Background       string              `json:"background"`
+	Name             string              `json:"name"`
+	UserID           string              `json:"-" bson:"user_id"`
+	Created          time.Time           `json:"created"`
+}
 
-type (
-	Character struct {
-		Race             string              `json:"race"`
-		Gender           string              `json:"gender"`
-		AestheticTraits  map[string][]string `json:"aesthetic_traits"`
-		FunctionalTraits map[string][]string `json:"functional_traits"`
-		Background       string              `json:"background"`
-		Name             string              `json:"name"`
-	}
-
-	// map[string][]string in JSON might be { "HAIRCOLOR": [ "BLONDE" ], "OTHERAESTHETICS": [ "FRECKLEY","REDNOSED" ] }
-	// This way we can access traits by going AestheticTraitCategories[cat].Traits[trait].Description etc
-
-	CharacterForm struct {
-		Character Character
-		Step      int
-	}
-)
+// map[string][]string in JSON might be { "HAIRCOLOR": [ "BLONDE" ], "OTHERAESTHETICS": [ "FRECKLEY","REDNOSED" ] }
+// This way we can access traits by going AestheticTraitCategories[cat].Traits[trait].Description etc
 
 // var activeCharacterForms = make(map[*User]*CharacterForm)
 //

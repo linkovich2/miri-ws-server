@@ -2,7 +2,6 @@ package server
 
 import (
 	"github.com/gorilla/websocket"
-	"gopkg.in/mgo.v2/bson"
 	"net/http"
 	"time"
 )
@@ -28,7 +27,7 @@ type Connection struct {
 	send      chan []byte     // Buffered channel of outbound messages.
 	ID        string
 	Admin     bool
-	UserID    bson.ObjectId
+	UserID    string
 }
 
 type InboundMessage struct {
