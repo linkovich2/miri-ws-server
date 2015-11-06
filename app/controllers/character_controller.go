@@ -2,8 +2,7 @@ package controllers
 
 import (
 	"encoding/json"
-	"github.com/jonathonharrell/miri-ws-server/engine/api/parameters"
-	"github.com/jonathonharrell/miri-ws-server/engine/services"
+	"github.com/jonathonharrell/miri-ws-server/app/services"
 	"net/http"
 )
 

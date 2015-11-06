@@ -1,13 +1,13 @@
-package engine
+package app
 
 import (
 	"fmt"
 	"time"
 
-	db "github.com/jonathonharrell/miri-ws-server/engine/database"
-	"github.com/jonathonharrell/miri-ws-server/engine/util"
-	"github.com/jonathonharrell/miri-ws-server/engine/util/dice"
-	"github.com/jonathonharrell/miri-ws-server/engine/util/filters"
+	db "github.com/jonathonharrell/miri-ws-server/app/database"
+	"github.com/jonathonharrell/miri-ws-server/app/util"
+	"github.com/jonathonharrell/miri-ws-server/app/util/dice"
+	"github.com/jonathonharrell/miri-ws-server/app/util/filters"
 )
 
 func Start() {

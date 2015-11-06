@@ -1,4 +1,4 @@
-package engine
+package app
 
 type Weather struct {
 	Name  string

@@ -1,8 +1,8 @@
-package engine
+package app
 
 import (
 // "encoding/json"
-// "github.com/jonathonharrell/miri-ws-server/engine/util"
+// "github.com/jonathonharrell/miri-ws-server/app/util"
 // "strconv"
 )
 

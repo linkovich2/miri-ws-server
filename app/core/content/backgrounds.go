@@ -1,7 +1,7 @@
 package content
 
 import (
-	"github.com/jonathonharrell/miri-ws-server/engine/core/game"
+	"github.com/jonathonharrell/miri-ws-server/app/core/game"
 )
 
 var Backgrounds = map[string]game.Background{

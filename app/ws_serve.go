@@ -1,9 +1,9 @@
-package engine
+package app
 
 import (
 	"fmt"
 	jwt "github.com/dgrijalva/jwt-go"
-	"github.com/jonathonharrell/miri-ws-server/engine/database"
+	"github.com/jonathonharrell/miri-ws-server/app/database"
 	"gopkg.in/mgo.v2/bson"
 	"net/http"
 	"stablelib.com/v1/uniuri"

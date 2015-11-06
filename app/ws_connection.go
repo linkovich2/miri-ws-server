@@ -1,8 +1,8 @@
-package engine
+package app
 
 import (
 	"github.com/gorilla/websocket"
-	"github.com/jonathonharrell/miri-ws-server/engine/models"
+	"github.com/jonathonharrell/miri-ws-server/app/models"
 	"net/http"
 	"time"
 )

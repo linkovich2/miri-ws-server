@@ -1,4 +1,4 @@
-package engine
+package app
 
 import (
 	"gopkg.in/mgo.v2/bson"
