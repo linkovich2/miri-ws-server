@@ -1,23 +1,23 @@
 package engine
 
 type (
-	ConnectionHandler interface {
-		Connect(c *Connection) bool
-		Disconnect(c *Connection) bool
-		Handle(m *Message) bool
+	connectionHandler interface {
+		connect(c *connection) bool
+		disconnect(c *connection) bool
+		handle(m *message) bool
 	}
 )
 
-type DefaultConnectionHandler struct{}
+type defaultConnectionHandler struct{}
 
-func (d *DefaultConnectionHandler) Connect(c *Connection) bool {
+func (d *defaultConnectionHandler) connect(c *connection) bool {
 	return false
 }
 
-func (d *DefaultConnectionHandler) Disconnect(c *Connection) bool {
+func (d *defaultConnectionHandler) disconnect(c *connection) bool {
 	return false
 }
 
-func (d *DefaultConnectionHandler) Handle(m *Message) bool {
+func (d *defaultConnectionHandler) handle(m *message) bool {
 	return false
 }

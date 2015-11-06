@@ -6,7 +6,7 @@ type Room struct {
 	Realm       string
 	Pos         Position
 	Active      bool
-	Connections []*Connection
+	Connections []*connection
 }
 
 func (r *Room) Init() {

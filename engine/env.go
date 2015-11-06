@@ -3,7 +3,6 @@ package engine
 import (
 	"log"
 
-	"github.com/jonathonharrell/miri-ws-server/engine/logger"
 	"github.com/kelseyhightower/envconfig"
 )
 
@@ -29,6 +28,6 @@ func init() {
 		log.Fatal(err.Error())
 	}
 
-	logger.Write.Info("\nEnvironment\n-----------\nPort: %v\nDB Host: %s\nDB Name: %s\n",
+	logger.Info("\nEnvironment\n-----------\nPort: %v\nDB Host: %s\nDB Name: %s\n",
 		env.Port, env.DBHost, env.DBName)
 }

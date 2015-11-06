@@ -20,7 +20,7 @@ func Start() {
 	db.ConnectToDatabase(env.DBHost, env.DBName) // create master DB session
 	defer db.CloseDatabaseConnection()
 
-	go Hub.Run()
+	go hub.Run()
 	serve()
 
 	var input string

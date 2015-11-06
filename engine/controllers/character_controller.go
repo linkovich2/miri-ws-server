@@ -3,7 +3,6 @@ package controllers
 import (
 	"encoding/json"
 	"github.com/jonathonharrell/miri-ws-server/engine/api/parameters"
-	"github.com/jonathonharrell/miri-ws-server/engine/logger"
 	"github.com/jonathonharrell/miri-ws-server/engine/services"
 	"net/http"
 )
@@ -15,7 +14,6 @@ func CreateCharacter(w http.ResponseWriter, r *http.Request, next http.HandlerFu
 
 	userId, err := getUserId(r)
 	if err != nil {
-		logger.Write.Error(err.Error())
 		w.WriteHeader(http.StatusUnauthorized)
 		return
 	}
@@ -36,7 +34,6 @@ func CharacterOptions(w http.ResponseWriter, r *http.Request, next http.HandlerF
 func ListCharacters(w http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
 	userId, err := getUserId(r)
 	if err != nil {
-		logger.Write.Error(err.Error())
 		w.WriteHeader(http.StatusUnauthorized)
 		return
 	}

@@ -4,18 +4,11 @@ import (
 	"fmt"
 	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/jonathonharrell/miri-ws-server/engine/database"
-	"github.com/jonathonharrell/miri-ws-server/engine/logger"
-	"github.com/jonathonharrell/miri-ws-server/engine/models"
 	"gopkg.in/mgo.v2/bson"
 	"net/http"
 	"stablelib.com/v1/uniuri"
 	"strconv"
 )
-
-type ConnectionData struct {
-	User      *models.User
-	Character *models.Character
-}
 
 func serve() {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
@@ -34,30 +27,30 @@ func serve() {
 
 		if err == nil && token.Valid {
 			if !bson.IsObjectIdHex(token.Claims["_id"].(string)) {
-				logger.Write.Error("Invalid hex value for user ID found in auth token.")
+				logger.Error("Invalid hex value for user ID found in auth token.")
 				w.WriteHeader(http.StatusUnauthorized)
 				return
 			}
 
 			u, err := getUser(token.Claims["_id"].(string))
 			if err != nil {
-				logger.Write.Error("User not found for ID", token.Claims["_id"].(string))
+				logger.Error("User not found for ID", token.Claims["_id"].(string))
 				w.WriteHeader(http.StatusUnauthorized)
 				return
 			}
 
 			ws, err := upgrader.Upgrade(w, r, nil)
 			if err != nil {
-				logger.Write.Error(err.Error())
+				logger.Error(err.Error())
 				return
 			}
 
-			c := &Connection{send: make(chan []byte, 256), webSocket: ws, ID: uniuri.New(), IsAdmin: u.IsAdmin}
-			Hub.register <- c
+			c := &connection{send: make(chan []byte, 256), webSocket: ws, id: uniuri.New(), admin: u.isAdmin()}
+			hub.register <- c
 			go c.writePump()
 			c.readPump()
 		} else {
-			logger.Write.Error("%v", err.Error())
+			logger.Error("%v", err.Error())
 			w.WriteHeader(http.StatusUnauthorized)
 		}
 	})
@@ -66,12 +59,12 @@ func serve() {
 	go http.ListenAndServe(addr, nil)
 }
 
-func getUser(userId string) (*models.User, error) {
+func getUser(userId string) (*user, error) {
 	session := database.GetSession() // connect
 	db := session.DB(env.DBName)
 	defer session.Close()
 
-	u := models.User{}
+	u := user{}
 	err := db.C("users").Find(bson.M{"_id": bson.ObjectIdHex(userId)}).One(&u)
 	return &u, err
 }

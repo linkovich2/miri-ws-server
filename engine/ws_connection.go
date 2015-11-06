@@ -23,23 +23,23 @@ var upgrader = websocket.Upgrader{
 }
 
 // connection is an middleman between the websocket connection and the hub.
-type Connection struct {
+type connection struct {
 	webSocket *websocket.Conn // The websocket connection.
 	send      chan []byte     // Buffered channel of outbound messages.
-	ID        string
-	IsAdmin   bool
-	Character *models.Character
+	id        string
+	admin     bool
+	character *models.Character
 }
 
-type Message struct {
-	Payload    []byte
-	Connection *Connection
+type message struct {
+	payload    []byte
+	connection *connection
 }
 
 // ReadPump pumps messages from the websocket connection to the hub.
-func (c *Connection) readPump() {
+func (c *connection) readPump() {
 	defer func() {
-		Hub.unregister <- c
+		hub.unregister <- c
 		c.webSocket.Close()
 	}()
 	c.webSocket.SetReadLimit(MaxMessageSize)
@@ -51,18 +51,18 @@ func (c *Connection) readPump() {
 		if err != nil {
 			break
 		}
-		Hub.inbound <- &Message{msg, c}
+		hub.inbound <- &message{msg, c}
 	}
 }
 
 // Write writes a message with the given message type and payload.
-func (c *Connection) write(mt int, payload []byte) error {
+func (c *connection) write(mt int, payload []byte) error {
 	c.webSocket.SetWriteDeadline(time.Now().Add(WriteWait))
 	return c.webSocket.WriteMessage(mt, payload)
 }
 
 // WritePump pumps messages from the hub to the websocket connection.
-func (c *Connection) writePump() {
+func (c *connection) writePump() {
 	ticker := time.NewTicker(PingPeriod)
 	defer func() {
 		ticker.Stop()
