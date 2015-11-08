@@ -6,7 +6,7 @@ import (
 	"github.com/jonathonharrell/miri-ws-server/app/game"
 	//"github.com/jonathonharrell/miri-ws-server/app/content"
 	"github.com/jonathonharrell/miri-ws-server/app/database"
-	"github.com/jonathonharrell/miri-ws-server/app/logger"
+	// "github.com/jonathonharrell/miri-ws-server/app/logger"
 
 	"gopkg.in/mgo.v2/bson"
 )
@@ -23,6 +23,6 @@ func (c *characterController) List(connection *game.Connection, game *game.Game,
 	var characters []core.Character
 	_ = db.C("characters").Find(bson.M{"user_id": connection.Socket.UserID}).All(&characters)
 
-	logger.Write.Info("FOUND THIS SHIT %v", connection.Socket.UserID)
-	logger.Write.Info("FOUND THESE SHITS %v", characters)
+	res, _ := json.Marshal(characters)
+	connection.Socket.Send(res)
 }
