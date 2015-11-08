@@ -109,6 +109,8 @@ var elvishLetters = map[string]string{
 var exoticElvishLetters = map[string]string{
 	"ch": "p'a",
 	"Ch": "P'a",
+	"co": "po",
+	"Co": "L'o",
 	"sh": "il",
 	"Sh": "Il",
 	"qu": "ge",
@@ -182,8 +184,8 @@ func TranslateToElvish(s string, understanding int) string {
 				}
 			}
 		} else {
-			if string(word[0]) == strings.ToUpper(string(word[0])) && index != 0 {
-				newWord[index] = word
+			if string(word[0]) == strings.ToUpper(string(word[0])) && index != 0 && words[index - 1] != "." {
+				buffer.WriteString(word)
 			} else {
 				var keys []string
 				for k := range elvishLetters {
@@ -198,7 +200,11 @@ func TranslateToElvish(s string, understanding int) string {
 					word = word[:len(word)-2] + word[len(word)-1:]
 				}
 
-				if word[len(word)-1:] == "s" {
+				if word[len(word)-2:] == "es" {
+					word = word[:len(word) - 2]
+					postfix = "ner"
+				} else if word[len(word)-1:] == "s" {
+					word = word[:len(word) - 1]
 					postfix = "nu"
 				}
 
