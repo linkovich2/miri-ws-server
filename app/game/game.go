@@ -15,7 +15,6 @@ type Game struct {
 
 func (game *Game) Start() {
 	dice.SeedRandom() // seed rand for dice
-	filters.Init()    // init filter libs (RP filter, profanity filter, language filter, etc)
 
 	miri := &core.World{"Miri", make(map[string]core.Realm)}             // load in the world, rooms, etc
 	go util.RunEvery(core.WorldUpdateLoopTimer*time.Second, miri.Update) // start the world update loop
