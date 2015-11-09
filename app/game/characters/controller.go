@@ -6,7 +6,7 @@ import (
 	"github.com/jonathonharrell/miri-ws-server/app/core"
 	"github.com/jonathonharrell/miri-ws-server/app/database"
 	"github.com/jonathonharrell/miri-ws-server/app/game"
-	// "github.com/jonathonharrell/miri-ws-server/app/logger"
+	"github.com/jonathonharrell/miri-ws-server/app/logger"
 
 	"gopkg.in/mgo.v2/bson"
 )
@@ -14,7 +14,7 @@ import (
 type (
 	characterController struct{}
 	optionsParams       struct {
-		get string `json:"get"`
+		Get string `json:"get"`
 	}
 )
 
@@ -33,14 +33,14 @@ func (c *characterController) List(connection *game.Connection, game *game.Game,
 }
 
 func (c *characterController) Options(connection *game.Connection, game *game.Game, args *json.RawMessage) {
-	var params optionsParams
 	var body interface{}
-	err := json.Unmarshal(*args, params)
+	params := optionsParams{}
+	err := json.Unmarshal(*args, &params)
 	if err != nil {
-		// @todo handle json malformed or something like that
+		logger.Write.Error(err.Error()) // @todo handle json malformed or something like that
 	}
 
-	switch params.get {
+	switch params.Get {
 	case "races":
 		body = content.Races
 	case "genders":
@@ -51,6 +51,8 @@ func (c *characterController) Options(connection *game.Connection, game *game.Ga
 		body = content.FunctionalTraits
 	case "backgrounds":
 		body = content.Backgrounds
+	default "races":
+		body = content.Races
 	}
 
 	res, _ := json.Marshal(body)
