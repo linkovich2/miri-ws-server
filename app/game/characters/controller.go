@@ -16,6 +16,11 @@ type (
 	optionsParams       struct {
 		Get string `json:"get"`
 	}
+	deleteParams struct {
+		Id string `json:"id"`
+	}
+	selectParams   deleteParams
+	validateParams core.Character
 )
 
 var Controller = characterController{}
@@ -30,6 +35,18 @@ func (c *characterController) List(connection *game.Connection, game *game.Game,
 
 	res, _ := json.Marshal(characters)
 	connection.Socket.Send(res)
+}
+
+func (c *characterController) Delete(connection *game.Connection, game *game.Game, args *json.RawMessage) {
+	// @todo stub
+}
+
+func (c *characterController) Select(connection *game.Connection, game *game.Game, args *json.RawMessage) {
+	// @todo stub
+}
+
+func (c *characterController) Validate(connection *game.Connection, game *game.Game, args *json.RawMessage) {
+	// @todo stub
 }
 
 func (c *characterController) Options(connection *game.Connection, game *game.Game, args *json.RawMessage) {
@@ -51,7 +68,7 @@ func (c *characterController) Options(connection *game.Connection, game *game.Ga
 		body = content.FunctionalTraits
 	case "backgrounds":
 		body = content.Backgrounds
-	default "races":
+	default:
 		body = content.Races
 	}
 
