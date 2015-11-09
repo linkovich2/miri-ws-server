@@ -184,7 +184,7 @@ func TranslateToElvish(s string, understanding int) string {
 				}
 			}
 		} else {
-			if string(word[0]) == strings.ToUpper(string(word[0])) && index != 0 && words[index - 1] != "." {
+			if string(word[0]) == strings.ToUpper(string(word[0])) && index != 0 && words[index-1] != "." {
 				buffer.WriteString(word)
 			} else {
 				var keys []string
@@ -201,10 +201,10 @@ func TranslateToElvish(s string, understanding int) string {
 				}
 
 				if word[len(word)-2:] == "es" {
-					word = word[:len(word) - 2]
+					word = word[:len(word)-2]
 					postfix = "ner"
 				} else if word[len(word)-1:] == "s" {
-					word = word[:len(word) - 1]
+					word = word[:len(word)-1]
 					postfix = "nu"
 				}
 

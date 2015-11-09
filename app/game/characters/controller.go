@@ -2,16 +2,21 @@ package characters
 
 import (
 	"encoding/json"
+	"github.com/jonathonharrell/miri-ws-server/app/content"
 	"github.com/jonathonharrell/miri-ws-server/app/core"
-	"github.com/jonathonharrell/miri-ws-server/app/game"
-	//"github.com/jonathonharrell/miri-ws-server/app/content"
 	"github.com/jonathonharrell/miri-ws-server/app/database"
+	"github.com/jonathonharrell/miri-ws-server/app/game"
 	// "github.com/jonathonharrell/miri-ws-server/app/logger"
 
 	"gopkg.in/mgo.v2/bson"
 )
 
-type characterController struct{}
+type (
+	characterController struct{}
+	optionsParams       struct {
+		get string `json:"get"`
+	}
+)
 
 var Controller = characterController{}
 
@@ -24,5 +29,30 @@ func (c *characterController) List(connection *game.Connection, game *game.Game,
 	_ = db.C("characters").Find(bson.M{"user_id": connection.Socket.UserID}).All(&characters)
 
 	res, _ := json.Marshal(characters)
+	connection.Socket.Send(res)
+}
+
+func (c *characterController) Options(connection *game.Connection, game *game.Game, args *json.RawMessage) {
+	var params optionsParams
+	var body interface{}
+	err := json.Unmarshal(*args, params)
+	if err != nil {
+		// @todo handle json malformed or something like that
+	}
+
+	switch params.get {
+	case "races":
+		body = content.Races
+	case "genders":
+		body = content.Genders
+	case "aesthetic_traits":
+		body = content.AestheticTraits
+	case "functional_traits":
+		body = content.FunctionalTraits
+	case "backgrounds":
+		body = content.Backgrounds
+	}
+
+	res, _ := json.Marshal(body)
 	connection.Socket.Send(res)
 }
