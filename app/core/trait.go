@@ -29,7 +29,6 @@ type (
 		Name              string   `json:"name"`
 		ID                string   `json:"id"`
 		Description       string   `json:"description"`
-		Image             int      `json:"image"`
 		Category          string   `json:"category"`
 		DisallowedRaces   []string `json:"disallowed_races"`
 		DisallowedGenders []string `json:"disallowed_genders"`
@@ -40,7 +39,6 @@ type (
 		Name              string   `json:"name"`
 		ID                string   `json:"id"`
 		Description       string   `json:"description"`
-		Image             int      `json:"image"`
 		Category          string   `json:"category"`
 		DisallowedRaces   []string `json:"disallowed_races"`
 		DisallowedGenders []string `json:"disallowed_genders"`
