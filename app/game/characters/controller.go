@@ -4,11 +4,11 @@ import (
 	"encoding/json"
 	"github.com/jonathonharrell/miri-ws-server/app/content"
 	"github.com/jonathonharrell/miri-ws-server/app/core"
-	"github.com/jonathonharrell/miri-ws-server/app/database"
+	// "github.com/jonathonharrell/miri-ws-server/app/database"
 	"github.com/jonathonharrell/miri-ws-server/app/game"
 	"github.com/jonathonharrell/miri-ws-server/app/logger"
 
-	"gopkg.in/mgo.v2/bson"
+	// "gopkg.in/mgo.v2/bson"
 )
 
 type (
@@ -26,14 +26,7 @@ type (
 var Controller = characterController{}
 
 func (c *characterController) List(connection *game.Connection, game *game.Game, args *json.RawMessage) {
-	session, dbName := database.GetSession() // connect
-	db := session.DB(dbName)
-	defer session.Close()
-
-	var characters []core.Character
-	_ = db.C("characters").Find(bson.M{"user_id": connection.Socket.UserID}).All(&characters)
-
-	res, _ := json.Marshal(characters)
+	res, _ := json.Marshal(connection.Socket.User.Characters)
 	connection.Socket.Send(res)
 }
 
@@ -52,7 +45,12 @@ func (c *characterController) Create(connection *game.Connection, game *game.Gam
 		logger.Write.Error(err.Error()) // @todo handle json malformed or something like that
 	}
 
+	// @todo temp
 	logger.Write.Info("Received a create character message for character \"%v, %v, %v: %v\"", character.Name, character.Race, character.Gender, character.Background)
+
+	// @todo validate against existing characters (if 3 or greater and !connection.Socket.Admin, fail)
+	// @todo validate the character itself
+	// @todo save the character in the database
 }
 
 func (c *characterController) Options(connection *game.Connection, game *game.Game, args *json.RawMessage) {

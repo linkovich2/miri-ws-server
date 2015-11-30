@@ -47,7 +47,7 @@ func Start(port int, key string) {
 				return
 			}
 
-			c := &Connection{send: make(chan []byte, 256), webSocket: ws, ID: uniuri.New(), Admin: u.IsAdmin(), UserID: u.ID.Hex()}
+			c := &Connection{send: make(chan []byte, 256), webSocket: ws, ID: uniuri.New(), User: u}
 			hub.register <- c
 			go c.writePump()
 			c.readPump()

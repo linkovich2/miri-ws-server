@@ -1,6 +1,7 @@
 package server
 
 import (
+	"github.com/jonathonharrell/miri-ws-server/app/core"
 	"github.com/gorilla/websocket"
 	"net/http"
 	"time"
@@ -26,8 +27,7 @@ type Connection struct {
 	webSocket *websocket.Conn // The websocket connection.
 	send      chan []byte     // Buffered channel of outbound messages.
 	ID        string
-	Admin     bool
-	UserID    string
+	User      *core.User
 }
 
 type InboundMessage struct {
