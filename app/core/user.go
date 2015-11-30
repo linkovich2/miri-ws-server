@@ -19,7 +19,7 @@ type User struct {
 	Updated             time.Time
 	FailedLoginAttempts int
 
-	Characters          []Character
+	Characters []Character
 }
 
 func (u *User) IsAdmin() bool {

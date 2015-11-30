@@ -1,8 +1,8 @@
 package server
 
 import (
-	"github.com/jonathonharrell/miri-ws-server/app/core"
 	"github.com/gorilla/websocket"
+	"github.com/jonathonharrell/miri-ws-server/app/core"
 	"net/http"
 	"time"
 )
