@@ -45,8 +45,14 @@ func (c *characterController) Select(connection *game.Connection, game *game.Gam
 	// @todo stub
 }
 
-func (c *characterController) Validate(connection *game.Connection, game *game.Game, args *json.RawMessage) {
-	// @todo stub
+func (c *characterController) Create(connection *game.Connection, game *game.Game, args *json.RawMessage) {
+	character := core.Character{}
+	err := json.Unmarshal(*args, &character)
+	if err != nil {
+		logger.Write.Error(err.Error()) // @todo handle json malformed or something like that
+	}
+
+	logger.Write.Info("Received a create character message for character \"%v, %v, %v: %v\"", character.Name, character.Race, character.Gender, character.Background)
 }
 
 func (c *characterController) Options(connection *game.Connection, game *game.Game, args *json.RawMessage) {
