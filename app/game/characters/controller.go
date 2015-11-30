@@ -48,7 +48,7 @@ func (c *characterController) Create(connection *game.Connection, game *game.Gam
 	// @todo temp
 	logger.Write.Info("Received a create character message for character \"%v, %v, %v: %v\"", character.Name, character.Race, character.Gender, character.Background)
 
-	// @todo validate against existing characters (if 3 or greater and !connection.Socket.Admin, fail)
+	// @todo validate against existing characters (if 3 or greater and !connection.Socket.User.IsAdmin(), fail)
 	// @todo validate the character itself
 	// @todo save the character in the database
 }
