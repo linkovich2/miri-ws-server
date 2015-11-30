@@ -54,15 +54,16 @@ func (r *Router) Handle(m *server.InboundMessage) {
 	var cmd string
 	err = json.Unmarshal(*command, &cmd)
 
+	c := connections[m.Connection.ID]
+
 	if !argsExist {
 		if c.Character != nil {
 			logger.Write.Warning("No args found in JSON payload for command: %s for connection %s; continuing", cmd, m.Connection.ID)
 		}
-		
+
 		args = &json.RawMessage{}
 	}
 
-	c := connections[m.Connection.ID]
 	method := strings.ToLower(cmd)
 	method = strings.ToUpper(method[:1]) + method[1:]
 
