@@ -20,7 +20,10 @@ type (
 		Id string `json:"id"`
 	}
 	selectParams   deleteParams
-	validateParams core.Character
+	createResponse struct {
+		Success bool     `json:"success"`
+		Errors  []string `json:"errors"`
+	}
 )
 
 var Controller = characterController{}
@@ -45,12 +48,22 @@ func (c *characterController) Create(connection *game.Connection, game *game.Gam
 		logger.Write.Error(err.Error()) // @todo handle json malformed or something like that
 	}
 
+	// greater then 3 characters exist for this account, if it's not an admin user it should not be created
+	if len(connection.Socket.User.Characters) >= 3 && !connection.Socket.User.IsAdmin() {
+		logger.Write.Error("Character could not be saved for Connection [%s], character limit exceeded", connection.Socket.ID)
+		handleCharacterCreationError(connection)
+		return // stop execution here
+	}
+
+	if !validateCharacter(connection, &character) {
+		handleCharacterCreationError(connection)
+		return // stop execution
+	}
+
+	// @todo save the character in the database
+
 	// @todo temp
 	logger.Write.Info("Received a create character message for character \"%v, %v, %v: %v\"", character.Name, character.Race, character.Gender, character.Background)
-
-	// @todo validate against existing characters (if 3 or greater and !connection.Socket.User.IsAdmin(), fail)
-	// @todo validate the character itself
-	// @todo save the character in the database
 }
 
 func (c *characterController) Options(connection *game.Connection, game *game.Game, args *json.RawMessage) {
@@ -78,4 +91,75 @@ func (c *characterController) Options(connection *game.Connection, game *game.Ga
 
 	res, _ := json.Marshal(body)
 	connection.Socket.Send(res)
+}
+
+func handleCharacterCreationError(connection *game.Connection) {
+	errors, _ := json.Marshal(createResponse{false, []string{"Something went wrong with character creation."}})
+	connection.Socket.Send(errors)
+}
+
+func validateCharacter(connection *game.Connection, character *core.Character) bool {
+	if !validateRace(connection, character) {
+		return false
+	}
+	if !validateGender(connection, character) {
+		return false
+	}
+	if !validateAestheticTraits(connection, character) {
+		return false
+	}
+	if !validateFunctionalTraits(connection, character) {
+		return false
+	}
+	if !validateBackground(connection, character) {
+		return false
+	}
+	if !validateName(connection, character) {
+		return false
+	}
+	return true
+}
+
+func validateRace(connection *game.Connection, character *core.Character) bool {
+	if _, raceExists := content.Races[character.Race]; raceExists {
+		return true
+	}
+
+	logger.Write.Error("Character Creation Error (Connection [%s]): Provided Race [%s] does not exist.", connection.Socket.ID, character.Race)
+	return false
+}
+
+func validateGender(connection *game.Connection, character *core.Character) (valid bool) {
+	if gender, genderExists := content.Genders[character.Gender]; genderExists {
+		if gender.RaceAllowed(character.Race) {
+			return true
+		} else {
+			logger.Write.Error(
+				"Character Creation Error (Connection [%s]): Gender [%s] not allowed for Race [%s].",
+				connection.Socket.ID,
+				character.Gender,
+				character.Race,
+			)
+			return false
+		}
+	}
+
+	logger.Write.Error("Character Creation Error (Connection [%s]): Gender [%s] doesn't exist.", connection.Socket.ID, character.Gender)
+	return false
+}
+
+func validateAestheticTraits(connection *game.Connection, character *core.Character) (valid bool) {
+	return
+}
+
+func validateFunctionalTraits(connection *game.Connection, character *core.Character) (valid bool) {
+	return
+}
+
+func validateBackground(connection *game.Connection, character *core.Character) (valid bool) {
+	return
+}
+
+func validateName(connection *game.Connection, character *core.Character) (valid bool) {
+	return
 }
