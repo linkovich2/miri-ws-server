@@ -68,8 +68,8 @@ func (r *Router) Handle(m *server.InboundMessage) {
 	method := strings.ToLower(cmd)
 	method = strings.ToUpper(method[:1]) + method[1:]
 
-	if c.Socket.User.IsAdmin() {
-		adminCommand := reflect.ValueOf(&admin.Controller).MethodByName(method)
+	if len(cmd) > 6 && c.Socket.User.IsAdmin() && cmd[:6] == "admin_" {
+		adminCommand := reflect.ValueOf(&admin.Controller).MethodByName(strings.ToUpper(cmd[6:7]) + cmd[7:])
 		if adminCommand.IsValid() {
 			adminCommand.Call([]reflect.Value{reflect.ValueOf(c), reflect.ValueOf(r.game), reflect.ValueOf(args)})
 			return // stop execution here
