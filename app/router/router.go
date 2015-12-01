@@ -3,6 +3,7 @@ package router
 import (
 	"encoding/json"
 	"github.com/jonathonharrell/miri-ws-server/app/game"
+	"github.com/jonathonharrell/miri-ws-server/app/game/admin"
 	"github.com/jonathonharrell/miri-ws-server/app/game/characters"
 	"github.com/jonathonharrell/miri-ws-server/app/logger"
 	"github.com/jonathonharrell/miri-ws-server/app/server"
@@ -66,6 +67,14 @@ func (r *Router) Handle(m *server.InboundMessage) {
 
 	method := strings.ToLower(cmd)
 	method = strings.ToUpper(method[:1]) + method[1:]
+
+	if c.Socket.User.IsAdmin() {
+		adminCommand := reflect.ValueOf(&admin.Controller).MethodByName(method)
+		if adminCommand.IsValid() {
+			adminCommand.Call([]reflect.Value{reflect.ValueOf(c), reflect.ValueOf(r.game), reflect.ValueOf(args)})
+			return // stop execution here
+		}
+	}
 
 	if c.Character != nil {
 		r.game.Input <- &game.Command{Value: method, Args: args, Character: c.Character, Connection: c.Socket}
