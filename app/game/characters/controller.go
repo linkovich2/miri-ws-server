@@ -62,7 +62,7 @@ func (c *characterController) Create(connection *game.Connection, game *game.Gam
 
 	// @todo save the character in the database
 
-	res, _ := json.Marshal(createResponse{true})
+	res, _ := json.Marshal(createResponse{true, []string{}})
 	connection.Socket.Send(res)
 }
 
