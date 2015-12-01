@@ -62,8 +62,8 @@ func (c *characterController) Create(connection *game.Connection, game *game.Gam
 
 	// @todo save the character in the database
 
-	// @todo temp
-	logger.Write.Info("Received a create character message for character \"%v, %v, %v: %v\"", character.Name, character.Race, character.Gender, character.Background)
+	res, _ := json.Marshal(createResponse{true})
+	connection.Socket.Send(res)
 }
 
 func (c *characterController) Options(connection *game.Connection, game *game.Game, args *json.RawMessage) {
