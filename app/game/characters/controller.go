@@ -279,9 +279,11 @@ func validateFunctionalTraits(connection *game.Connection, character *core.Chara
 }
 
 func validateBackground(connection *game.Connection, character *core.Character) (valid bool) {
+	// @todo all we need to do is check it exists and that it's allowed
 	return
 }
 
 func validateName(connection *game.Connection, character *core.Character) (valid bool) {
+	// @todo we'll do the same validation we do client side here, but we might also check for some disallowed names
 	return
 }
