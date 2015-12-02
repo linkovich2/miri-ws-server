@@ -129,7 +129,7 @@ func validateRace(connection *game.Connection, character *core.Character) bool {
 	return false
 }
 
-func validateGender(connection *game.Connection, character *core.Character) (valid bool) {
+func validateGender(connection *game.Connection, character *core.Character) bool {
 	if gender, genderExists := content.Genders[character.Gender]; genderExists {
 		if gender.RaceAllowed(character.Race) {
 			return true
@@ -148,11 +148,54 @@ func validateGender(connection *game.Connection, character *core.Character) (val
 	return false
 }
 
-func validateAestheticTraits(connection *game.Connection, character *core.Character) (valid bool) {
-	return
+func validateAestheticTraits(connection *game.Connection, character *core.Character) bool {
+	for key, traits := range character.AestheticTraits {
+		if _, categoryExists := content.AestheticTraits[key]; !categoryExists { // trait category does not exist
+			logger.Write.Error("Character Creation Error (Connection [%s]): Unknown Trait Category [%s].", connection.Socket.ID, key)
+			return false
+		}
+		category := content.AestheticTraits[key]
+
+		if !category.IsAllowedForCharacter(character) && len(traits) > 0 { // not allowed for character and one exists
+			logger.Write.Error("Character Creation Error (Connection [%s]): Trait Category [%s] not allowed for character.", connection.Socket.ID, key)
+			return false
+		}
+
+		if len(traits) > 1 && category.Unique { // character contains more then one trait in a unique category
+			logger.Write.Error("Character Creation Error (Connection [%s]): Trait Category [%s] is unique.", connection.Socket.ID, key)
+			return false
+		}
+
+		for _, trait := range traits {
+			if _, traitExists := category.Traits[trait]; !traitExists { // trait itself does not exist
+				logger.Write.Error("Character Creation Error (Connection [%s]): Trait [%s] does not exist.", connection.Socket.ID, trait)
+				return false
+			}
+
+			t := category.Traits[trait]
+			if !t.IsAllowedForCharacter(character) { // individual trait is not allowed for this character
+				logger.Write.Error("Character Creation Error (Connection [%s]): Trait [%s] is not allowed for character.", connection.Socket.ID, trait)
+				return false
+			}
+		}
+	}
+
+	// loop through all aesthetic trait categories and check if one exists where one is required
+	for key, category := range content.AestheticTraits {
+		if category.Minimum > 0 && category.IsAllowedForCharacter(character) {
+			if len(character.AestheticTraits[key]) < category.Minimum {
+				logger.Write.Error("Character Creation Error (Connection [%s]): Character doesn't have enough traits from Trait Category [%s]", connection.Socket.ID, key)
+				return false
+			}
+		}
+	}
+
+	return true
 }
 
 func validateFunctionalTraits(connection *game.Connection, character *core.Character) (valid bool) {
+	// @todo this should look the same as aesthetic trait validation except individual traits may be required within a category
+	// and we also need to validate the point total is positive
 	return
 }
 
