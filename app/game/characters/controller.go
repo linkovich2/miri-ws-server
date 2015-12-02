@@ -253,7 +253,7 @@ func validateFunctionalTraits(connection *game.Connection, character *core.Chara
 		}
 
 		for id, trait := range category.Traits {
-			if trait.Required {
+			if trait.Required && trait.IsAllowedForCharacter(character) {
 				if _, categoryExists := character.FunctionalTraits[key]; !categoryExists {
 					logger.Write.Error("Character Creation Error (Connection [%s]): Required Trait Category [%s] doesn't exist.", connection.Socket.ID, key)
 					return false
