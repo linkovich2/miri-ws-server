@@ -13,4 +13,9 @@ var Genders = map[string]core.Gender{
 		Name: "Female",
 		ID:   "F",
 	},
+	"NA": core.Gender{
+		Name: "N/A",
+		ID:   "NA",
+		Only: []string{"AUTOMATON"},
+	},
 }
