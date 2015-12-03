@@ -10,10 +10,10 @@ type (
 	}
 
 	BackgroundPrerequisites struct {
-		Races            []string
-		Genders          []string
-		AestheticTraits  []string
-		FunctionalTraits []string
+		Races            []string `json:"races"`
+		Genders          []string `json:"genders"`
+		AestheticTraits  []string `json:"aesthetic_traits"`
+		FunctionalTraits []string `json:"functional_traits"`
 	}
 )
 
