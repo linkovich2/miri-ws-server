@@ -194,7 +194,7 @@ func validateAestheticTraits(connection *game.Connection, character *core.Charac
 	return true
 }
 
-func validateFunctionalTraits(connection *game.Connection, character *core.Character) (valid bool) {
+func validateFunctionalTraits(connection *game.Connection, character *core.Character) bool {
 	// @todo this should look the same as aesthetic trait validation except individual traits may be required within a category
 	var points int
 
@@ -238,14 +238,18 @@ func validateFunctionalTraits(connection *game.Connection, character *core.Chara
 		}
 	}
 
-	if points > 0 {
+	if points < 0 {
 		logger.Write.Error("Character Creation Error (Connection [%s]): Point deficit too high.", connection.Socket.ID)
 		return false
 	}
 
 	// loop through all aesthetic trait categories and check if one exists where one is required
 	for key, category := range content.FunctionalTraits {
-		if category.Minimum > 0 && category.IsAllowedForCharacter(character) {
+		if !category.IsAllowedForCharacter(character) {
+			continue
+		}
+
+		if category.Minimum > 0 {
 			if len(character.FunctionalTraits[key]) < category.Minimum {
 				logger.Write.Error("Character Creation Error (Connection [%s]): Character doesn't have enough traits from Trait Category [%s]", connection.Socket.ID, key)
 				return false
@@ -278,12 +282,23 @@ func validateFunctionalTraits(connection *game.Connection, character *core.Chara
 	return true
 }
 
-func validateBackground(connection *game.Connection, character *core.Character) (valid bool) {
-	// @todo all we need to do is check it exists and that it's allowed
-	return
+func validateBackground(connection *game.Connection, character *core.Character) bool {
+	if _, backgroundExists := content.Backgrounds[character.Background]; !backgroundExists {
+		logger.Write.Error("Character Creation Error (Connection [%s]): Provided Background [%s] doesn't exist.", connection.Socket.ID, character.Background)
+		return false
+	}
+
+	b := content.Backgrounds[character.Background]
+	if !b.IsAllowedForCharacter(character) {
+		logger.Write.Error("Character Creation Error (Connection [%s]): Background [%s] isn't allowed for character.", connection.Socket.ID, character.Background)
+		return false
+	}
+
+	return true
 }
 
-func validateName(connection *game.Connection, character *core.Character) (valid bool) {
+func validateName(connection *game.Connection, character *core.Character) bool {
 	// @todo we'll do the same validation we do client side here, but we might also check for some disallowed names
-	return
+	logger.Write.Info("We got to name validation")
+	return false
 }

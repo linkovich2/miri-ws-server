@@ -29,4 +29,12 @@ var Backgrounds = map[string]core.Background{
 		Description: "You are a nomad, currently traveling through the Skyshround Forest.",
 		AllowAll:    true,
 	},
+	"BAHAMUTKNIGHT": core.Background{
+		Name:        "Temple of Bahamut - Understudy",
+		ID:          "BAHAMUTKNIGHT",
+		Description: "You are an understudy at the temple of Bahamut, perhaps in training to be a knight or cleric.",
+		Prerequisites: core.BackgroundPrerequisites{
+			FunctionalTraits: []string{"BAHAMUT"},
+		},
+	},
 }

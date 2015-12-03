@@ -22,7 +22,7 @@ func (b *Background) IsAllowedForCharacter(character *Character) bool {
 		return true
 	}
 
-	matchesRace, matchesGender, matchesAestheticTraits, matchesFunctionalTraits := true, true, true, true
+	matchesRace, matchesGender := true, true
 
 	if len(b.Prerequisites.Races) > 0 {
 		matchesRace = false
@@ -44,8 +44,47 @@ func (b *Background) IsAllowedForCharacter(character *Character) bool {
 		}
 	}
 
-	// @todo aesthetic traits
-	// @todo functional traits
+	if len(b.Prerequisites.AestheticTraits) > 0 {
+		var traitMatches = make(map[string]bool)
+		for _, a := range b.Prerequisites.AestheticTraits {
+			traitMatches[a] = false
+			for _, c := range character.AestheticTraits {
+				for _, t := range c {
+					if t == a {
+						traitMatches[a] = true
+						break
+					}
+				}
+			}
+		}
 
-	return (matchesRace && matchesGender && matchesAestheticTraits && matchesFunctionalTraits)
+		for _, match := range traitMatches {
+			if !match {
+				return false
+			}
+		}
+	}
+
+	if len(b.Prerequisites.FunctionalTraits) > 0 {
+		var traitMatches = make(map[string]bool)
+		for _, a := range b.Prerequisites.FunctionalTraits {
+			traitMatches[a] = false
+			for _, c := range character.FunctionalTraits {
+				for _, t := range c {
+					if t == a {
+						traitMatches[a] = true
+						break
+					}
+				}
+			}
+		}
+
+		for _, match := range traitMatches {
+			if !match {
+				return false
+			}
+		}
+	}
+
+	return (matchesRace && matchesGender)
 }
