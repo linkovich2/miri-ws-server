@@ -6,7 +6,7 @@ import (
 )
 
 type Character struct {
-	ID               bson.ObjectId       `bson:"_id,omitempty"`
+	ID               bson.ObjectId       `bson:"_id,omitempty" json:"id"`
 	Race             string              `json:"race"`
 	Gender           string              `json:"gender"`
 	AestheticTraits  map[string][]string `json:"aesthetic_traits"`
