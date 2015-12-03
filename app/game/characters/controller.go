@@ -46,6 +46,13 @@ func (c *characterController) List(connection *game.Connection, game *game.Game,
 
 func (c *characterController) Delete(connection *game.Connection, game *game.Game, args *json.RawMessage) {
 	// @todo we need to make sure to validate that the character belongs to the user deleting it
+	params := deleteParams{}
+	err := json.Unmarshal(*args, &params)
+	if err != nil {
+		logger.Write.Error(err.Error()) // @todo handle json malformed or something like that
+	}
+
+	logger.Write.Info("%v", params)
 }
 
 func (c *characterController) Select(connection *game.Connection, game *game.Game, args *json.RawMessage) {
