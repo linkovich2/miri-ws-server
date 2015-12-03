@@ -4,12 +4,15 @@ import (
 	"encoding/json"
 	"github.com/jonathonharrell/miri-ws-server/app/content"
 	"github.com/jonathonharrell/miri-ws-server/app/core"
-	"strconv"
-	// "github.com/jonathonharrell/miri-ws-server/app/database"
+	"github.com/jonathonharrell/miri-ws-server/app/database"
 	"github.com/jonathonharrell/miri-ws-server/app/game"
 	"github.com/jonathonharrell/miri-ws-server/app/logger"
+	"regexp"
+	"strconv"
+	"strings"
+	"time"
 
-	// "gopkg.in/mgo.v2/bson"
+	"gopkg.in/mgo.v2/bson"
 )
 
 type (
@@ -30,7 +33,14 @@ type (
 var Controller = characterController{}
 
 func (c *characterController) List(connection *game.Connection, game *game.Game, args *json.RawMessage) {
-	res, _ := json.Marshal(connection.Socket.User.Characters)
+	session, dbName := database.GetSession() // connect
+	db := session.DB(dbName)
+	defer session.Close()
+
+	var characters []core.Character
+	_ = db.C("characters").Find(bson.M{"user_id": connection.Socket.User.ID}).All(&characters)
+
+	res, _ := json.Marshal(characters)
 	connection.Socket.Send(res)
 }
 
@@ -49,8 +59,15 @@ func (c *characterController) Create(connection *game.Connection, game *game.Gam
 		logger.Write.Error(err.Error()) // @todo handle json malformed or something like that
 	}
 
+	session, dbName := database.GetSession() // connect
+	db := session.DB(dbName)
+	defer session.Close()
+
+	var characters []core.Character
+	_ = db.C("characters").Find(bson.M{"user_id": connection.Socket.User.ID}).All(&characters)
+
 	// greater then 3 characters exist for this account, if it's not an admin user it should not be created
-	if len(connection.Socket.User.Characters) >= 3 && !connection.Socket.User.IsAdmin() {
+	if len(characters) >= 3 && !connection.Socket.User.IsAdmin() {
 		logger.Write.Error("Character could not be saved for Connection [%s], character limit exceeded", connection.Socket.ID)
 		handleCharacterCreationError(connection)
 		return // stop execution here
@@ -61,7 +78,9 @@ func (c *characterController) Create(connection *game.Connection, game *game.Gam
 		return // stop execution
 	}
 
-	// @todo save the character in the database
+	character.UserID = connection.Socket.User.ID
+	character.Created = time.Now() // timestamp this bad boy
+	_ = db.C("characters").Insert(&character)
 
 	res, _ := json.Marshal(createResponse{true, []string{}})
 	connection.Socket.Send(res)
@@ -297,7 +316,32 @@ func validateBackground(connection *game.Connection, character *core.Character) 
 }
 
 func validateName(connection *game.Connection, character *core.Character) bool {
-	// @todo we'll do the same validation we do client side here, but we might also check for some disallowed names
-	logger.Write.Info("We got to name validation")
-	return false
+	if len(character.Name) < 5 { // name not long enough
+		logger.Write.Error("Character Creation Error (Connection [%s]): Name [%s] isn't long enough.", connection.Socket.ID, character.Name)
+		return false
+	}
+
+	splitName := strings.Split(character.Name, " ")
+	if len(splitName) != 2 {
+		logger.Write.Error("Character Creation Error (Connection [%s]): Name [%s] must have only one space (first and last name)", connection.Socket.ID, character.Name)
+		return false
+	}
+
+	safe, err := regexp.Match(`^['a-zA-Z-\s]+$`, []byte(character.Name))
+	if !safe || err != nil {
+		logger.Write.Error("Character Creation Error (Connection [%s]): Name [%s] has invalid characters", connection.Socket.ID, character.Name)
+		return false
+	}
+
+	if len(splitName[0]) < 2 {
+		logger.Write.Error("Character Creation Error (Connection [%s]): First name must be two or more characters in Name [%s].", connection.Socket.ID, character.Name)
+		return false
+	}
+	if len(splitName[1]) < 2 {
+		logger.Write.Error("Character Creation Error (Connection [%s]): Last name must be two or more characters in Name [%s].", connection.Socket.ID, character.Name)
+		return false
+	}
+
+	// @todo in the future we may want to also filter here through names we explicitly disallow
+	return true
 }

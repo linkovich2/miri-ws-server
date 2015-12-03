@@ -13,6 +13,6 @@ type Character struct {
 	FunctionalTraits map[string][]string `json:"functional_traits"`
 	Background       string              `json:"background"`
 	Name             string              `json:"name"`
-	UserID           string              `json:"-" bson:"user_id"`
+	UserID           bson.ObjectId       `json:"-" bson:"user_id"`
 	Created          time.Time           `json:"created"`
 }
