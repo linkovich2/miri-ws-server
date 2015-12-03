@@ -43,7 +43,7 @@ var Races = map[string]core.Race{
 	},
 }
 
-// @todo FUTURE RACES
+// FUTURE RACES
 //
 // "name":"Spriggan",
 // "description":"[WIP]",

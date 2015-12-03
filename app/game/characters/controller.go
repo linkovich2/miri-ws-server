@@ -195,7 +195,6 @@ func validateAestheticTraits(connection *game.Connection, character *core.Charac
 }
 
 func validateFunctionalTraits(connection *game.Connection, character *core.Character) bool {
-	// @todo this should look the same as aesthetic trait validation except individual traits may be required within a category
 	var points int
 
 	for key, traits := range character.FunctionalTraits {
