@@ -45,11 +45,12 @@ func (c *characterController) List(connection *game.Connection, game *game.Game,
 }
 
 func (c *characterController) Delete(connection *game.Connection, game *game.Game, args *json.RawMessage) {
-	// @todo stub
+	// @todo we need to make sure to validate that the character belongs to the user deleting it
 }
 
 func (c *characterController) Select(connection *game.Connection, game *game.Game, args *json.RawMessage) {
-	// @todo stub
+	// @todo validate that the user is selecting a character that belongs to them, then attach them to the socket
+	// then send it over to the game loop
 }
 
 func (c *characterController) Create(connection *game.Connection, game *game.Game, args *json.RawMessage) {
