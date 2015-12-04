@@ -59,12 +59,31 @@ func (c *characterController) Delete(connection *game.Connection, game *game.Gam
 	err = db.C("characters").Remove(bson.M{"_id": params.Id, "user_id": connection.Socket.User.ID})
 	if err != nil {
 		logger.Write.Error("Connection [%s] tried to delete a character that either didn't belong to them or doesn't exist.", connection.Socket.ID)
+		return
 	}
 }
 
-func (c *characterController) Select(connection *game.Connection, game *game.Game, args *json.RawMessage) {
-	// @todo validate that the user is selecting a character that belongs to them, then attach them to the socket
-	// then send it over to the game loop
+func (c *characterController) Select(connection *game.Connection, g *game.Game, args *json.RawMessage) {
+	params := selectParams{}
+	err := json.Unmarshal(*args, &params)
+	if err != nil {
+		logger.Write.Error(err.Error())
+		return
+	}
+
+	session, dbName := database.GetSession() // connect
+	db := session.DB(dbName)
+	defer session.Close()
+
+	character := &core.Character{}
+	err = db.C("characters").Find(bson.M{"_id": params.Id, "user_id": connection.Socket.User.ID}).One(&character)
+	if err != nil {
+		logger.Write.Error("Connection [%s] tried to select a character that either didn't belong to them or doesn't exist.", connection.Socket.ID)
+		return
+	}
+
+	gameConnection := &game.Connection{connection.Socket, character}
+	g.Connect <- gameConnection
 }
 
 func (c *characterController) Create(connection *game.Connection, game *game.Game, args *json.RawMessage) {

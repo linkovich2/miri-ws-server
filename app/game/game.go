@@ -10,7 +10,8 @@ import (
 )
 
 type Game struct {
-	Input chan *Command
+	Input   chan *Command
+	Connect chan *Connection
 }
 
 func (game *Game) Start() {
@@ -23,10 +24,12 @@ func (game *Game) Start() {
 		select {
 		case command := <-game.Input:
 			logger.Write.Info("Received a command: %v", command.Value)
+		case connection := <-game.Connect:
+			logger.Write.Info("Received a new connection: %v", connection)
 		}
 	}
 }
 
 func NewGame() *Game {
-	return &Game{make(chan *Command)}
+	return &Game{make(chan *Command), make(chan *Connection)}
 }
