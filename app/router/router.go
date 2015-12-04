@@ -27,10 +27,7 @@ func (r *Router) Connect(c *server.Connection) {
 
 func (r *Router) Disconnect(c *server.Connection) {
 	delete(connections, c.ID)
-
-	// @todo we should also pass this to the game goroutine,
-	// and it should check if the connection is in-game
-	// if it is, it should remove the connection after a set time period
+	r.game.Disconnect <- c.ID
 }
 
 func (r *Router) Handle(m *server.InboundMessage) {
