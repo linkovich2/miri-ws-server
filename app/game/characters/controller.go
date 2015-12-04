@@ -21,7 +21,7 @@ type (
 		Get string `json:"get"`
 	}
 	deleteParams struct {
-		Id string `json:"id"`
+		Id bson.ObjectId `json:"id"`
 	}
 	selectParams   deleteParams
 	createResponse struct {
@@ -45,14 +45,20 @@ func (c *characterController) List(connection *game.Connection, game *game.Game,
 }
 
 func (c *characterController) Delete(connection *game.Connection, game *game.Game, args *json.RawMessage) {
-	// @todo we need to make sure to validate that the character belongs to the user deleting it
 	params := deleteParams{}
 	err := json.Unmarshal(*args, &params)
 	if err != nil {
 		logger.Write.Error(err.Error()) // @todo handle json malformed or something like that
 	}
 
-	logger.Write.Info("%v", params)
+	session, dbName := database.GetSession() // connect
+	db := session.DB(dbName)
+	defer session.Close()
+
+	err = db.C("characters").Remove(bson.M{"_id": params.Id, "user_id": connection.Socket.User.ID})
+	if err != nil {
+		logger.Write.Error("Connection [%s] tried to delete a character that either didn't belong to them or doesn't exist.", connection.Socket.ID)
+	}
 }
 
 func (c *characterController) Select(connection *game.Connection, game *game.Game, args *json.RawMessage) {
