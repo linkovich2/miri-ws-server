@@ -6,6 +6,7 @@ type Room struct {
 	Description string   `json:"description"`
 	Active      bool     `json:"-"`
 	Connections []string `json:"-"`
+	Position    Position
 }
 
 func (r *Room) Update() {

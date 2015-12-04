@@ -33,6 +33,28 @@ func (p *Position) ToString() string {
 	return s.String()
 }
 
+func (p *Position) AdjacentPositions() map[string]string {
+	north := Position{p.X, p.Y + 1, p.Z}
+	south := Position{p.X, p.Y - 1, p.Z}
+	northeast := Position{p.X + 1, p.Y + 1, p.Z}
+	northwest := Position{p.X - 1, p.Y + 1, p.Z}
+	southeast := Position{p.X + 1, p.Y - 1, p.Z}
+	southwest := Position{p.X - 1, p.Y - 1, p.Z}
+	east := Position{p.X + 1, p.Y, p.Z}
+	west := Position{p.X - 1, p.Y, p.Z}
+
+	return map[string]string{
+		"north":     north.ToString(),
+		"south":     south.ToString(),
+		"northeast": northeast.ToString(),
+		"northwest": northwest.ToString(),
+		"southeast": southeast.ToString(),
+		"southwest": southwest.ToString(),
+		"east":      east.ToString(),
+		"west":      west.ToString(),
+	}
+}
+
 /**
  * Get a Position struct from a template, IE: "15:22:2" => Position{15, 22, 2}
  */

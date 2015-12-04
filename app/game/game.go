@@ -11,6 +11,8 @@ import (
 	"time"
 )
 
+var miri *core.World
+
 type Game struct {
 	Input       chan *Command
 	Connect     chan *Connection
@@ -20,7 +22,7 @@ type Game struct {
 func (game *Game) Start() {
 	dice.SeedRandom() // seed rand for dice
 
-	miri := &world.Miri
+	miri = &world.Miri
 	go util.RunEvery(core.WorldUpdateLoopTimer*time.Second, miri.Update) // start the world update loop
 
 	for {
@@ -33,7 +35,13 @@ func (game *Game) Start() {
 			logger.Write.Info("Num connections: %v", len(game.Connections))
 
 			room := miri.Realms[c.Character.Realm].Rooms[c.Character.Position]
-			res, _ := json.Marshal(&response{Room: room, Messages: []string{"Connected"}})
+			msg := &response{
+				Room:       room,
+				Messages:   []string{"Connected"},
+				Directions: GetAvailableDirections(&room, c.Character.Realm),
+			}
+
+			res, _ := json.Marshal(msg)
 			c.Socket.Send(res)
 		}
 	}
