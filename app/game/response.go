@@ -2,8 +2,9 @@ package game
 
 type (
 	ResponseLocation struct {
-		Name        string `json:"name"`
-		Description string `json:"description"`
+		Name        string   `json:"name"`
+		Description string   `json:"description"`
+		Messages    []string `json:"messages"`
 	}
 
 	response struct {
