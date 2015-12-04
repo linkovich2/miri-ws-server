@@ -1,11 +1,11 @@
 package core
 
 type Room struct {
-	ID          int
-	Name        string
-	Description string
-	Active      bool
-	Connections []string
+	ID          int      `json:"-"`
+	Name        string   `json:"name"`
+	Description string   `json:"description"`
+	Active      bool     `json:"-"`
+	Connections []string `json:"-"`
 }
 
 func (r *Room) Update() {

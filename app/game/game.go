@@ -33,7 +33,7 @@ func (game *Game) Start() {
 			logger.Write.Info("Num connections: %v", len(game.Connections))
 
 			room := miri.Realms[c.Character.Realm].Rooms[c.Character.Position]
-			res, _ := json.Marshal(&response{Location: ResponseLocation{room.Name, room.Description}})
+			res, _ := json.Marshal(&response{Room: room, Messages: []string{"Connected"}})
 			c.Socket.Send(res)
 		}
 	}

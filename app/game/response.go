@@ -1,13 +1,12 @@
 package game
 
-type (
-	ResponseLocation struct {
-		Name        string `json:"name"`
-		Description string `json:"description"`
-	}
+import (
+	"github.com/jonathonharrell/miri-ws-server/app/core"
+)
 
+type (
 	response struct {
-		Location ResponseLocation `json:"location"`
-		Messages []string         `json:"messages"`
+		Room     core.Room `json:"room"`
+		Messages []string  `json:"messages"`
 	}
 )
