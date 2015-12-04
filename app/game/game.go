@@ -1,11 +1,13 @@
 package game
 
 import (
+	"github.com/jonathonharrell/miri-ws-server/app/content/world"
 	"github.com/jonathonharrell/miri-ws-server/app/core"
 	"github.com/jonathonharrell/miri-ws-server/app/logger"
 	"github.com/jonathonharrell/miri-ws-server/app/util"
 	"github.com/jonathonharrell/miri-ws-server/app/util/dice"
 	// "github.com/jonathonharrell/miri-ws-server/app/util/filters"
+	"encoding/json"
 	"time"
 )
 
@@ -18,7 +20,7 @@ type Game struct {
 func (game *Game) Start() {
 	dice.SeedRandom() // seed rand for dice
 
-	miri := &core.World{"Miri", make(map[string]core.Realm)}             // load in the world, rooms, etc
+	miri := &world.Miri
 	go util.RunEvery(core.WorldUpdateLoopTimer*time.Second, miri.Update) // start the world update loop
 
 	for {
@@ -28,8 +30,11 @@ func (game *Game) Start() {
 		case c := <-game.Connect:
 			logger.Write.Info("Connection [%s] started in game with Character: [%s]", c.Socket.ID, c.Character.Name)
 			game.Connections[c.Socket.ID] = c
+			logger.Write.Info("Num connections: %v", len(game.Connections))
 
-			// @todo we should send the initial play info after this
+			room := miri.Realms[c.Character.Realm].Rooms[c.Character.Position]
+			res, _ := json.Marshal(&response{ResponseLocation{room.Name, room.Description}})
+			c.Socket.Send(res)
 		}
 	}
 }

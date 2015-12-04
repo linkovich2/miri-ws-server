@@ -3,14 +3,9 @@ package core
 type Room struct {
 	ID          int
 	Name        string
-	Realm       string
-	Pos         Position
+	Description string
 	Active      bool
 	Connections []string
-}
-
-func (r *Room) Init() {
-	r.Deactivate()
 }
 
 func (r *Room) Update() {

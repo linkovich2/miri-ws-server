@@ -15,4 +15,6 @@ type Character struct {
 	Name             string              `json:"name"`
 	UserID           bson.ObjectId       `json:"-" bson:"user_id"`
 	Created          time.Time           `json:"created"`
+	Position         string              `json:"-"`
+	Realm            string              `json:"-"`
 }

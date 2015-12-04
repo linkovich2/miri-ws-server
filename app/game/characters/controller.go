@@ -115,6 +115,8 @@ func (c *characterController) Create(connection *game.Connection, game *game.Gam
 
 	character.UserID = connection.Socket.User.ID
 	character.Created = time.Now() // timestamp this bad boy
+	character.Position = content.Backgrounds[character.Background].StartPosition
+	character.Realm = content.Backgrounds[character.Background].StartRealm
 	_ = db.C("characters").Insert(&character)
 
 	res, _ := json.Marshal(createResponse{true, []string{}})
