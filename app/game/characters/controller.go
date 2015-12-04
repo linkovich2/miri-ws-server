@@ -48,7 +48,8 @@ func (c *characterController) Delete(connection *game.Connection, game *game.Gam
 	params := deleteParams{}
 	err := json.Unmarshal(*args, &params)
 	if err != nil {
-		logger.Write.Error(err.Error()) // @todo handle json malformed or something like that
+		logger.Write.Error(err.Error())
+		return
 	}
 
 	session, dbName := database.GetSession() // connect
@@ -70,7 +71,8 @@ func (c *characterController) Create(connection *game.Connection, game *game.Gam
 	character := core.Character{}
 	err := json.Unmarshal(*args, &character)
 	if err != nil {
-		logger.Write.Error(err.Error()) // @todo handle json malformed or something like that
+		logger.Write.Error(err.Error())
+		return
 	}
 
 	session, dbName := database.GetSession() // connect
@@ -105,7 +107,8 @@ func (c *characterController) Options(connection *game.Connection, game *game.Ga
 	params := optionsParams{}
 	err := json.Unmarshal(*args, &params)
 	if err != nil {
-		logger.Write.Error(err.Error()) // @todo handle json malformed or something like that
+		logger.Write.Error(err.Error())
+		return
 	}
 
 	switch params.Get {
