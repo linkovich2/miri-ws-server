@@ -10,8 +10,9 @@ import (
 )
 
 type Game struct {
-	Input   chan *Command
-	Connect chan *Connection
+	Input       chan *Command
+	Connect     chan *Connection
+	Connections map[string]*Connection
 }
 
 func (game *Game) Start() {
@@ -22,14 +23,17 @@ func (game *Game) Start() {
 
 	for {
 		select {
-		case command := <-game.Input:
-			logger.Write.Info("Received a command: %v", command.Value)
-		case connection := <-game.Connect:
-			logger.Write.Info("Received a new connection: %v", connection)
+		case c := <-game.Input:
+			logger.Write.Info("Received a command: %v", c.Value)
+		case c := <-game.Connect:
+			logger.Write.Info("Connection [%s] started in game with Character: [%s]", c.Socket.ID, c.Character.Name)
+			game.Connections[c.Socket.ID] = c
+
+			// @todo we should send the initial play info after this
 		}
 	}
 }
 
 func NewGame() *Game {
-	return &Game{make(chan *Command), make(chan *Connection)}
+	return &Game{make(chan *Command), make(chan *Connection), make(map[string]*Connection)}
 }
