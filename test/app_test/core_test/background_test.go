@@ -1,6 +1,9 @@
-package core
+package core_test
 
-import "testing"
+import (
+	. "github.com/jonathonharrell/miri-ws-server/app/core"
+	"testing"
+)
 
 var (
 	testBackgroundAll  = Background{AllowAll: true}

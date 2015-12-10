@@ -1,6 +1,9 @@
-package dice
+package dice_test
 
-import "testing"
+import (
+	. "github.com/jonathonharrell/miri-ws-server/app/util/dice"
+	"testing"
+)
 
 func TestParseDice(t *testing.T) {
 	var d Dice = "3d6"
