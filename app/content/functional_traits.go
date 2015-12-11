@@ -10,12 +10,6 @@ var FunctionalTraits = map[string]core.FunctionalTraitCategory{
 		ID:     "RELIGION",
 		Unique: true,
 		Traits: map[string]core.FunctionalTrait{
-			"NORELIGION": core.FunctionalTrait{
-				Name:        "N/A",
-				ID:          "NORELIGION",
-				Description: "You are not a particularly religious individual",
-				Points:      "0",
-			},
 			"BAHAMUT": core.FunctionalTrait{
 				Name:        "Follower of Bahamut",
 				ID:          "BAHAMUT",
