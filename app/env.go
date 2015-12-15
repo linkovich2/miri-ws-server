@@ -19,7 +19,7 @@ var env Environment
 
 func init() {
 	env.Port = 8080
-	env.DBHost = "localhost:27017"
+	env.DBHost = "127.0.0.1:27017"
 	env.DBName = "miri-dev"
 	env.JWTExpirationDelta = 72
 	env.JWTSecretKey = "i23k8jnTghdfadGGrt32hgSGH42zSD53HaraaR48990A"
