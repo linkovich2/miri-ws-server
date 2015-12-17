@@ -16,6 +16,8 @@ var Races = map[string]core.Race{
 			"<p><strong>Personality: </strong>Varied, but commonly adaptable, ambitious, or self-centered.</p>" +
 			"<p><strong>History: </strong>Humans have, since the days of Fae, been masters of conquering and migrating. Their civilizations are among the largest in the Miri, and their number is several times as great as that of the other races. They are masters of trade and diplomacy, also having a large number of allies. Whether that is due to their personable natures one cannot be certain. Whatever drives them, humans endeavor to succeed.</p>",
 		Description: "The most diverse race in The Miri.",
+		Descriptor:  "human",
+		GenderHuman: true,
 	},
 	"ELF": core.Race{
 		Name:        "Elf",
@@ -28,6 +30,8 @@ var Races = map[string]core.Race{
 			"<p><strong>Average Lifespan: </strong>Between 550 and 650 years</p>" +
 			"<p><strong>Personality: </strong>Varied, but commonly curious, polite, or haughty.</p>" +
 			"<p><strong>History: </strong></p>",
+		Descriptor:  "elven",
+		GenderHuman: true,
 	},
 	"DWARF": core.Race{
 		Name:        "Dwarf",
@@ -40,6 +44,8 @@ var Races = map[string]core.Race{
 			"<p><strong>Average Lifespan: </strong>Between 200 and 450 years</p>" +
 			"<p><strong>Personality: </strong>Varied, but commonly proud, determined, loyal, decisive, or stubborn.</p>" +
 			"<p><strong>History: </strong>Dwarves have been around for as long as the Miri itself, or at least as far back as the historians can see. They've played a part in each of the major wars, in fact some of the finest warriors in folklore were dwarves - especially according to the dwarven archives. Many have staked their claim in the Miri as artisans, something dwarves have proven to be especially adept at. Mountain Dwarves are known for their amazing weapon and armor smiths, while Hill Dwarves are known for their cuisine.</p>",
+		Descriptor:  "dwarven",
+		GenderHuman: false,
 	},
 }
 

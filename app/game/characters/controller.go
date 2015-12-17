@@ -3,6 +3,7 @@ package characters
 import (
 	"encoding/json"
 	"github.com/jonathonharrell/miri-ws-server/app/content"
+	"github.com/jonathonharrell/miri-ws-server/app/content/world"
 	"github.com/jonathonharrell/miri-ws-server/app/core"
 	"github.com/jonathonharrell/miri-ws-server/app/database"
 	"github.com/jonathonharrell/miri-ws-server/app/game"
@@ -17,7 +18,13 @@ import (
 
 type (
 	characterController struct{}
-	optionsParams       struct {
+	characterResponse   struct {
+		Character   core.Character `json:"character"`
+		Location    string         `json:"location"`
+		Description string         `json:"description"`
+		Realm       string         `json:"realm"`
+	}
+	optionsParams struct {
 		Get string `json:"get"`
 	}
 	deleteParams struct {
@@ -32,19 +39,28 @@ type (
 
 var Controller = characterController{}
 
-func (c *characterController) List(connection *game.Connection, game *game.Game, args *json.RawMessage) {
+func (c *characterController) List(connection *game.Connection, g *game.Game, args *json.RawMessage) {
 	session, dbName := database.GetSession() // connect
 	db := session.DB(dbName)
 	defer session.Close()
 
 	var characters []core.Character
+	var response []characterResponse
 	_ = db.C("characters").Find(bson.M{"user_id": connection.Socket.User.ID}).All(&characters)
+	for _, c := range characters {
+		response = append(response, characterResponse{
+			Character:   c,
+			Description: game.DescribeCharacter(&c),
+			Location:    world.Miri.Realms[c.Realm].Rooms[c.Position].Name,
+			Realm:       world.Miri.Realms[c.Realm].Name,
+		})
+	}
 
-	res, _ := json.Marshal(characters)
+	res, _ := json.Marshal(response)
 	connection.Socket.Send(res)
 }
 
-func (c *characterController) Delete(connection *game.Connection, game *game.Game, args *json.RawMessage) {
+func (c *characterController) Delete(connection *game.Connection, g *game.Game, args *json.RawMessage) {
 	params := deleteParams{}
 	err := json.Unmarshal(*args, &params)
 	if err != nil {
@@ -86,7 +102,7 @@ func (c *characterController) Select(connection *game.Connection, g *game.Game, 
 	g.Connect <- gameConnection
 }
 
-func (c *characterController) Create(connection *game.Connection, game *game.Game, args *json.RawMessage) {
+func (c *characterController) Create(connection *game.Connection, g *game.Game, args *json.RawMessage) {
 	character := core.Character{}
 	err := json.Unmarshal(*args, &character)
 	if err != nil {
@@ -123,7 +139,7 @@ func (c *characterController) Create(connection *game.Connection, game *game.Gam
 	connection.Socket.Send(res)
 }
 
-func (c *characterController) Options(connection *game.Connection, game *game.Game, args *json.RawMessage) {
+func (c *characterController) Options(connection *game.Connection, g *game.Game, args *json.RawMessage) {
 	var body interface{}
 	params := optionsParams{}
 	err := json.Unmarshal(*args, &params)

@@ -5,4 +5,6 @@ type Race struct {
 	Description     string `json:"description"`
 	LongDescription string `json:"long_description"`
 	ID              string `json:"id, omitempty"`
+	Descriptor      string `json:"-"`
+	GenderHuman     bool   `json:"-"`
 }
