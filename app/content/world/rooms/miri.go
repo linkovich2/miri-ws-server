@@ -5,6 +5,11 @@ import (
 )
 
 var Miri = map[string]core.Room{
+	"0:0:1": core.Room{
+		Position:    core.Position{0, 0, 1},
+		Name:        "Kra Iree'a Outskirts",
+		Description: "Description @todo heyyyyy",
+	},
 	"1:1:1": core.Room{
 		Position:    core.Position{1, 1, 1},
 		Name:        "Kra Iree'a",
