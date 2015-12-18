@@ -31,6 +31,11 @@ var AestheticTraits = map[string]core.AestheticTraitCategory{
 				ID:          "BLACK",
 				Description: "[PossessivePronoun] hair is jet black.",
 			},
+			"RED": core.AestheticTrait{
+				Name:        "Red",
+				ID:          "RED",
+				Description: "[Pronoun] has ginger-red hair.",
+			},
 		},
 	},
 	"HAIRSTYLE": core.AestheticTraitCategory{
@@ -43,22 +48,22 @@ var AestheticTraits = map[string]core.AestheticTraitCategory{
 				Name:              "Messy Bun",
 				ID:                "MESSYBUN",
 				DisallowedGenders: []string{"M"},
-				Description:       "[PossessivePronoun] hair is loosely arranged in a bun above your head, strands falling about messily.",
+				Description:       "[PossessivePronoun] hair is loosely arranged in a bun above [PossessivePronoun] head, strands falling about messily.",
 			},
 			"LONGSTRAIGHT": core.AestheticTrait{
 				Name:        "Long, Straight",
 				ID:          "LONGSTRAIGHT",
-				Description: "[PossessivePronoun] hair is long and straight, reaching just below shoulder-length.",
+				Description: "[PossessivePronoun] hair is long and straight, reaching just below [PossessivePronoun] shoulders.",
 			},
 			"SHORT": core.AestheticTrait{
 				Name:        "Short",
 				ID:          "SHORT",
-				Description: "[PossessivePronoun] hair is kept neatly close to your head, less then half an inch long.",
+				Description: "[PossessivePronoun] hair is kept neatly close to [PossessivePronoun] head, less then half an inch long.",
 			},
 			"BALD": core.AestheticTrait{
 				Name:        "Bald",
 				ID:          "BALD",
-				Description: "[PossessivePronoun] are bald, but at least you're aerodynamic.",
+				Description: "[PossessivePronoun] are bald, but at least [Pronoun]'s aerodynamic.",
 			},
 		},
 	},
@@ -117,7 +122,7 @@ var AestheticTraits = map[string]core.AestheticTraitCategory{
 			"SCARREDFACE": core.AestheticTrait{
 				Name:        "Facial Scars",
 				ID:          "SCARREDFACE",
-				Description: "[PossessivePronoun] face is scarred. Whether from battle or clumsiness, only [Pronoun] know.",
+				Description: "[PossessivePronoun] face is scarred. Whether from battle or clumsiness, only [Pronoun] knows.",
 			},
 			"SCARREDBODY": core.AestheticTrait{
 				Name:        "Scarred Body",
