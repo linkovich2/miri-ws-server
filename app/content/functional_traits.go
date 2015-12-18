@@ -13,13 +13,13 @@ var FunctionalTraits = map[string]core.FunctionalTraitCategory{
 			"BAHAMUT": core.FunctionalTrait{
 				Name:        "Follower of Bahamut",
 				ID:          "BAHAMUT",
-				Description: "The God of Light",
+				Description: "[Pronoun] [IsAre] a follower of The God of Light",
 				Points:      "-1",
 			},
 			"MORRHIGAN": core.FunctionalTrait{
 				Name:        "Worshipper of Morrhigan",
 				ID:          "MORRHIGAN",
-				Description: "The Goddess of Death",
+				Description: "[Pronoun] [IsAre] a worshipper of The Goddess of Death",
 				Points:      "-1",
 			},
 		},
