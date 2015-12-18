@@ -32,7 +32,7 @@ var FunctionalTraits = map[string]core.FunctionalTraitCategory{
 			"DARKVISION": core.FunctionalTrait{
 				Name:        "Darkvision",
 				ID:          "DARKVISION",
-				Description: "Your vision is fair even in dim light and partial darkness.",
+				Description: "[PossessivePronoun] vision is fair even in dim light and partial darkness.",
 				Points:      "0",
 				Required:    true,
 			},
@@ -41,7 +41,7 @@ var FunctionalTraits = map[string]core.FunctionalTraitCategory{
 				ID:          "FTFORESTS",
 				Only:        "ELF",
 				Required:    true,
-				Description: "You have a natural ability to navigate forests.",
+				Description: "[Pronoun] [HaveHas] an innate ability to navigate forests or woodland terrain.",
 				Points:      "0",
 			},
 			"FTCAVERNS": core.FunctionalTrait{
@@ -49,7 +49,7 @@ var FunctionalTraits = map[string]core.FunctionalTraitCategory{
 				ID:          "FTCAVERNS",
 				Only:        "DWARF",
 				Required:    true,
-				Description: "You have a natural ability to navigate caverns, mountains, and other rocky terrain.",
+				Description: "[Pronoun] [HaveHas] an innate ability to navigate mountains and other rocky terrain.",
 				Points:      "0",
 			},
 		},

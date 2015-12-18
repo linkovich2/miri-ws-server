@@ -34,7 +34,7 @@ var AestheticTraits = map[string]core.AestheticTraitCategory{
 			"RED": core.AestheticTrait{
 				Name:        "Red",
 				ID:          "RED",
-				Description: "[Pronoun] has ginger-red hair.",
+				Description: "[PossessivePronoun] hair is red.",
 			},
 		},
 	},
@@ -63,7 +63,7 @@ var AestheticTraits = map[string]core.AestheticTraitCategory{
 			"BALD": core.AestheticTrait{
 				Name:        "Bald",
 				ID:          "BALD",
-				Description: "[PossessivePronoun] are bald, but at least [Pronoun]'s aerodynamic.",
+				Description: "[PossessivePronoun] head is bald and shiny.",
 			},
 		},
 	},
@@ -75,12 +75,14 @@ var AestheticTraits = map[string]core.AestheticTraitCategory{
 		DisallowedGenders: []string{"F"},
 		Traits: map[string]core.AestheticTrait{
 			"LONGBRAIDEDBEARD": core.AestheticTrait{
-				Name: "Long, braided beard",
-				ID:   "LONGBRAIDEDBEARD",
+				Name:        "Long, braided beard",
+				ID:          "LONGBRAIDEDBEARD",
+				Description: "[PossessivePronoun] face is obscured by a long, intricately braided beard.",
 			},
 			"STUBBLE": core.AestheticTrait{
-				Name: "Stubble",
-				ID:   "STUBBLE",
+				Name:        "Stubble",
+				ID:          "STUBBLE",
+				Description: "A midday shadow shows [PossessivePronoun] weariness from travel, or [PossessivePronoun] lack of grooming habits.",
 			},
 		},
 	},
@@ -122,12 +124,12 @@ var AestheticTraits = map[string]core.AestheticTraitCategory{
 			"SCARREDFACE": core.AestheticTrait{
 				Name:        "Facial Scars",
 				ID:          "SCARREDFACE",
-				Description: "[PossessivePronoun] face is scarred. Whether from battle or clumsiness, only [Pronoun] knows.",
+				Description: "[PossessivePronoun] face is marked or scarred.",
 			},
 			"SCARREDBODY": core.AestheticTrait{
 				Name:        "Scarred Body",
 				ID:          "SCARREDBODY",
-				Description: "[PossessivePronoun] body is scarred. There's a story behind each mark.",
+				Description: "[PossessivePronoun] body is marked or scarred.",
 			},
 		},
 	},

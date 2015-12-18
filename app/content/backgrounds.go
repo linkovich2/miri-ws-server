@@ -8,7 +8,7 @@ var Backgrounds = map[string]core.Background{
 	"NOMADKAIARA": core.Background{
 		Name:          "Nomad - Tulinne Desert",
 		ID:            "NOMADKAIARA",
-		Description:   "You are a nomad, currently traveling through the Tulinne Desert.",
+		Description:   "[Pronoun] [IsAre] a nomad, currently traveling through the Tulinne Desert.",
 		AllowAll:      true,
 		StartRealm:    "MIRI",
 		StartPosition: "1:1:1",
@@ -16,7 +16,7 @@ var Backgrounds = map[string]core.Background{
 	"NOMADELDOREI": core.Background{
 		Name:          "Nomad - Sapphire Coast",
 		ID:            "NOMADELDOREI",
-		Description:   "[INCOMPLETE] You are a nomad, currently traveling through the Sapphire Coast.",
+		Description:   "[INCOMPLETE] [Pronoun] [IsAre] a nomad, currently traveling through the Sapphire Coast.",
 		AllowAll:      true,
 		StartRealm:    "MIRI",
 		StartPosition: "1:1:1",
@@ -24,7 +24,7 @@ var Backgrounds = map[string]core.Background{
 	"NOMADFOXEAR": core.Background{
 		Name:          "Nomad - Soro Fields",
 		ID:            "NOMADFOXEAR",
-		Description:   "[INCOMPLETE] You are a nomad, currently traveling through the Soro Fields.",
+		Description:   "[INCOMPLETE] [Pronoun] [IsAre] a nomad, currently traveling through the Soro Fields.",
 		AllowAll:      true,
 		StartRealm:    "MIRI",
 		StartPosition: "1:1:1",
@@ -32,7 +32,7 @@ var Backgrounds = map[string]core.Background{
 	"NOMADBRIREE": core.Background{
 		Name:          "Nomad - Skyshroud Forest",
 		ID:            "NOMADBRIREE",
-		Description:   "[INCOMPLETE] You are a nomad, currently traveling through the Skyshround Forest.",
+		Description:   "[INCOMPLETE] [Pronoun] [IsAre] a nomad, currently traveling through the Skyshround Forest.",
 		AllowAll:      true,
 		StartRealm:    "MIRI",
 		StartPosition: "1:1:1",
@@ -40,7 +40,7 @@ var Backgrounds = map[string]core.Background{
 	"BAHAMUTKNIGHT": core.Background{
 		Name:        "Temple of Bahamut - Understudy",
 		ID:          "BAHAMUTKNIGHT",
-		Description: "[INCOMPLETE] You are an understudy at the temple of Bahamut, perhaps in training to be a knight or cleric.",
+		Description: "[INCOMPLETE] [Pronoun] [IsAre] an understudy at the temple of Bahamut, perhaps in training to be a knight or cleric.",
 		Prerequisites: core.BackgroundPrerequisites{
 			FunctionalTraits: []string{"BAHAMUT"},
 		},
