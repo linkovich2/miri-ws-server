@@ -8,6 +8,7 @@ type Gender struct {
 	Human           string   `json:"-"`
 	Scientific      string   `json:"-"`
 	Pronoun         string   `json:"-"`
+	Possessive      string   `json:"-"`
 }
 
 func (g *Gender) RaceAllowed(race string) bool {

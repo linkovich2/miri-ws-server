@@ -3,6 +3,8 @@ package game
 import (
 	"github.com/jonathonharrell/miri-ws-server/app/content"
 	"github.com/jonathonharrell/miri-ws-server/app/core"
+	"github.com/jonathonharrell/miri-ws-server/app/logger"
+	"github.com/jonathonharrell/miri-ws-server/app/util/filters"
 
 	"bytes"
 )
@@ -27,8 +29,21 @@ func DescribeCharacter(c *core.Character) string {
 		response.Write([]byte(gender.Scientific))
 	}
 
-	// @todo build an aesthetic traits based descriptions
-	// @todo future: need at least one more description based on deeds, skills and functional traits
+	response.Write([]byte("; "))
+
+	for i, cat := range c.AestheticTraits {
+		for _, t := range cat {
+			response.Write([]byte(filters.GenderPronouns(content.AestheticTraits[i].Traits[t].Description, gender.Possessive, gender.Pronoun)))
+			response.Write([]byte(" "))
+		}
+	}
 
 	return response.String()
+}
+
+// @todo future: need at least one more description based on deeds, skills and functional traits
+
+// @todo this should log an error if it fails
+func SaveCharacter(c *core.Character) {
+	logger.Write.Info("Save Character [%s] called", c.Name)
 }

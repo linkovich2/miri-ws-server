@@ -12,6 +12,7 @@ var Genders = map[string]core.Gender{
 		Human:           "man",
 		Scientific:      "male",
 		Pronoun:         "he",
+		Possessive:      "his",
 	},
 	"F": core.Gender{
 		Name:            "Female",
@@ -20,6 +21,7 @@ var Genders = map[string]core.Gender{
 		Human:           "woman",
 		Scientific:      "female",
 		Pronoun:         "she",
+		Possessive:      "her",
 	},
 	"NA": core.Gender{
 		Name:       "N/A",
@@ -28,5 +30,6 @@ var Genders = map[string]core.Gender{
 		Human:      "automaton",
 		Scientific: "automaton",
 		Pronoun:    "it",
+		Possessive: "it's",
 	},
 }
