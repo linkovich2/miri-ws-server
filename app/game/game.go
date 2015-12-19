@@ -29,7 +29,7 @@ func (game *Game) Start() {
 	for {
 		select {
 		case c := <-game.Input:
-			logger.Write.Info("Connection [%s] sent Command: [%v]", c.Value)
+			logger.Write.Info("Connection [%s] sent Command: [%v]", c.Connection.ID, c.Value)
 		case c := <-game.Connect:
 			logger.Write.Info("Connection [%s] started in game with Character: [%s]", c.Socket.ID, c.Character.Name)
 			game.Connections[c.Socket.ID] = c

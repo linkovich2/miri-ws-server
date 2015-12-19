@@ -98,8 +98,8 @@ func (c *characterController) Select(connection *game.Connection, g *game.Game, 
 		return
 	}
 
-	gameConnection := &game.Connection{connection.Socket, character}
-	g.Connect <- gameConnection
+	connection.Character = character
+	g.Connect <- connection
 }
 
 func (c *characterController) Create(connection *game.Connection, g *game.Game, args *json.RawMessage) {
