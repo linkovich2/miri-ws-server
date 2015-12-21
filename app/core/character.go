@@ -53,6 +53,7 @@ func (c *Character) GetStats() StatBlock {
 	c.SetDefaultStats()
 
 	// @todo calc stats from any modifying properties in core, such as traits, items, etc.
+	// @note stats cannot be lower then 1 or higher then 20
 	c.statsCached = true
 	return c.stats
 }
