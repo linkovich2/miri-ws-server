@@ -42,12 +42,18 @@ func cMove(game *Game, c *Command) {
 	room.Add(c.Connection.ID)
 
 	game.defaultMessage(c.Connection, c.Character, []string{})
-	game.broadcastToRoom(
-		c.Connection,
-		strings.Join([]string{ShortDescriptionForCharacter(c.Character), " makes their way into the area."}, ""),
-		fmt.Sprintf("You make your way %s", params.Direction),
-		room,
-	)
+	game.broadcastToRoom(c.Connection, getMovementMessage(c.Character, params.Direction), getMovementMessageBroadcast(c.Character, params.Direction), room)
+}
+
+func getMovementMessage(c *core.Character, dir string) string {
+	// @todo this is mostly a stub for putting together a movement string for a character
+	// ex. if the player is on horseback and we want to illustrate that
+	return strings.Join([]string{ShortDescriptionForCharacter(c), " makes their way into the area."}, "")
+}
+
+func getMovementMessageBroadcast(c *core.Character, dir string) string {
+	// @todod see above method
+	return fmt.Sprintf("You make your way %s", dir)
 }
 
 func (game *Game) getAvailableDirections(r *core.Room, realm string) map[string]bool {
