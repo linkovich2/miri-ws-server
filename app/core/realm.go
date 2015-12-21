@@ -4,7 +4,7 @@ type (
 	Realm struct {
 		ID    string
 		Name  string `json:"name"`
-		Rooms map[string]Room
+		Rooms map[string]*Room
 		// Weathers  map[string]Weather
 		// TimeCycle map[string]RealmTime `json:"times"`
 		// Time      string

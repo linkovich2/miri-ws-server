@@ -13,18 +13,19 @@ func (r *Room) Update() {
 	// do something, this is the "slow update", world-level update
 }
 
-func (r *Room) Activate() {
+func (r *Room) Add(c string) {
 	r.Active = true
-	// here we should activate the "fast updates" for entities in the room
-	// spin those off into separate goroutines
+	r.Connections = append(r.Connections, c)
 }
 
-func (r *Room) Deactivate() {
-	r.Active = false
+func (r *Room) Remove(c string) {
+	if len(r.Connections) <= 0 {
+		r.Active = false
+	}
 
-	// we should now "cool down" the "fast updates"
-}
-
-func (r *Room) Broadcast() {
-
+	for i, v := range r.Connections {
+		if v == c {
+			r.Connections = append(r.Connections[:i], r.Connections[i+1:]...)
+		}
+	}
 }

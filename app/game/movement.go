@@ -5,13 +5,14 @@ import (
 	"fmt"
 	"github.com/jonathonharrell/miri-ws-server/app/core"
 	"github.com/jonathonharrell/miri-ws-server/app/logger"
+	"strings"
 )
 
 type cMoveArgs struct {
 	Direction string `json:"direction"`
 }
 
-func cMove(c *Command) {
+func cMove(game *Game, c *Command) {
 	params := cMoveArgs{}
 	err := json.Unmarshal(*c.Args, &params)
 	if err != nil {
@@ -33,17 +34,29 @@ func cMove(c *Command) {
 		return
 	}
 
+	room := game.World.Realms[c.Character.Realm].Rooms[c.Character.Position]
+	room.Remove(c.Connection.ID)
+
 	c.Character.Position = newPosition.ToString()
-	defaultMessage(c.Connection, c.Character, []string{fmt.Sprintf("You make your way %s", params.Direction)})
+	room = game.World.Realms[c.Character.Realm].Rooms[c.Character.Position]
+	room.Add(c.Connection.ID)
+
+	game.defaultMessage(c.Connection, c.Character, []string{})
+	game.broadcastToRoom(
+		c.Connection,
+		strings.Join([]string{ShortDescriptionForCharacter(c.Character), " makes their way into the area."}, ""),
+		fmt.Sprintf("You make your way %s", params.Direction),
+		room,
+	)
 }
 
-func GetAvailableDirections(r *core.Room, realm string) map[string]bool {
+func (game *Game) getAvailableDirections(r *core.Room, realm string) map[string]bool {
 	directions := make(map[string]bool)
 
 	positions := r.Position.AdjacentPositions()
 
 	for k, p := range positions {
-		if _, roomExists := miri.Realms[realm].Rooms[p]; roomExists {
+		if _, roomExists := game.World.Realms[realm].Rooms[p]; roomExists {
 			directions[k] = true
 		} else {
 			directions[k] = false

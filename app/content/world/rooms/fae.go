@@ -4,4 +4,4 @@ import (
 	"github.com/jonathonharrell/miri-ws-server/app/core"
 )
 
-var Fae = map[string]core.Room{}
+var Fae = map[string]*core.Room{}

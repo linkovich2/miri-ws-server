@@ -6,7 +6,7 @@ import (
 
 type (
 	response struct {
-		Room       core.Room       `json:"room"`
+		Room       *core.Room      `json:"room"`
 		Messages   []string        `json:"messages"`
 		Directions map[string]bool `json:"directions"`
 	}

@@ -6,7 +6,7 @@ const (
 
 type World struct {
 	Name   string
-	Realms map[string]Realm
+	Realms map[string]*Realm
 }
 
 func (w *World) Update() {
