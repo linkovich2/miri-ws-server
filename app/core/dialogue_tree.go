@@ -7,5 +7,5 @@ type DialogueTree struct {
 	RaceOption   map[string]bool
 	GenderOption map[string]bool
 	TraitOption  map[string]bool
-	Options      []DialogueTree
+	Options      []*DialogueTree
 }
