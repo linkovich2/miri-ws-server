@@ -33,7 +33,7 @@ func (game *Game) Start() {
 		case c := <-game.Connect:
 			game.handleConnection(c)
 		case c := <-game.Disconnect:
-			delete(game.Connections, c)
+			game.handleDisconnection(c)
 		}
 	}
 }
@@ -54,6 +54,14 @@ func (game *Game) handleConnection(c *Connection) {
 	room.Add(c.Socket.ID)
 	game.World.Realms[c.Character.Realm].Rooms[c.Character.Position] = room
 	game.defaultMessage(c.Socket, c.Character, []string{"Connected"})
+}
+
+func (game *Game) handleDisconnection(conn string) {
+	c := game.Connections[conn]
+	room := game.World.Realms[c.Character.Realm].Rooms[c.Character.Position]
+	room.Remove(c.Socket.ID)
+
+	delete(game.Connections, c.Socket.ID)
 }
 
 func (game *Game) handleInput(c *Command) {
