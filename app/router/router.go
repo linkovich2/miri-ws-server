@@ -62,8 +62,8 @@ func (r *Router) Handle(m *server.InboundMessage) {
 		args = &json.RawMessage{}
 	}
 
-	method := strings.ToLower(cmd)
-	method = strings.ToUpper(method[:1]) + method[1:]
+	lowered := strings.ToLower(cmd)
+	method := strings.ToUpper(lowered[:1]) + lowered[1:]
 
 	if len(cmd) > 6 && c.Socket.User.IsAdmin() && cmd[:6] == "admin_" {
 		adminCommand := reflect.ValueOf(&admin.Controller).MethodByName(strings.ToUpper(cmd[6:7]) + cmd[7:])
@@ -74,7 +74,7 @@ func (r *Router) Handle(m *server.InboundMessage) {
 	}
 
 	if c.Character != nil {
-		r.game.Input <- &game.Command{Value: method, Args: args, Character: c.Character, Connection: c.Socket}
+		r.game.Input <- &game.Command{Value: lowered, Args: args, Character: c.Character, Connection: c.Socket}
 	} else {
 		command := reflect.ValueOf(&characters.Controller).MethodByName(method)
 

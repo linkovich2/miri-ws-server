@@ -12,3 +12,7 @@ type Command struct {
 	Character  *core.Character
 	Connection *server.Connection
 }
+
+var commandRegistrar = map[string]func(*Command){
+	"move": cMove,
+}

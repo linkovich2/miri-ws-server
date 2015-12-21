@@ -20,4 +20,9 @@ var Miri = map[string]core.Room{
 		Name:        "Kra Iree'a Outskirts",
 		Description: "Description stuff @todo.",
 	},
+	"2:3:1": core.Room{
+		Position:    core.Position{2, 3, 1},
+		Name:        "BIG TODO",
+		Description: "Description stuff @todo.",
+	},
 }

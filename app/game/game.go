@@ -4,6 +4,7 @@ import (
 	"github.com/jonathonharrell/miri-ws-server/app/content/world"
 	"github.com/jonathonharrell/miri-ws-server/app/core"
 	"github.com/jonathonharrell/miri-ws-server/app/logger"
+	"github.com/jonathonharrell/miri-ws-server/app/server"
 	"github.com/jonathonharrell/miri-ws-server/app/util"
 	"github.com/jonathonharrell/miri-ws-server/app/util/dice"
 	// "github.com/jonathonharrell/miri-ws-server/app/util/filters"
@@ -29,20 +30,15 @@ func (game *Game) Start() {
 	for {
 		select {
 		case c := <-game.Input:
-			logger.Write.Info("Connection [%s] sent Command: [%v]", c.Connection.ID, c.Value)
+			if f, exists := commandRegistrar[c.Value]; exists {
+				f(c)
+			} else {
+				logger.Write.Error("Connection [%s] sent Command: [%v], but it doesn't exist.", c.Connection.ID, c.Value)
+			}
 		case c := <-game.Connect:
 			logger.Write.Info("Connection [%s] started in game with Character: [%s]", c.Socket.ID, c.Character.Name)
 			game.Connections[c.Socket.ID] = c
-
-			room := miri.Realms[c.Character.Realm].Rooms[c.Character.Position]
-			msg := &response{
-				Room:       room,
-				Messages:   []string{"Connected"},
-				Directions: GetAvailableDirections(&room, c.Character.Realm),
-			}
-
-			res, _ := json.Marshal(msg)
-			c.Socket.Send(res)
+			defaultMessage(c.Socket, c.Character, []string{"Connected"})
 		case c := <-game.Disconnect:
 			// @todo perform other logging out actions
 			delete(game.Connections, c)
@@ -57,4 +53,16 @@ func NewGame() *Game {
 		Disconnect:  make(chan string),
 		Connections: make(map[string]*Connection),
 	}
+}
+
+func defaultMessage(s *server.Connection, c *core.Character, messages []string) {
+	room := miri.Realms[c.Realm].Rooms[c.Position]
+	msg := &response{
+		Room:       room,
+		Messages:   messages,
+		Directions: GetAvailableDirections(&room, c.Realm),
+	}
+
+	res, _ := json.Marshal(msg)
+	s.Send(res)
 }

@@ -55,6 +55,29 @@ func (p *Position) AdjacentPositions() map[string]string {
 	}
 }
 
+func (p *Position) Move(direction string) (Position, error) {
+	switch direction {
+	case "north":
+		return Position{p.X, p.Y + 1, p.Z}, nil
+	case "south":
+		return Position{p.X, p.Y - 1, p.Z}, nil
+	case "northeast":
+		return Position{p.X + 1, p.Y + 1, p.Z}, nil
+	case "northwest":
+		return Position{p.X - 1, p.Y + 1, p.Z}, nil
+	case "southeast":
+		return Position{p.X + 1, p.Y - 1, p.Z}, nil
+	case "southwest":
+		return Position{p.X - 1, p.Y - 1, p.Z}, nil
+	case "east":
+		return Position{p.X + 1, p.Y, p.Z}, nil
+	case "west":
+		return Position{p.X - 1, p.Y, p.Z}, nil
+	}
+
+	return *p, errors.New("Direction provided was invalid")
+}
+
 /**
  * Get a Position struct from a template, IE: "15:22:2" => Position{15, 22, 2}
  */
