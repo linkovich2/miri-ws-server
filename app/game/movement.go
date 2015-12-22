@@ -41,6 +41,15 @@ func move(game *Game, c *Command) {
 		return
 	}
 
+	if _, exists := game.World.Realms[c.Character.Realm].Rooms[newPosition.ToString()]; !exists {
+		logger.Write.Error(
+			"Character [%s] connection [%s] tried to move to a room that doesn't exist!",
+			c.Character.Name,
+			c.Connection.ID,
+		)
+		return
+	}
+
 	go func() {
 		startMovingMessage := response{Messages: []string{"You begin moving"}}
 		res, _ := json.Marshal(&startMovingMessage)
@@ -48,7 +57,6 @@ func move(game *Game, c *Command) {
 
 		c.Character.State = core.StateMoving
 		room := game.World.Realms[c.Character.Realm].Rooms[c.Character.Position]
-		logger.Write.Info("%v", (time.Duration(c.Character.GetSpeed())+time.Duration(room.GetSpeedMod()))*time.Second)
 		time.Sleep((time.Duration(c.Character.GetSpeed()) + time.Duration(room.GetSpeedMod())) * time.Second) // wait for character's move speed
 
 		room.Remove(c.Connection.ID)
