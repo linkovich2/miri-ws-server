@@ -57,11 +57,11 @@ func (game *Game) handleConnection(c *Connection) {
 }
 
 func (game *Game) handleDisconnection(conn string) {
-	c := game.Connections[conn]
-	room := game.World.Realms[c.Character.Realm].Rooms[c.Character.Position]
-	room.Remove(c.Socket.ID)
-
-	delete(game.Connections, c.Socket.ID)
+	if c, exists := game.Connections[conn]; exists {
+		room := game.World.Realms[c.Character.Realm].Rooms[c.Character.Position]
+		room.Remove(c.Socket.ID)
+		delete(game.Connections, c.Socket.ID)
+	}
 }
 
 func (game *Game) handleInput(c *Command) {
