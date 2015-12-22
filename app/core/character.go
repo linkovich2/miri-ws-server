@@ -8,7 +8,10 @@ import (
 )
 
 const (
-	BaseCharacterMoveSpeed = 20
+	BaseCharacterMoveSpeed = 4
+
+	StateDefault = iota
+	StateMoving
 )
 
 type (
@@ -26,6 +29,7 @@ type (
 		Realm            string              `json:"-"`
 		stats            StatBlock           `json:"-"`
 		statsCached      bool                `json:"-"`
+		State            int                 `json:"-"`
 	}
 
 	Stat      int
@@ -70,4 +74,10 @@ func (s *Stat) GetModifier() string {
 
 func (s *Stat) ToInt() int {
 	return int(*s)
+}
+
+func (c *Character) GetSpeed() int {
+	stats := c.GetStats()
+	mod, _ := strconv.Atoi(stats.Dex.GetModifier())
+	return BaseCharacterMoveSpeed + mod
 }

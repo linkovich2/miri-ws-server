@@ -6,6 +6,7 @@ import (
 	"github.com/jonathonharrell/miri-ws-server/app/core"
 	"github.com/jonathonharrell/miri-ws-server/app/logger"
 	"strings"
+	"time"
 )
 
 type cMoveArgs struct {
@@ -13,14 +14,20 @@ type cMoveArgs struct {
 }
 
 func cMove(game *Game, c *Command) {
+	if c.Character.State != core.StateMoving {
+		move(game, c)
+	} else {
+		logger.Write.Error("Character [%s] from connection [%s] tried to move when they were already moving!", c.Character.Name, c.Connection.ID)
+	}
+}
+
+func move(game *Game, c *Command) {
 	params := cMoveArgs{}
 	err := json.Unmarshal(*c.Args, &params)
 	if err != nil {
 		logger.Write.Error(err.Error())
 		return
 	}
-
-	// @todo this should be timed out based on the character's move speed
 
 	position, err := core.GetPosition(c.Character.Position)
 	if err != nil {
@@ -34,15 +41,26 @@ func cMove(game *Game, c *Command) {
 		return
 	}
 
-	room := game.World.Realms[c.Character.Realm].Rooms[c.Character.Position]
-	room.Remove(c.Connection.ID)
+	go func() {
+		startMovingMessage := response{Messages: []string{"You begin moving"}}
+		res, _ := json.Marshal(&startMovingMessage)
+		c.Connection.Send(res)
 
-	c.Character.Position = newPosition.ToString()
-	room = game.World.Realms[c.Character.Realm].Rooms[c.Character.Position]
-	room.Add(c.Connection.ID)
+		c.Character.State = core.StateMoving
+		room := game.World.Realms[c.Character.Realm].Rooms[c.Character.Position]
+		logger.Write.Info("%v", (time.Duration(c.Character.GetSpeed())+time.Duration(room.GetSpeedMod()))*time.Second)
+		time.Sleep((time.Duration(c.Character.GetSpeed()) + time.Duration(room.GetSpeedMod())) * time.Second) // wait for character's move speed
 
-	game.defaultMessage(c.Connection, c.Character, []string{})
-	game.broadcastToRoom(c.Connection, getMovementMessage(c.Character, params.Direction), getMovementMessageBroadcast(c.Character, params.Direction), room)
+		room.Remove(c.Connection.ID)
+
+		c.Character.Position = newPosition.ToString()
+		room = game.World.Realms[c.Character.Realm].Rooms[c.Character.Position]
+		room.Add(c.Connection.ID)
+
+		c.Character.State = core.StateDefault
+		game.defaultMessage(c.Connection, c.Character, []string{})
+		game.broadcastToRoom(c.Connection, getMovementMessage(c.Character, params.Direction), getMovementMessageBroadcast(c.Character, params.Direction), room)
+	}()
 }
 
 func getMovementMessage(c *core.Character, dir string) string {
