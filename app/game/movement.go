@@ -2,11 +2,37 @@ package game
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/jonathonharrell/miri-ws-server/app/core"
+	"github.com/jonathonharrell/miri-ws-server/app/util"
 	"github.com/jonathonharrell/miri-ws-server/app/logger"
 	"strings"
 	"time"
+)
+
+var (
+	movementMessages = map[string]map[string][]string{
+		"start": map[string][]string{
+			"walk": []string{
+				"You make your way to the [Direction]",
+				"You continue [Direction], walking through the [Detail]",
+			},
+		},
+		"broadcastStart": map[string][]string{
+			"walk": []string{
+				"[Description] begins walking to the [Direction]",
+			},
+		},
+		"arrive": map[string][]string{
+			"walk": []string{
+				"You arrive at [RoomName]",
+			},
+		},
+		"broadcastArrive": map[string][]string{
+			"walk": []string{
+				"You notice [Description] entering the area.",
+			},
+		},
+	}
 )
 
 type cMoveArgs struct {
@@ -51,12 +77,15 @@ func move(game *Game, c *Command) {
 	}
 
 	go func() {
-		startMovingMessage := response{Messages: []string{"You begin moving"}}
-		res, _ := json.Marshal(&startMovingMessage)
-		c.Connection.Send(res)
-
 		c.Character.State = core.StateMoving
 		room := game.World.Realms[c.Character.Realm].Rooms[c.Character.Position]
+		game.broadcastToRoom(
+			c.Connection,
+			getMovementMessage(c.Character, room, params.Direction, "broadcastStart"),
+			getMovementMessage(c.Character, room, params.Direction, "start"),
+			room,
+		)
+
 		// @todo as part of this sleep we may want to check for movement impeding stuff, such as being on a mountain
 		// we may also want to check for exit traps or anything like that
 		time.Sleep((time.Duration(c.Character.GetSpeed()) + time.Duration(room.GetSpeedMod())) * time.Second) // wait for character's move speed
@@ -69,19 +98,25 @@ func move(game *Game, c *Command) {
 
 		c.Character.State = core.StateDefault
 		game.defaultMessage(c.Connection, c.Character, []string{})
-		game.broadcastToRoom(c.Connection, getMovementMessage(c.Character, params.Direction), getMovementMessageBroadcast(c.Character, params.Direction), room)
+		game.broadcastToRoom(
+			c.Connection,
+			getMovementMessage(c.Character, room, params.Direction, "broadcastArrive"),
+			getMovementMessage(c.Character, room, params.Direction, "arrive"),
+			room,
+		)
 	}()
 }
 
-func getMovementMessage(c *core.Character, dir string) string {
-	// @todo this is mostly a stub for putting together a movement string for a character
-	// ex. if the player is on horseback and we want to illustrate that
-	return strings.Join([]string{ShortDescriptionForCharacter(c), " makes their way into the area."}, "")
-}
-
-func getMovementMessageBroadcast(c *core.Character, dir string) string {
-	// @todod see above method
-	return fmt.Sprintf("You make your way %s", dir)
+func getMovementMessage(c *core.Character, room *core.Room, dir, pool string) string {
+	res, err := util.Sample(movementMessages[pool][c.GetMovementStyle()])
+	if err != nil {
+		logger.Write.Error(err.Error()) // wtf happened
+		return ""
+	}
+	res = strings.Replace(res, "[Description]", ShortDescriptionForCharacter(c), -1)
+	res = strings.Replace(res, "[RoomName]", room.Name, -1)
+	res = strings.Replace(res, "[Direction]", dir, -1)
+	return res
 }
 
 func (game *Game) getAvailableDirections(r *core.Room, realm string) map[string]bool {

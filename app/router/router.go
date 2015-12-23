@@ -22,7 +22,6 @@ var connections = make(map[string]*game.Connection)
 
 func (r *Router) Connect(c *server.Connection) {
 	connections[c.ID] = &game.Connection{Socket: c}
-	// do we even need to do anything on connect? @todo
 }
 
 func (r *Router) Disconnect(c *server.Connection) {

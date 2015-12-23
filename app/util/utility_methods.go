@@ -29,11 +29,11 @@ func InArray(value interface{}, array interface{}) (ok bool, i int) {
 	return
 }
 
-func Sample(i []interface{}) (interface{}, error) {
+func Sample(i []string) (string, error) {
 	rand.Seed(time.Now().UnixNano())
 
 	if len(i) <= 0 {
-		return nil, errors.New("Sampled slice cannot be empty")
+		return "", errors.New("Sampled slice cannot be empty")
 	}
 
 	return i[rand.Intn(len(i))], nil
