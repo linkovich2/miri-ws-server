@@ -53,7 +53,7 @@ func (game *Game) handleConnection(c *Connection) {
 	room := game.World.Realms[c.Character.Realm].Rooms[c.Character.Position]
 	room.Add(c.Socket.ID)
 	game.World.Realms[c.Character.Realm].Rooms[c.Character.Position] = room
-	game.defaultMessage(c.Socket, c.Character, []string{"Connected;"})
+	game.defaultMessage(c.Socket, c.Character, []string{"<system>Connected;</system>"})
 }
 
 func (game *Game) handleDisconnection(conn string) {

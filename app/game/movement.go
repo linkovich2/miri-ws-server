@@ -118,7 +118,7 @@ func getMovementMessage(c *core.Character, room *core.Room, dir, pool string) st
 		res = strings.Replace(res, "[Detail]", detail, -1)
 	}
 
-	return res
+	return strings.Join([]string{"<movement>", res, "</movement>"}, "")
 }
 
 func (game *Game) getAvailableDirections(r *core.Room, realm string) map[string]bool {
