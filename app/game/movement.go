@@ -3,8 +3,8 @@ package game
 import (
 	"encoding/json"
 	"github.com/jonathonharrell/miri-ws-server/app/core"
-	"github.com/jonathonharrell/miri-ws-server/app/util"
 	"github.com/jonathonharrell/miri-ws-server/app/logger"
+	"github.com/jonathonharrell/miri-ws-server/app/util"
 	"strings"
 	"time"
 )
