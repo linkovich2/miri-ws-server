@@ -120,10 +120,10 @@ func getMovementMessage(c *core.Character, room *core.Room, dir, pool string) st
 	}
 
 	if pool == "broadcastStart" || pool == "broadcastArrive" {
-		return strings.Join([]string{"<default>", strings.ToUpper(res[:1]) + res[1:], "</default>"}, "")
+		return strings.Join([]string{"<default>", res, "</default>"}, "")
 	}
 
-	return strings.Join([]string{"<movement>", strings.ToUpper(res[:1]) + res[1:], "</movement>"}, "")
+	return strings.Join([]string{"<movement>", res, "</movement>"}, "")
 }
 
 func (game *Game) getAvailableDirections(r *core.Room, realm string) map[string]bool {
