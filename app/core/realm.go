@@ -17,8 +17,8 @@ type (
 	}
 )
 
-func (r *Realm) Update() {
+func (r *Realm) Update(sendMsg func(string, string)) {
 	for _, r := range r.Rooms {
-		r.Update()
+		r.Update(sendMsg)
 	}
 }

@@ -24,6 +24,12 @@ func (game *Game) Start() {
 	dice.SeedRandom() // seed rand for dice
 
 	game.World = &world.Miri
+	game.World.SetSendCallback(func(id, message string) {
+		if connection, exists := game.Connections[id]; exists {
+			res, _ := json.Marshal(&response{Messages: []string{message}})
+			connection.Socket.Send(res)
+		}
+	})
 	go util.RunEvery(core.WorldUpdateLoopTimer*time.Second, game.World.Update) // start the world update loop
 
 	for {

@@ -26,7 +26,7 @@ type Room struct {
 	Details []string `json:"-"`
 }
 
-func (r *Room) Update() {
+func (r *Room) Update(sendMsg func(string, string)) {
 	if r.Active {
 		// do something, this is the "slow update", world-level update
 	}
