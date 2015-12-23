@@ -27,7 +27,9 @@ type Room struct {
 }
 
 func (r *Room) Update() {
-	// do something, this is the "slow update", world-level update
+	if r.Active {
+		// do something, this is the "slow update", world-level update
+	}
 }
 
 func (r *Room) Add(c string) {
