@@ -53,3 +53,9 @@ func (r *Room) Remove(c string) {
 		r.Active = false
 	}
 }
+
+func (r *Room) Broadcast(msg string, cb func(string, string)) {
+	for _, c := range r.Connections {
+		cb(c, msg)
+	}
+}
