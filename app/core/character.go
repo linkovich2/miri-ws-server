@@ -81,3 +81,11 @@ func (c *Character) GetSpeed() int {
 	mod, _ := strconv.Atoi(stats.Dex.GetModifier())
 	return BaseCharacterMoveSpeed + mod
 }
+
+// returns a movement style for movement messages, for now walk is the only string
+// but in the future we may have stuff like mount, boat, or other keywords for
+// use with movement message creation
+func (c *Character) GetMovementStyle() string {
+	// @todo stub
+	return "walk"
+}
