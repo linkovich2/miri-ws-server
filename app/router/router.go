@@ -35,7 +35,7 @@ func (r *Router) Handle(m *server.InboundMessage) {
 	err := json.Unmarshal(m.Payload, &obj)
 	if err != nil {
 		// invalid JSON format?
-		logger.Write.Error("Invalid JSON formatting") // @todo errors
+		logger.Write.Error("Invalid JSON formatting")
 		return
 	}
 
@@ -43,7 +43,7 @@ func (r *Router) Handle(m *server.InboundMessage) {
 
 	if !commandExists {
 		// no comand found in JSON payload, invalid JSON then
-		logger.Write.Error("No command found in JSON payload") // @todo error handling
+		logger.Write.Error("No command found in JSON payload")
 		return
 	}
 
