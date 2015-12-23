@@ -18,6 +18,12 @@ type Room struct {
 	Connections []string `json:"-"`
 	Position    Position `json:"-"`
 	Size        int      `json:"-"`
+
+	// this is for use with building descriptions or sentences about battles or movement through a room
+	// take for instance this slice: []string{"sand", "tents", "noise"}
+	// might result in sentences like, "You make your way through the sand|tents|noise" or
+	// "The battle rages amidst the sand|tents|noise."
+	Details []string `json:"-"`
 }
 
 func (r *Room) Update() {

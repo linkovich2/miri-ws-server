@@ -14,8 +14,9 @@ var Miri = map[string]*core.Room{
 	"1:1:1": &core.Room{
 		Position:    core.Position{1, 1, 1},
 		Name:        "Kra Iree'a",
-		Description: "@todo Orange, blue and gold tents line the edge of this small traders outpost on the edge of the Tulinne Desert.",
+		Description: "Orange, blue and gold tents line the edges of this traders hub on the northern rim of the Tulinne Desert. Traders seem to come and go at odd times. The air is hot and dry, and the wind stirs the sands.",
 		Size:        core.RoomLarge,
+		Details:     []string{"tents", "sand", "traders"},
 	},
 	"1:2:1": &core.Room{
 		Position:    core.Position{1, 2, 1},

@@ -13,18 +13,19 @@ var (
 	movementMessages = map[string]map[string][]string{
 		"start": map[string][]string{
 			"walk": []string{
-				"You make your way to the [Direction]",
-				"You continue [Direction], walking through the [Detail]",
+				"You begin walking to the [Direction].",
+				"You continue [Direction], walking through the [Detail].",
+				"You look back on the [Detail] as you make your way [Direction].",
 			},
 		},
 		"broadcastStart": map[string][]string{
 			"walk": []string{
-				"[Description] begins walking to the [Direction]",
+				"[Description] begins walking to the [Direction].",
 			},
 		},
 		"arrive": map[string][]string{
 			"walk": []string{
-				"You arrive at [RoomName]",
+				"You arrive at [RoomName].",
 			},
 		},
 		"broadcastArrive": map[string][]string{
@@ -108,14 +109,15 @@ func move(game *Game, c *Command) {
 }
 
 func getMovementMessage(c *core.Character, room *core.Room, dir, pool string) string {
-	res, err := util.Sample(movementMessages[pool][c.GetMovementStyle()])
-	if err != nil {
-		logger.Write.Error(err.Error()) // wtf happened
-		return ""
-	}
+	res, _ := util.Sample(movementMessages[pool][c.GetMovementStyle()])
 	res = strings.Replace(res, "[Description]", ShortDescriptionForCharacter(c), -1)
 	res = strings.Replace(res, "[RoomName]", room.Name, -1)
 	res = strings.Replace(res, "[Direction]", dir, -1)
+	if len(room.Details) > 0 {
+		detail, _ := util.Sample(room.Details)
+		res = strings.Replace(res, "[Detail]", detail, -1)
+	}
+
 	return res
 }
 
