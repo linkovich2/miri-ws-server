@@ -99,3 +99,13 @@ func (game *Game) broadcastToRoom(originator *server.Connection, message string,
 		}
 	}
 }
+
+func (game *Game) CurrentlyPlaying(c *core.Character) bool {
+	for _, connection := range game.Connections {
+		if connection.Character.ID == c.ID {
+			return true
+		}
+	}
+
+	return false
+}

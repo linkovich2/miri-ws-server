@@ -95,11 +95,22 @@ func (c *characterController) Select(connection *game.Connection, g *game.Game, 
 	err = db.C("characters").Find(bson.M{"_id": params.Id, "user_id": connection.Socket.User.ID}).One(&character)
 	if err != nil {
 		logger.Write.Error("Connection [%s] tried to select a character that either didn't belong to them or doesn't exist.", connection.Socket.ID)
+		res, _ := json.Marshal(createResponse{false, []string{"That character either doesn't belong to you, or doesn't exist."}})
+		connection.Socket.Send(res)
+		return
+	}
+
+	if g.CurrentlyPlaying(character) {
+		logger.Write.Error("Connection [%s] tried to select a character that was already in-game ([%s]).", connection.Socket.ID, character.Name)
+		res, _ := json.Marshal(createResponse{false, []string{"This character is currently in-game."}})
+		connection.Socket.Send(res)
 		return
 	}
 
 	connection.Character = character
 	g.Connect <- connection
+	res, _ := json.Marshal(createResponse{true, []string{}})
+	connection.Socket.Send(res)
 }
 
 func (c *characterController) Create(connection *game.Connection, g *game.Game, args *json.RawMessage) {
