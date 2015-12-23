@@ -57,6 +57,8 @@ func move(game *Game, c *Command) {
 
 		c.Character.State = core.StateMoving
 		room := game.World.Realms[c.Character.Realm].Rooms[c.Character.Position]
+		// @todo as part of this sleep we may want to check for movement impeding stuff, such as being on a mountain
+		// we may also want to check for exit traps or anything like that
 		time.Sleep((time.Duration(c.Character.GetSpeed()) + time.Duration(room.GetSpeedMod())) * time.Second) // wait for character's move speed
 
 		room.Remove(c.Connection.ID)
