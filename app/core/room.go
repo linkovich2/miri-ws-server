@@ -41,13 +41,13 @@ func (r *Room) GetSpeedMod() int {
 }
 
 func (r *Room) Remove(c string) {
-	if len(r.Connections) <= 0 {
-		r.Active = false
-	}
-
 	for i, v := range r.Connections {
 		if v == c {
 			r.Connections = append(r.Connections[:i], r.Connections[i+1:]...)
 		}
+	}
+
+	if len(r.Connections) <= 0 {
+		r.Active = false
 	}
 }
