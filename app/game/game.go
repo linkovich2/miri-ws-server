@@ -79,7 +79,7 @@ func (game *Game) handleInput(c *Command) {
 }
 
 func (game *Game) defaultMessage(s *server.Connection, c *core.Character, messages []string) {
-	msg := response{Messages: messages}
+	msg := response{Messages: messages, State: c.GetStateString()}
 	if value, exists := game.World.Realms[c.Realm].Rooms[c.Position]; exists {
 		msg.Room = value
 		msg.Directions = game.getAvailableDirections(value, c.Realm)

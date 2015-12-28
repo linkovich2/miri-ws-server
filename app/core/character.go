@@ -14,6 +14,11 @@ const (
 	StateMoving
 )
 
+var stateStrings = map[int]string{
+	StateDefault: "default",
+	StateMoving:  "moving",
+}
+
 type (
 	Character struct {
 		ID               bson.ObjectId       `bson:"_id,omitempty" json:"id"`
@@ -88,4 +93,8 @@ func (c *Character) GetSpeed() int {
 func (c *Character) GetMovementStyle() string {
 	// @todo stub
 	return "walk"
+}
+
+func (c *Character) GetStateString() string {
+	return stateStrings[c.State]
 }
