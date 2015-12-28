@@ -14,6 +14,10 @@ func (w *World) SetSendCallback(f func(string, string)) {
 	w.sendCallback = f
 }
 
+func (w *World) GetSendCallback() func(string, string) {
+	return w.sendCallback
+}
+
 func (w *World) Update() {
 	for _, r := range w.Realms {
 		r.Update(w.sendCallback)
