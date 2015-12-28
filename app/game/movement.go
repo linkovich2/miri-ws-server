@@ -82,6 +82,7 @@ func move(game *Game, c *Command) {
 		room := game.World.Realms[c.Character.Realm].Rooms[c.Character.Position]
 		game.broadcastToRoom(
 			c.Connection,
+			c.Character,
 			getMovementMessage(c.Character, room, params.Direction, "broadcastStart"),
 			getMovementMessage(c.Character, room, params.Direction, "start"),
 			room,
@@ -101,6 +102,7 @@ func move(game *Game, c *Command) {
 		game.defaultMessage(c.Connection, c.Character, []string{})
 		game.broadcastToRoom(
 			c.Connection,
+			c.Character,
 			getMovementMessage(c.Character, room, params.Direction, "broadcastArrive"),
 			getMovementMessage(c.Character, room, params.Direction, "arrive"),
 			room,

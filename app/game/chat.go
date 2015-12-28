@@ -23,6 +23,7 @@ func cSay(game *Game, c *Command) {
 	desc := strings.Join([]string{"<strong>", strings.ToLower(ShortDescriptionForCharacter(c.Character)), "</strong>"}, "")
 	game.broadcastToRoom(
 		c.Connection,
+		c.Character,
 		strings.Join([]string{desc, " says, \"<say>", params.Input, "</say>\""}, ""),
 		strings.Join([]string{"You say, \"<say>", params.Input, "</say>\""}, ""),
 		room,
@@ -42,6 +43,7 @@ func cYell(game *Game, c *Command) {
 	desc := strings.Join([]string{"<strong>", strings.ToLower(ShortDescriptionForCharacter(c.Character)), "</strong>"}, "")
 	game.broadcastToRoom(
 		c.Connection,
+		c.Character,
 		strings.Join([]string{desc, " yells, \"<yell>", params.Input, "</yell>\""}, ""),
 		strings.Join([]string{"You yell, \"<yell>", params.Input, "</yell>\""}, ""),
 		room,

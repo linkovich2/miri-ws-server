@@ -89,9 +89,9 @@ func (game *Game) defaultMessage(s *server.Connection, c *core.Character, messag
 	s.Send(res)
 }
 
-func (game *Game) broadcastToRoom(originator *server.Connection, message string, messageForOriginator string, room *core.Room) {
+func (game *Game) broadcastToRoom(originator *server.Connection, character *core.Character, message string, messageForOriginator string, room *core.Room) {
 	msg := &response{Messages: []string{message}}
-	msgO := &response{Messages: []string{messageForOriginator}}
+	msgO := &response{Messages: []string{messageForOriginator}, State: character.GetStateString()}
 	res, _ := json.Marshal(msg)
 	resO, _ := json.Marshal(msgO)
 
