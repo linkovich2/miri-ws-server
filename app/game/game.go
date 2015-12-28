@@ -78,6 +78,12 @@ func (game *Game) handleInput(c *Command) {
 	}
 }
 
+func (game *Game) simpleMessage(s *server.Connection, messages []string) {
+	msg := miniResponse{Messages: messages}
+	res, _ := json.Marshal(&msg)
+	s.Send(res)
+}
+
 func (game *Game) defaultMessage(s *server.Connection, c *core.Character, messages []string) {
 	msg := response{Messages: messages, State: c.GetStateString()}
 	if value, exists := game.World.Realms[c.Realm].Rooms[c.Position]; exists {
@@ -90,18 +96,12 @@ func (game *Game) defaultMessage(s *server.Connection, c *core.Character, messag
 }
 
 func (game *Game) broadcastToRoom(originator *server.Connection, character *core.Character, message string, messageForOriginator string, room *core.Room) {
-	msg := &response{Messages: []string{message}}
-	msgO := &response{Messages: []string{messageForOriginator}, State: character.GetStateString()}
-	res, _ := json.Marshal(msg)
-	resO, _ := json.Marshal(msgO)
+	game.defaultMessage(originator, character, []string{messageForOriginator})
 
 	for _, id := range room.Connections {
-		if id == originator.ID {
+		if id != originator.ID {
 			c := game.Connections[id]
-			c.Socket.Send(resO)
-		} else {
-			c := game.Connections[id]
-			c.Socket.Send(res)
+			game.simpleMessage(c.Socket, []string{message})
 		}
 	}
 }

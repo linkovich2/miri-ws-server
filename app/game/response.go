@@ -11,4 +11,8 @@ type (
 		Directions map[string]bool `json:"directions"`
 		State      string          `json:"state"`
 	}
+
+	miniResponse struct {
+		Messages []string `json:"messages"`
+	}
 )
