@@ -3,23 +3,37 @@ package core
 import (
 	"bytes"
 	"errors"
+	"fmt"
 	"strconv"
 	"strings"
 	"text/template"
 )
 
-type Position struct {
-	X, Y, Z int
-}
-
-type PositionRange struct {
-	Max struct {
-		X, Y int
+type (
+	Position struct {
+		X, Y, Z int
 	}
 
-	Min struct {
-		X, Y int
+	PositionRange struct {
+		Max struct {
+			X, Y int
+		}
+
+		Min struct {
+			X, Y int
+		}
 	}
+)
+
+var oppositeDirections = map[string]string{
+	"north":     "south",
+	"south":     "north",
+	"east":      "west",
+	"west":      "east",
+	"northeast": "southwest",
+	"northwest": "southeast",
+	"southeast": "northwest",
+	"southwest": "northeast",
 }
 
 /**
@@ -92,4 +106,12 @@ func GetPosition(positionString string) (Position, error) {
 	z, _ := strconv.Atoi(arr[2])
 
 	return Position{x, y, z}, nil
+}
+
+func GetOppositeDirection(direction string) (string, error) {
+	if val, exists := oppositeDirections[direction]; exists {
+		return val, nil
+	} else {
+		return "", errors.New(fmt.Sprintf("Invalid direction supplied: [%s]", direction))
+	}
 }

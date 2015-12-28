@@ -2,8 +2,8 @@ package game
 
 import (
 	"encoding/json"
-	"github.com/jonathonharrell/miri-ws-server/app/logger"
 	"github.com/jonathonharrell/miri-ws-server/app/core"
+	"github.com/jonathonharrell/miri-ws-server/app/logger"
 	"strings"
 )
 
@@ -47,21 +47,16 @@ func cYell(game *Game, c *Command) {
 		room,
 	)
 
-	oppositeDirections := map[string]string{
-		"north":"south",
-		"south":"north",
-		"east":"west",
-		"west":"east",
-		"northeast":"southwest",
-		"northwest":"southeast",
-		"southeast":"northwest",
-		"southwest":"northeast",
-	}
-
 	for direction, value := range pos.AdjacentPositions() {
 		if room, exists := game.World.Realms[c.Character.Realm].Rooms[value]; exists {
+			d, err := core.GetOppositeDirection(direction)
+			if err != nil {
+				logger.Write.Error(err.Error())
+				continue
+			}
+
 			room.Broadcast(
-				strings.Join([]string{desc, " yells from the ", oppositeDirections[direction], ", \"<yell>", params.Input, "</yell>\""}, ""),
+				strings.Join([]string{desc, " yells from the ", d, ", \"<yell>", params.Input, "</yell>\""}, ""),
 				game.World.GetSendCallback(),
 			)
 		}
