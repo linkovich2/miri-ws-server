@@ -71,7 +71,7 @@ func (game *Game) handleDisconnection(conn string) {
 				return
 			}
 
-			time.Sleep(20 * time.Second) // wait for 20 seconds then log out the character
+			time.Sleep(10 * time.Second) // wait for 10 seconds then log out the character
 
 			c.Character.RemoveState(core.StateLoggingOut)
 			room := game.World.Realms[c.Character.Realm].Rooms[c.Character.Position]
