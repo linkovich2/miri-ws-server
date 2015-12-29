@@ -133,3 +133,13 @@ func (c *Character) HasState(s int) bool {
 
 	return false
 }
+
+func (c *Character) FirstName() string {
+	splitName := strings.Split(c.Name, " ")
+	return splitName[0]
+}
+
+func (c *Character) LastName() string {
+	splitName := strings.Split(c.Name, " ")
+	return splitName[1]
+}
