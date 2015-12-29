@@ -9,7 +9,7 @@ type (
 		Room       *core.Room      `json:"room"`
 		Messages   []string        `json:"messages"`
 		Directions map[string]bool `json:"directions"`
-		State      string          `json:"state"`
+		State      []string        `json:"state"`
 	}
 
 	miniResponse struct {

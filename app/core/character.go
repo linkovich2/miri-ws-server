@@ -1,6 +1,7 @@
 package core
 
 import (
+	"errors"
 	"gopkg.in/mgo.v2/bson"
 	"strconv"
 	"strings"
@@ -10,13 +11,13 @@ import (
 const (
 	BaseCharacterMoveSpeed = 4
 
-	StateDefault = iota
-	StateMoving
+	StateMoving = iota
+	StateLoggingOut
 )
 
 var stateStrings = map[int]string{
-	StateDefault: "default",
-	StateMoving:  "moving",
+	StateLoggingOut: "loggingOut",
+	StateMoving:     "moving",
 }
 
 type (
@@ -34,7 +35,7 @@ type (
 		Realm            string              `json:"-"`
 		stats            StatBlock           `json:"-"`
 		statsCached      bool                `json:"-"`
-		State            int                 `json:"-"`
+		State            []int               `json:"-"`
 	}
 
 	Stat      int
@@ -95,6 +96,40 @@ func (c *Character) GetMovementStyle() string {
 	return "walk"
 }
 
-func (c *Character) GetStateString() string {
-	return stateStrings[c.State]
+func (c *Character) GetStateString() []string {
+	res := []string{}
+	for _, val := range c.State {
+		res = append(res, stateStrings[val])
+	}
+
+	return res
+}
+
+func (c *Character) AddState(s int) error {
+	if c.HasState(s) {
+		return errors.New("Character has that state already!")
+	}
+
+	c.State = append(c.State, s)
+	return nil
+}
+
+func (c *Character) RemoveState(s int) {
+	// @todo this one might not need error reporting, but we should think about it
+	for i, val := range c.State {
+		if val == s {
+			c.State = append(c.State[:i], c.State[i+1:]...)
+			break
+		}
+	}
+}
+
+func (c *Character) HasState(s int) bool {
+	for _, val := range c.State {
+		if val == s {
+			return true
+		}
+	}
+
+	return false
 }

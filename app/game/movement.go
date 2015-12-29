@@ -41,7 +41,7 @@ type cMoveArgs struct {
 }
 
 func cMove(game *Game, c *Command) {
-	if c.Character.State != core.StateMoving {
+	if !c.Character.HasState(core.StateMoving) {
 		move(game, c)
 	} else {
 		logger.Write.Error("Character [%s] from connection [%s] tried to move when they were already moving!", c.Character.Name, c.Connection.ID)
@@ -78,7 +78,7 @@ func move(game *Game, c *Command) {
 	}
 
 	go func() {
-		c.Character.State = core.StateMoving
+		c.Character.AddState(core.StateMoving)
 		room := game.World.Realms[c.Character.Realm].Rooms[c.Character.Position]
 		game.broadcastToRoom(
 			c.Connection,
@@ -98,8 +98,7 @@ func move(game *Game, c *Command) {
 		room = game.World.Realms[c.Character.Realm].Rooms[c.Character.Position]
 		room.Add(c.Connection.ID)
 
-		c.Character.State = core.StateDefault
-		game.defaultMessage(c.Connection, c.Character, []string{})
+		c.Character.RemoveState(core.StateMoving)
 		game.broadcastToRoom(
 			c.Connection,
 			c.Character,
