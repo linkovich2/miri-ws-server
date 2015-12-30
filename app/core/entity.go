@@ -29,6 +29,16 @@ func (c *ComponentBag) Update(r *Room, callback func(string, string)) {
 	}
 }
 
+func (c *ComponentBag) Copy() *ComponentBag {
+	return &ComponentBag{
+		Name:         c.Name,
+		Interactions: c.Interactions,
+		Properties:   c.Properties,
+		Behaviors:    c.Behaviors,
+		NotVisible:   c.NotVisible,
+	}
+}
+
 func (pc PropertyCollection) ValueOf(key string) string {
 	for _, p := range pc {
 		if p.Key == key {
