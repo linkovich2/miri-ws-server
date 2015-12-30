@@ -35,3 +35,7 @@ var Miri = core.World{
 		},
 	},
 }
+
+func init() {
+	// @todo stub, override saved rooms from persistance layer
+}

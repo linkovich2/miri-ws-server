@@ -3,6 +3,7 @@ package server
 import (
 	"github.com/gorilla/websocket"
 	"github.com/jonathonharrell/miri-ws-server/app/core"
+	"github.com/jonathonharrell/miri-ws-server/app/logger"
 	"net/http"
 	"time"
 )
@@ -86,5 +87,11 @@ func (c *Connection) writePump() {
 }
 
 func (c *Connection) Send(m []byte) {
+	defer func() {
+		if r := recover(); r != nil {
+			logger.Write.Error("Connection [%s] send channel is closed!", c.ID)
+		}
+	}()
+
 	c.send <- m
 }

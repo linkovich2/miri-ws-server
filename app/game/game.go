@@ -4,6 +4,7 @@ import (
 	"github.com/jonathonharrell/miri-ws-server/app/content/world"
 	"github.com/jonathonharrell/miri-ws-server/app/core"
 	"github.com/jonathonharrell/miri-ws-server/app/logger"
+	db "github.com/jonathonharrell/miri-ws-server/app/persistence"
 	"github.com/jonathonharrell/miri-ws-server/app/server"
 	"github.com/jonathonharrell/miri-ws-server/app/util"
 	"github.com/jonathonharrell/miri-ws-server/app/util/dice"
@@ -65,10 +66,10 @@ func (game *Game) handleConnection(c *Connection) {
 func (game *Game) handleDisconnection(conn string) {
 	if c, exists := game.Connections[conn]; exists {
 		go func() {
+			db.SaveCharacter(c.Character)
 			err := c.Character.AddState(core.StateLoggingOut)
 			if err != nil {
 				logger.Write.Error(err.Error()) // @todo add some detail here
-				return
 			}
 
 			time.Sleep(10 * time.Second) // wait for 10 seconds then log out the character
