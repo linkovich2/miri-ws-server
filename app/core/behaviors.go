@@ -13,7 +13,7 @@ type (
 	}
 
 	CrowdConversationBehavior struct{}
-	Ambiance                  struct{}
+	AmbianceBehavior          struct{}
 )
 
 func (c CrowdConversationBehavior) Perform(cb *ComponentBag, room *Room, callback func(string, string)) {
@@ -27,7 +27,7 @@ func (c CrowdConversationBehavior) Perform(cb *ComponentBag, room *Room, callbac
 		// if we are on the last part of the conversation, we should broadcast that and remove the state and placeholder props
 		// from the bag
 
-		if rand.Intn(2)+1 == 2 {
+		if rand.Intn(10)+1 == 10 {
 			for _, p := range cb.Properties.Matching("conversation") {
 				conversations = append(conversations, strings.Split(p.Value, ";;"))
 			}
@@ -68,6 +68,17 @@ func (c CrowdConversationBehavior) Perform(cb *ComponentBag, room *Room, callbac
 	}
 }
 
-func (a Ambiance) Perform(cb *ComponentBag, room *Room, callback func(string, string)) {
-	// @stub
+func (a AmbianceBehavior) Perform(cb *ComponentBag, room *Room, callback func(string, string)) {
+	rand.Seed(time.Now().UnixNano())
+	ambiance := []string{}
+	if rand.Intn(20)+1 == 20 {
+		for _, p := range cb.Properties.Matching("ambiance") {
+			ambiance = append(ambiance, p.Value)
+		}
+		if len(ambiance) <= 0 { // failsafe
+			return
+		}
+
+		room.Broadcast(ambiance[rand.Intn(len(ambiance))], callback)
+	}
 }

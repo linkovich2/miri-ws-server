@@ -6,7 +6,7 @@ type (
 		Interactions []Interaction      `json:"interactions"`
 		Properties   PropertyCollection `json:"-"`
 		Behaviors    []Behavior         `json:"-"`
-		Visible      bool               `json:"visible"`
+		NotVisible   bool               `json:"not_visible"`
 	}
 	PropertyCollection []*Property
 	Property           struct {
