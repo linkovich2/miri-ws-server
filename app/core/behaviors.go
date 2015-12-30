@@ -27,7 +27,7 @@ func (c CrowdConversationBehavior) Perform(cb *ComponentBag, room *Room, callbac
 		// if we are on the last part of the conversation, we should broadcast that and remove the state and placeholder props
 		// from the bag
 
-		if rand.Intn(10)+1 == 10 {
+		if rand.Intn(20)+1 == 20 {
 			for _, p := range cb.Properties.Matching("conversation") {
 				conversations = append(conversations, strings.Split(p.Value, ";;"))
 			}

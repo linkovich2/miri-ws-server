@@ -19,5 +19,8 @@ var KraJaficAmbiance = &core.ComponentBag{
 	NotVisible: true,
 	Properties: []*core.Property{
 		&core.Property{"ambiance", "<ambiance><em>The sands stir in the wind...</em></ambiance>"},
+		&core.Property{"ambiance", "<ambiance><em>You can hear the tents flapping in the wind.</em></ambiance>"},
+		&core.Property{"ambiance", "<ambiance><em>The sounds of haggling surround you.</em></ambiance>"},
+		&core.Property{"ambiance", "<ambiance><em>The sun beats down overhead...</em></ambiance>"},
 	},
 }
