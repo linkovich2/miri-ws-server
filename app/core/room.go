@@ -18,6 +18,7 @@ type Room struct {
 	Connections []string `json:"-"`
 	Position    Position `json:"-"`
 	Size        int      `json:"-"`
+	Entities    []Entity `json:"entities"`
 
 	// this is for use with building descriptions or sentences about battles or movement through a room
 	// take for instance this slice: []string{"sand", "tents", "noise"}
@@ -28,7 +29,9 @@ type Room struct {
 
 func (r *Room) Update(sendMsg func(string, string)) {
 	if r.Active {
-		// do something, this is the "slow update", world-level update
+		for _, e := range r.Entities {
+			e.Update(r, sendMsg)
+		}
 	}
 }
 
