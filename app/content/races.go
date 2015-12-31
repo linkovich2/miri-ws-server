@@ -15,14 +15,14 @@ var Races = map[string]core.Race{
 			"<p><strong>Average Lifespan: </strong>Between 50 and 100 years</p>" +
 			"<p><strong>Personality: </strong>Varied, but commonly adaptable, ambitious, or self-centered.</p>" +
 			"<p><strong>History: </strong>Humans have, since the days of Fae, been masters of conquering and migrating. Their civilizations are among the largest in the Miri, and their number is several times as great as that of the other races. They are masters of trade and diplomacy, also having a large number of allies. Whether that is due to their personable natures one cannot be certain. Whatever drives them, humans endeavor to succeed.</p>",
-		Description: "The most diverse race in The Miri.",
+		Description: "Diverse, ingenuitive, adaptable.",
 		Descriptor:  "human",
 		GenderHuman: true,
 	},
 	"ELF": core.Race{
 		Name:        "Elf",
 		ID:          "ELF",
-		Description: "A graceful people, typically well-mannered and empathetic.",
+		Description: "Graceful, familial, spiritual.",
 		LongDescription: "<p><strong>Distinct Groups:</strong> Dark Elf, Wood Elf, Blood Elf, High Elf</p>" +
 			"<p><strong>Appearance: </strong>Slender and graceful, with fine features and pointed ears.</p>" +
 			"<p><strong>Average Height: </strong>Between 4'10 and 6'0 on average</p>" +
@@ -36,7 +36,7 @@ var Races = map[string]core.Race{
 	"DWARF": core.Race{
 		Name:        "Dwarf",
 		ID:          "DWARF",
-		Description: "Stout, stoic and enduring, like the mountains they adore.",
+		Description: "Stoic, hard-working, enduring.",
 		LongDescription: "<p><strong>Distinct Groups:</strong> Hill Dwarf, Mountain Dwarf</p>" +
 			"<p><strong>Appearance: </strong>Short, stout. Often have long, intricate or decorated beards</p>" +
 			"<p><strong>Average Height: </strong>Between 4'2 and 4'9</p>" +
