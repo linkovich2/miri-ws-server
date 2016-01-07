@@ -1,8 +1,13 @@
 ifeq ($(OS),Windows_NT)
-	APPNAME := 'miri-ws-server.exe'
+	APPNAME := miri-ws-server.exe
 else
-  APPNAME := 'miri-ws-server'
+  APPNAME := miri-ws-server
 endif
 
-all:
-	cd app/content/; go-bindata -pkg 'content' json/...; cd ../../; go test ./app/test/...; godep go build; ./$(APPNAME)
+all: content test build
+content:
+	cd app/content/; go-bindata -pkg 'content' json/...; cd ../../;
+test:
+	go test ./app/test/...;
+build:
+	godep go build; ./$(APPNAME)
