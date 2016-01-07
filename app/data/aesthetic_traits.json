@@ -1,0 +1,129 @@
+{
+  "HAIRCOLOR": {
+    "id": "HAIRCOLOR",
+    "name": "Hair Color",
+    "unique": true,
+    "min": 1,
+    "traits": {
+      "BROWN": {
+        "name": "Brown",
+        "id": "BROWN",
+        "description": "[PossessivePronoun] hair is brown."
+      },
+      "BLONDE": {
+        "name": "Blonde",
+        "id": "BLONDE",
+        "description": "[PossessivePronoun] hair is bright blonde."
+      },
+      "GREY": {
+        "name": "Grey",
+        "id": "GREY",
+        "description": "[PossessivePronoun] hair is grey and sullen."
+      },
+      "BLACK": {
+        "name": "Black",
+        "id": "BLACK",
+        "description": "[PossessivePronoun] hair is jet black."
+      },
+      "RED": {
+        "name": "Red",
+        "id": "RED",
+        "description": "[PossessivePronoun] hair is red."
+      },
+    }
+  },
+  "HAIRSTYLE": {
+    "id": "HAIRSTYLE",
+    "name": "Hair Style",
+    "unique": true,
+    "min": 1,
+    "traits": {
+      "MESSYBUN": {
+        "name": "Messy Bun",
+        "id": "MESSYBUN",
+        "disallowed_genders": ["M"],
+        "description": "[PossessivePronoun] hair is loosely arranged in a bun above [PossessivePronoun] head, strands falling about messily."
+      },
+      "LONGSTRAIGHT": {
+        "name": "Long, Straight",
+        "id": "LONGSTRAIGHT",
+        "description": "[PossessivePronoun] hair is long and straight, reaching just below [PossessivePronoun] shoulders."
+      },
+      "SHORT": {
+        "name": "Short",
+        "id": "SHORT",
+        "description": "[PossessivePronoun] hair is kept neatly close to [PossessivePronoun] head, less then half an inch long."
+      },
+      "BALD": {
+        "name": "Bald",
+        "id": "BALD",
+        "description": "[PossessivePronoun] head is bald and shiny."
+      }
+    }
+  },
+  "FACIALHAIR": {
+    "id": "FACIALHAIR",
+    "name": "Facial Hair",
+    "unique": true,
+    "disallowed_races": ["ELF"],
+    "disallowed_genders": ["F"],
+    "traits": {
+      "LONGBRAIDEDBEARD": {
+        "name": "Long, braided beard",
+        "id": "LONGBRAIDEDBEARD",
+        "description": "[PossessivePronoun] face is obscured by a long, intricately braided beard."
+      },
+      "STUBBLE": {
+        "name": "Stubble",
+        "id": "STUBBLE",
+        "description": "A midday shadow shows [PossessivePronoun] weariness from travel, or [PossessivePronoun] lack of grooming habits."
+      }
+    }
+  },
+  "ELFEARS": {
+    "id": "ELFEARS",
+    "name": "Ear Style",
+    "unique": true,
+    "min": 1,
+    "only": "ELF",
+    "traits": {
+      "LONGUP": {
+        "name": "Long, Pointed Up",
+        "id": "LONGUP",
+        "description": "[PossessivePronoun] ears are long and point upwards."
+      },
+      "SHORTUP": {
+        "name": "Short, Pointed Up",
+        "id": "SHORTUP",
+        "description": "[PossessivePronoun] ears are short and point upwards."
+      }
+    }
+  },
+  "MISC": {
+    "id": "MISC",
+    "name": "Miscellaneous",
+    "unique": false,
+    "traits": {
+      "FRECKLES": {
+        "name": "Freckles",
+        "id": "FRECKLES",
+        "description": "Freckles and sun spots dot [PossessivePronoun] skin."
+      },
+      "REDNOSED": {
+        "name": "Red-Nosed",
+        "id": "REDNOSED",
+        "description": "[PossessivePronoun] nose is red, probably from drinking too much."
+      },
+      "SCARREDFACE": {
+        "name": "Facial Scars",
+        "id": "SCARREDFACE",
+        "description": "[PossessivePronoun] face is marked or scarred."
+      },
+      "SCARREDBODY": {
+        "name": "Scarred Body",
+        "id": "SCARREDBODY",
+        "description": "[PossessivePronoun] body is marked or scarred."
+      },
+    }
+  },
+}
