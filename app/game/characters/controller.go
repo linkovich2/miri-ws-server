@@ -184,7 +184,7 @@ func (c *characterController) Options(connection *game.Connection, g *game.Game,
 	case "genders":
 		body = content.Genders
 	case "aesthetic_traits":
-		body = content.AestheticTraits
+		body = content.AestheticTraits()
 	case "functional_traits":
 		body = content.FunctionalTraits
 	case "backgrounds":
@@ -253,12 +253,13 @@ func validateGender(connection *game.Connection, character *core.Character) bool
 }
 
 func validateAestheticTraits(connection *game.Connection, character *core.Character) bool {
+	list := content.AestheticTraits()
 	for key, traits := range character.AestheticTraits {
-		if _, categoryExists := content.AestheticTraits[key]; !categoryExists { // trait category does not exist
+		if _, categoryExists := list[key]; !categoryExists { // trait category does not exist
 			logger.Write.Error("Character Creation Error (Connection [%s]): Unknown Trait Category [%s].", connection.Socket.ID, key)
 			return false
 		}
-		category := content.AestheticTraits[key]
+		category := list[key]
 
 		if !category.IsAllowedForCharacter(character) && len(traits) > 0 { // not allowed for character and one exists
 			logger.Write.Error("Character Creation Error (Connection [%s]): Trait Category [%s] not allowed for character.", connection.Socket.ID, key)
@@ -285,7 +286,7 @@ func validateAestheticTraits(connection *game.Connection, character *core.Charac
 	}
 
 	// loop through all aesthetic trait categories and check if one exists where one is required
-	for key, category := range content.AestheticTraits {
+	for key, category := range list {
 		if category.Minimum > 0 && category.IsAllowedForCharacter(character) {
 			if len(character.AestheticTraits[key]) < category.Minimum {
 				logger.Write.Error("Character Creation Error (Connection [%s]): Character doesn't have enough traits from Trait Category [%s]", connection.Socket.ID, key)

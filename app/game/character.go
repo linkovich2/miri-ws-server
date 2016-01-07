@@ -14,10 +14,11 @@ func DescribeCharacter(c *core.Character) string {
 	response.Write([]byte("; "))
 
 	gender := content.Genders[c.Gender]
+	traits := content.AestheticTraits()
 
 	for i, cat := range c.AestheticTraits {
 		for _, t := range cat {
-			response.Write([]byte(filters.GenderPronouns(content.AestheticTraits[i].Traits[t].Description, gender.Possessive, gender.Pronoun, false)))
+			response.Write([]byte(filters.GenderPronouns(traits[i].Traits[t].Description, gender.Possessive, gender.Pronoun, false)))
 			response.Write([]byte(" "))
 		}
 	}
