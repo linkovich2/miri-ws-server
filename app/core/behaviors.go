@@ -26,8 +26,9 @@ func (c CrowdConversationBehavior) Perform(cb *ComponentBag, room *Room, callbac
 		// if we choose to start a conversation, we should add a "placeholder" prop and a "state" prop
 		// if we are on the last part of the conversation, we should broadcast that and remove the state and placeholder props
 		// from the bag
+		freq := getFrequencyProp(cb)
 
-		if rand.Intn(20)+1 == 20 {
+		if rand.Intn(freq)+1 == freq {
 			for _, p := range cb.Properties.Matching("conversation") {
 				conversations = append(conversations, strings.Split(p.Value, ";;"))
 			}
@@ -38,7 +39,7 @@ func (c CrowdConversationBehavior) Perform(cb *ComponentBag, room *Room, callbac
 			// now we have conversations, let's pick one and decide whether we want to start a conversation now
 			i := rand.Intn(len(conversations))
 			cb.Properties = append(cb.Properties, &Property{Key: "state", Value: "conversing"})
-			cb.Properties = append(cb.Properties, &Property{Key: "placeholder", Value: strconv.Itoa(i) + ";1;skip"})
+			cb.Properties = append(cb.Properties, &Property{Key: "placeholder", Value: strconv.Itoa(i) + ";1"})
 			room.Broadcast(conversations[i][0], callback)
 		}
 	} else if state == "conversing" {
@@ -49,10 +50,6 @@ func (c CrowdConversationBehavior) Perform(cb *ComponentBag, room *Room, callbac
 
 		placeholder := cb.Properties.ValueOf("placeholder")
 		splitPlaceholder := strings.Split(placeholder, ";")
-		if len(splitPlaceholder) > 2 {
-			cb.Properties.Update("placeholder", strings.Replace(placeholder, ";skip", "", -1))
-			return
-		}
 
 		conversationIndex, _ := strconv.Atoi(splitPlaceholder[0])
 		placeholderIndex, _ := strconv.Atoi(splitPlaceholder[1])
@@ -62,16 +59,21 @@ func (c CrowdConversationBehavior) Perform(cb *ComponentBag, room *Room, callbac
 			cb.Properties = cb.Properties.Remove("state")
 			return
 		}
-		room.Broadcast(convo[placeholderIndex], callback)
 
-		cb.Properties.Update("placeholder", strings.Join([]string{splitPlaceholder[0], strconv.Itoa(placeholderIndex + 1), "skip"}, ";"))
+		if convo[placeholderIndex] != "PAUSE" {
+			room.Broadcast(convo[placeholderIndex], callback)
+		}
+
+		cb.Properties.Update("placeholder", strings.Join([]string{splitPlaceholder[0], strconv.Itoa(placeholderIndex + 1)}, ";"))
 	}
 }
 
 func (a AmbianceBehavior) Perform(cb *ComponentBag, room *Room, callback func(string, string)) {
 	rand.Seed(time.Now().UnixNano())
+	freq := getFrequencyProp(cb)
+
 	ambiance := []string{}
-	if rand.Intn(20)+1 == 20 {
+	if rand.Intn(freq)+1 == freq {
 		for _, p := range cb.Properties.Matching("ambiance") {
 			ambiance = append(ambiance, p.Value)
 		}
@@ -80,5 +82,15 @@ func (a AmbianceBehavior) Perform(cb *ComponentBag, room *Room, callback func(st
 		}
 
 		room.Broadcast(ambiance[rand.Intn(len(ambiance))], callback)
+	}
+}
+
+func getFrequencyProp(cb *ComponentBag) int {
+	freqString := cb.Properties.ValueOf("frequency")
+	if freqString == "" {
+		return 10
+	} else {
+		c, _ := strconv.Atoi(freqString)
+		return c
 	}
 }
