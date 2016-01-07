@@ -5,10 +5,10 @@ type Gender struct {
 	ID              string   `json:"id"`
 	DisallowedRaces []string `json:"disallowed_races"`
 	Only            string   `json:"only"`
-	Human           string   `json:"-"`
-	Scientific      string   `json:"-"`
-	Pronoun         string   `json:"-"`
-	Possessive      string   `json:"-"`
+	Human           string   `json:"human"`
+	Scientific      string   `json:"scientific"`
+	Pronoun         string   `json:"pronoun"`
+	Possessive      string   `json:"possessive"`
 }
 
 func (g *Gender) RaceAllowed(race string) bool {

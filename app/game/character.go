@@ -13,7 +13,7 @@ func DescribeCharacter(c *core.Character) string {
 	response := bytes.NewBuffer([]byte(ShortDescriptionForCharacter(c)))
 	response.Write([]byte("; "))
 
-	gender := content.Genders[c.Gender]
+	gender := content.Gender(c.Gender)
 	traits := content.AestheticTraits()
 
 	for i, cat := range c.AestheticTraits {
@@ -28,8 +28,8 @@ func DescribeCharacter(c *core.Character) string {
 
 func ShortDescriptionForCharacter(c *core.Character) string {
 	response := bytes.NewBuffer([]byte{})
-	race := content.Races[c.Race]
-	gender := content.Genders[c.Gender]
+	race := content.Race(c.Race)
+	gender := content.Gender(c.Gender)
 
 	if race.Descriptor[:1] == "a" || race.Descriptor[:1] == "e" || race.Descriptor[:1] == "i" || race.Descriptor[:1] == "o" || race.Descriptor[:1] == "u" {
 		response.Write([]byte("An "))

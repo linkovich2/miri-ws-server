@@ -159,10 +159,12 @@ func (c *characterController) Create(connection *game.Connection, g *game.Game, 
 		return // stop execution
 	}
 
+	bg := content.Background(character.Background)
+
 	character.UserID = connection.Socket.User.ID
 	character.Created = time.Now() // timestamp this bad boy
-	character.Position = content.Backgrounds[character.Background].StartPosition
-	character.Realm = content.Backgrounds[character.Background].StartRealm
+	character.Position = bg.StartPosition
+	character.Realm = bg.StartRealm
 	_ = db.C("characters").Insert(&character)
 
 	res, _ := json.Marshal(createResponse{true, []string{}})
@@ -180,17 +182,17 @@ func (c *characterController) Options(connection *game.Connection, g *game.Game,
 
 	switch params.Get {
 	case "races":
-		body = content.Races
+		body = content.Races()
 	case "genders":
-		body = content.Genders
+		body = content.Genders()
 	case "aesthetic_traits":
 		body = content.AestheticTraits()
 	case "functional_traits":
-		body = content.FunctionalTraits
+		body = content.FunctionalTraits()
 	case "backgrounds":
-		body = content.Backgrounds
+		body = content.Backgrounds()
 	default:
-		body = content.Races
+		body = content.Races()
 	}
 
 	res, _ := json.Marshal(body)
@@ -225,7 +227,8 @@ func validateCharacter(connection *game.Connection, character *core.Character) b
 }
 
 func validateRace(connection *game.Connection, character *core.Character) bool {
-	if _, raceExists := content.Races[character.Race]; raceExists {
+	races := content.Races()
+	if _, raceExists := races[character.Race]; raceExists {
 		return true
 	}
 
@@ -234,7 +237,8 @@ func validateRace(connection *game.Connection, character *core.Character) bool {
 }
 
 func validateGender(connection *game.Connection, character *core.Character) bool {
-	if gender, genderExists := content.Genders[character.Gender]; genderExists {
+	genders := content.Genders()
+	if gender, genderExists := genders[character.Gender]; genderExists {
 		if gender.RaceAllowed(character.Race) {
 			return true
 		} else {
@@ -301,12 +305,14 @@ func validateAestheticTraits(connection *game.Connection, character *core.Charac
 func validateFunctionalTraits(connection *game.Connection, character *core.Character) bool {
 	var points int
 
+	list := content.FunctionalTraits()
+
 	for key, traits := range character.FunctionalTraits {
-		if _, categoryExists := content.FunctionalTraits[key]; !categoryExists { // trait category does not exist
+		if _, categoryExists := list[key]; !categoryExists { // trait category does not exist
 			logger.Write.Error("Character Creation Error (Connection [%s]): Unknown Trait Category [%s].", connection.Socket.ID, key)
 			return false
 		}
-		category := content.FunctionalTraits[key]
+		category := list[key]
 
 		if !category.IsAllowedForCharacter(character) && len(traits) > 0 { // not allowed for character and one exists
 			logger.Write.Error("Character Creation Error (Connection [%s]): Trait Category [%s] not allowed for character.", connection.Socket.ID, key)
@@ -347,7 +353,7 @@ func validateFunctionalTraits(connection *game.Connection, character *core.Chara
 	}
 
 	// loop through all aesthetic trait categories and check if one exists where one is required
-	for key, category := range content.FunctionalTraits {
+	for key, category := range list {
 		if !category.IsAllowedForCharacter(character) {
 			continue
 		}
@@ -386,12 +392,13 @@ func validateFunctionalTraits(connection *game.Connection, character *core.Chara
 }
 
 func validateBackground(connection *game.Connection, character *core.Character) bool {
-	if _, backgroundExists := content.Backgrounds[character.Background]; !backgroundExists {
+	bgs := content.Backgrounds()
+	if _, backgroundExists := bgs[character.Background]; !backgroundExists {
 		logger.Write.Error("Character Creation Error (Connection [%s]): Provided Background [%s] doesn't exist.", connection.Socket.ID, character.Background)
 		return false
 	}
 
-	b := content.Backgrounds[character.Background]
+	b := bgs[character.Background]
 	if !b.IsAllowedForCharacter(character) {
 		logger.Write.Error("Character Creation Error (Connection [%s]): Background [%s] isn't allowed for character.", connection.Socket.ID, character.Background)
 		return false

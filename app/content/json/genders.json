@@ -1,0 +1,29 @@
+{
+  "M": {
+    "name": "Male",
+    "id": "M",
+    "disallowed_races": ["AUTOMATON"],
+    "human": "man",
+    "scientific": "male",
+    "pronoun": "he",
+    "possessive": "his"
+  },
+  "F": {
+    "name": "Female",
+    "id": "F",
+    "disallowed_races": ["AUTOMATON"],
+    "human": "woman",
+    "scientific": "female",
+    "pronoun": "she",
+    "possessive": "her"
+  },
+  "NA": {
+    "name": "N/A",
+    "id": "NA",
+    "only": "AUTOMATON",
+    "human": "automaton",
+    "scientific": "automaton",
+    "pronoun": "it",
+    "possessive": "it's"
+  }
+}

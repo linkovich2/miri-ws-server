@@ -1,0 +1,44 @@
+{
+  "NOMADKAIARA": {
+    "name": "Nomad - Tulinne Desert",
+    "id": "NOMADKAIARA",
+    "description": "[Pronoun] [IsAre] a nomad, currently traveling through the Tulinne Desert.",
+    "allow_all": true,
+    "start_realm": "MIRI",
+    "start_position": "1:1:1"
+  },
+  "NOMADELDOREI": {
+    "name": "Nomad - Sapphire Coast",
+    "id": "NOMADELDOREI",
+    "description": "[INCOMPLETE] [Pronoun] [IsAre] a nomad, currently traveling through the Sapphire Coast.",
+    "allow_all": true,
+    "start_realm": "MIRI",
+    "start_position": "1:1:1"
+  },
+  "NOMADFOXEAR": {
+    "name": "Nomad - Soro Fields",
+    "id": "NOMADFOXEAR",
+    "description": "[INCOMPLETE] [Pronoun] [IsAre] a nomad, currently traveling through the Soro Fields.",
+    "allow_all": true,
+    "start_realm": "MIRI",
+    "start_position": "1:1:1"
+  },
+  "NOMADBRIREE": {
+    "name": "Nomad - Skyshroud Forest",
+    "id": "NOMADBRIREE",
+    "description": "[INCOMPLETE] [Pronoun] [IsAre] a nomad, currently traveling through the Skyshroud Forest.",
+    "allow_all": true,
+    "start_realm": "MIRI",
+    "start_position": "1:1:1"
+  },
+  "BAHAMUTKNIGHT": {
+    "name": "Temple of Bahamut - Understudy",
+    "id": "BAHAMUTKNIGHT",
+    "description": "[INCOMPLETE] [Pronoun] [IsAre] an understudy at the temple of Bahamut, perhaps in training to be a knight or cleric.",
+    "start_realm": "MIRI",
+    "start_position": "1:1:1",
+    "prerequisites": {
+      "functional_traits": ["BAHAMUT"]
+    }
+  }
+}

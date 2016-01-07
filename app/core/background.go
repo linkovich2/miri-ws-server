@@ -7,8 +7,8 @@ type (
 		Prerequisites BackgroundPrerequisites `json:"prerequisites"`
 		AllowAll      bool                    `json:"allow_all"`
 		Description   string                  `json:"description"`
-		StartPosition string                  `json:"-"`
-		StartRealm    string                  `json:"-"`
+		StartPosition string                  `json:"start_position"`
+		StartRealm    string                  `json:"start_realm"`
 	}
 
 	BackgroundPrerequisites struct {

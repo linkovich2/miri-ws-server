@@ -1,0 +1,51 @@
+{
+  "RELIGION": {
+    "name": "Religion",
+    "id": "RELIGION",
+    "unique": true,
+    "traits": {
+      "BAHAMUT": {
+        "name": "Follower of Bahaumut",
+        "id": "BAHAMUT",
+        "description": "[Pronoun] [IsAre] a follower of The God of Light",
+        "points": "-1"
+      },
+      "MORRHIGAN": {
+        "name": "Worshipper of Morrhigan",
+        "id": "MORRHIGAN",
+        "description": "[Pronoun] [IsAre] a worshipper of The Goddess of Death",
+        "points": "-1"
+      }
+    }
+  },
+  "RACIAL": {
+    "name": "Inherent Racial Ability",
+    "id": "RACIAL",
+    "disallowed_races": ["HUMAN"],
+    "traits": {
+      "DARKVISION": {
+        "name": "Darkvision",
+        "id": "DARKVISION",
+        "description": "[PossessivePronoun] vision is fair even in dim light and partial darkness.",
+        "points": "0",
+        "required": true
+      },
+      "FTFORESTS": {
+        "name": "Natural Attunement - Forests",
+        "id": "FTFORESTS",
+        "only": "ELF",
+        "required": true,
+        "points": "0",
+        "description": "[Pronoun] [HaveHas] an innate ability to navigate forests or woodland terrain."
+      },
+      "FTCAVERNS": {
+        "name": "Natural Attunement - Mountains",
+        "id": "FTCAVERNS",
+        "only": "DWARF",
+        "required": true,
+        "points": "0",
+        "description": "[Pronoun] [HaveHas] an innate ability to navigate mountains or other rocky terrain."
+      }
+    }
+  }
+}
