@@ -5,4 +5,4 @@ else
 endif
 
 all:
-	cd app/; go-bindata data/; cd ..; godep go build; ./$(APPNAME)
+	cd app/content/; go-bindata -pkg 'content' json/...; cd ../../; go test ./app/test/...; godep go build; ./$(APPNAME)
