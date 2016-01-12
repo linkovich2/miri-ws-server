@@ -1,7 +1,7 @@
 package game
 
 import (
-	"github.com/jonathonharrell/miri-ws-server/app/content/world"
+	"github.com/jonathonharrell/miri-ws-server/app/content"
 	"github.com/jonathonharrell/miri-ws-server/app/core"
 	"github.com/jonathonharrell/miri-ws-server/app/logger"
 	db "github.com/jonathonharrell/miri-ws-server/app/persistence"
@@ -24,7 +24,7 @@ type Game struct {
 func (game *Game) Start() {
 	dice.SeedRandom() // seed rand for dice
 
-	game.World = &world.Miri
+	game.World = content.World()
 	game.World.SetSendCallback(func(id, message string) {
 		if connection, exists := game.Connections[id]; exists {
 			res, _ := json.Marshal(&response{Messages: []string{message}})
@@ -126,4 +126,12 @@ func (game *Game) CurrentlyPlaying(c *core.Character) bool {
 	}
 
 	return false
+}
+
+func (game *Game) LocationNameForCharacter(c *core.Character) string {
+	return game.World.Realms[c.Realm].Rooms[c.Position].Name
+}
+
+func (game *Game) RealmNameForCharacter(c *core.Character) string {
+	return game.World.Realms[c.Realm].Name
 }

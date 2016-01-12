@@ -1,0 +1,54 @@
+{
+  "1:0:1": {
+    "name": "Kra Jafic Traders' Outpost - Southern Bazaar",
+    "description": "The edge of the bazaar - merchants come and go among the tents bartering goods and services. Bright orange and blue tents match the local dress. There is such a variety of smells from so many different locales - some pleasant, others foul. The chatter of trading crowds is oddly comforting.",
+    "position": {"X": 1, "Y": 0, "Z": 1},
+    "size": 4,
+    "details": ["trading tents", "bazaar", "sand", "traders"],
+    "entities": ["KRAJAFIC_MERCHANT_CROWD", "KRAJAFIC_AMBIANCE", "MERCHANT_AMBIANCE"]
+  },
+  "0:1:1": {
+    "name": "Kra Jafic Traders' Outpost - Western Bazaar",
+    "description": "The eastern area of this trading center seems quiet, but traders still come and go. There isn't a lot on display here - the trading must be going on inside the orange and blue tents.",
+    "position": {"X": 0, "Y": 1, "Z": 1},
+    "size": 4,
+    "details": ["trading tents", "bazaar", "sand", "traders"],
+    "entities": ["KRAJAFIC_SHADY_MERCHANT_CROWD", "KRAJAFIC_AMBIANCE"]
+  },
+  "1:1:1": {
+    "name": "Kra Jafic Traders' Outpost",
+    "description": "Orange, blue and gold tents line the edges of this traders' hub on the northern rim of the Tulinne Desert. Traders seem to come and go at odd times. The air is hot and dry, and the wind stirs the sands.",
+    "position": {"X": 1, "Y": 1, "Z": 1},
+    "size": 4,
+    "details": ["trading tents", "bazaar", "sand", "traders"],
+    "entities": ["KRAJAFIC_MERCHANT_CROWD", "KRAJAFIC_AMBIANCE", "MERCHANT_AMBIANCE"]
+  },
+  "1:2:1": {
+    "name": "Kra Jafic Traders' Outpost - Northern Edge",
+    "description": "The tents of Kra Jafic are to the south, but at this edge of the outpost it is quiet. Here is where the stone road is no longer maintained, and the harsh desert surrounding this place seems endless.",
+    "position": {"X": 1, "Y": 2, "Z": 1},
+    "size": 4,
+    "details": ["sand", "paved stones"]
+  },
+  "2:2:1": {
+    "name": "Kirenov Sands",
+    "description": "To the north you can feintly make out the outline of the Kai Era mountains.",
+    "position": {"X": 2, "Y": 2, "Z": 1},
+    "size": 6,
+    "details": ["sand"]
+  },
+  "2:1:1": {
+    "name": "Kirenov Sands",
+    "description": "The sand seems to go on forever.",
+    "position": {"X": 2, "Y": 1, "Z": 1},
+    "size": 6,
+    "details": ["sand"]
+  },
+  "1:-1:1": {
+    "name": "Kirenov Sands",
+    "description": "The desert seems to go on forever.",
+    "position": {"X": 1, "Y": -1, "Z": 1},
+    "size": 6,
+    "details": ["sand"]
+  }
+}

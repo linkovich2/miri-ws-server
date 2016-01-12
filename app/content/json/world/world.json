@@ -1,0 +1,25 @@
+{
+  "name": "Miri",
+  "realms": {
+    "MIRI": {
+      "id": "MIRI",
+      "name": "The Miri"
+    },
+    "SHADOW": {
+      "id": "SHADOW",
+      "name": "The Shadow"
+    },
+    "LIGHT": {
+      "id": "LIGHT",
+      "name": "The Light"
+    },
+    "CHAOS": {
+      "id": "CHAOS",
+      "name": "The Chaos"
+    },
+    "FAE": {
+      "id": "FAE",
+      "name": "The Fae"
+    }
+  }
+}

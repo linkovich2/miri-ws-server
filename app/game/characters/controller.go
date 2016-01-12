@@ -3,7 +3,6 @@ package characters
 import (
 	"encoding/json"
 	"github.com/jonathonharrell/miri-ws-server/app/content"
-	"github.com/jonathonharrell/miri-ws-server/app/content/world"
 	"github.com/jonathonharrell/miri-ws-server/app/core"
 	"github.com/jonathonharrell/miri-ws-server/app/database"
 	"github.com/jonathonharrell/miri-ws-server/app/game"
@@ -51,8 +50,8 @@ func (c *characterController) List(connection *game.Connection, g *game.Game, ar
 		response = append(response, characterResponse{
 			Character:   c,
 			Description: game.DescribeCharacter(&c),
-			Location:    world.Miri.Realms[c.Realm].Rooms[c.Position].Name,
-			Realm:       world.Miri.Realms[c.Realm].Name,
+			Location:    g.LocationNameForCharacter(&c),
+			Realm:       g.RealmNameForCharacter(&c),
 		})
 	}
 
