@@ -1,11 +1,18 @@
 package core
 
 import (
+	"github.com/jonathonharrell/miri-ws-server/app/logger"
 	"math/rand"
+	"reflect"
 	"strconv"
 	"strings"
 	"time"
 )
+
+var BehaviorRegistry = map[string]reflect.Type{
+	"CROWD_CONVERSATION": reflect.TypeOf(CrowdConversationBehavior{}),
+	"AMBIANCE":           reflect.TypeOf(AmbianceBehavior{}),
+}
 
 type (
 	Behavior interface {
@@ -15,6 +22,8 @@ type (
 	CrowdConversationBehavior struct{}
 	AmbianceBehavior          struct{}
 )
+
+// @todo organize this into an init method and load up behaviors into the registry
 
 func (c CrowdConversationBehavior) Perform(cb *ComponentBag, room *Room, callback func(string, string)) {
 	conversations := [][]string{}

@@ -3,19 +3,24 @@ package content
 import (
 	"encoding/json"
 	"github.com/jonathonharrell/miri-ws-server/app/core"
+	"reflect"
 )
 
-var entities map[string]core.ComponentBag
+type entityContainer map[string]*core.ComponentBag
+
+var e entityContainer
 
 type readEntity struct {
-	Name       string     `json:"name"`
-	Behaviors  []string   `json:"behaviors"`
-	Properties [][]string `json:"properties"`
-	NotVisible bool       `json:"not_visible"`
+	Name         string     `json:"name"`
+	Behaviors    []string   `json:"behaviors"`
+	Properties   [][]string `json:"properties"`
+	NotVisible   bool       `json:"not_visible"`
+	Interactions []string   `json:"interactions"`
 }
 
 func init() {
-	if len(entities) <= 0 {
+	if len(e) <= 0 {
+		e = entityContainer{}
 		files, err := AssetDir("json/entities")
 		if err != nil {
 			panic(err)
@@ -29,7 +34,39 @@ func init() {
 				panic(err)
 			}
 
-			// make the real componentBag from the readEntities
+			for key, re := range a {
+				c := &core.ComponentBag{
+					Name:       re.Name,
+					NotVisible: re.NotVisible,
+				}
+
+				properties := core.PropertyCollection{}
+				for _, p := range re.Properties {
+					properties = append(properties, &core.Property{p[0], p[1]})
+				}
+				c.Properties = properties
+
+				behaviors := []core.Behavior{}
+				for _, b := range re.Behaviors {
+					behaviors = append(
+						behaviors,
+						reflect.New(core.BehaviorRegistry[b]).Elem().Interface().(core.Behavior),
+					)
+				}
+				c.Behaviors = behaviors
+
+				// @todo translate interactions
+
+				e[key] = c
+			}
 		}
+	}
+}
+
+func (ec entityContainer) get(i string) *core.ComponentBag {
+	if entity, exists := ec[i]; exists {
+		return entity.Copy()
+	} else {
+		panic("Entity doesn't exist!") // @todo make this more specific
 	}
 }

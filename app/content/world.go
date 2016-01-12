@@ -31,7 +31,10 @@ func World() *core.World {
 		r.Rooms = make(map[string]*core.Room)
 
 		for positionString, tmp := range a {
-			// @todo build entities out before attaching to room
+			entities := []core.Entity{}
+			for _, k := range tmp.Entities {
+				entities = append(entities, e.get(k))
+			}
 			// @todo persistance layer probably has something to say about this
 			r.Rooms[positionString] = &core.Room{
 				Name:        tmp.Name,
@@ -39,6 +42,7 @@ func World() *core.World {
 				Size:        tmp.Size,
 				Details:     tmp.Details,
 				Position:    tmp.Position,
+				Entities:    entities,
 			}
 		}
 	}
