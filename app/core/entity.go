@@ -1,5 +1,7 @@
 package core
 
+import "github.com/jonathonharrell/miri-ws-server/app/logger"
+
 type (
 	ComponentBag struct {
 		Name         string             `json:"name"`
@@ -14,12 +16,13 @@ type (
 		Value string `json:"value"`
 	}
 	Interaction struct {
-		Command string `json:"command"`
-		// @todo
+		Title  string     `json:"title"`
+		Action Interactor `json:"-"`
 	}
 
 	Entity interface {
 		Update(*Room, func(string, string))
+		Interact(string, *Character, *Room, func(string, string))
 	}
 )
 
@@ -27,6 +30,17 @@ func (c *ComponentBag) Update(r *Room, callback func(string, string)) {
 	for _, b := range c.Behaviors {
 		b.Perform(c, r, callback)
 	}
+}
+
+func (c *ComponentBag) Interact(action string, character *Character, r *Room, callback func(string, string)) {
+	for _, i := range c.Interactions {
+		if i.Action.Title() == action {
+			i.Action.Perform(c, character, r, callback)
+			return
+		}
+	}
+
+	logger.Write.Error("Character [%s] sent an action [%s] that is not available on this entity [%s].", character.Name, action, c.Name)
 }
 
 func (c *ComponentBag) Copy() *ComponentBag {

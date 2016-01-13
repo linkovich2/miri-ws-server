@@ -1,5 +1,7 @@
 package core
 
+import "github.com/jonathonharrell/miri-ws-server/app/logger"
+
 const (
 	RoomTiny = iota
 	RoomSmall
@@ -10,15 +12,16 @@ const (
 )
 
 type Room struct {
-	ID          int      `json:"-"`
-	Name        string   `json:"name"`
-	Description string   `json:"description"`
-	Detail      string   `json:"detail"`
-	Active      bool     `json:"-"`
-	Connections []string `json:"-"`
-	Position    Position `json:"-"`
-	Size        int      `json:"-"`
-	Entities    []Entity `json:"entities"`
+	ID          int                   `json:"-"`
+	Name        string                `json:"name"`
+	Description string                `json:"description"`
+	Detail      string                `json:"detail"`
+	Active      bool                  `json:"-"`
+	Connections []string              `json:"-"`
+	Position    Position              `json:"-"`
+	Size        int                   `json:"-"`
+	Entities    map[string]Entity     `json:"entities"`
+	Characters  map[string]*Character `json:"-"`
 
 	// this is for use with building descriptions or sentences about battles or movement through a room
 	// take for instance this slice: []string{"sand", "tents", "noise"}
@@ -35,9 +38,10 @@ func (r *Room) Update(sendMsg func(string, string)) {
 	}
 }
 
-func (r *Room) Add(c string) {
+func (r *Room) Add(connectionId string, character *Character) {
 	r.Active = true
-	r.Connections = append(r.Connections, c)
+	r.Connections = append(r.Connections, connectionId)
+	r.Characters[connectionId] = character
 }
 
 func (r *Room) GetSpeedMod() int {
@@ -49,6 +53,7 @@ func (r *Room) Remove(c string) {
 	for i, v := range r.Connections {
 		if v == c {
 			r.Connections = append(r.Connections[:i], r.Connections[i+1:]...)
+			delete(r.Characters, c)
 		}
 	}
 
@@ -60,5 +65,13 @@ func (r *Room) Remove(c string) {
 func (r *Room) Broadcast(msg string, cb func(string, string)) {
 	for _, c := range r.Connections {
 		cb(c, msg)
+	}
+}
+
+func (r *Room) Interact(c *Character, target, action string, cb func(string, string)) {
+	if e, exists := r.Entities[target]; exists {
+		e.Interact(action, c, r, cb)
+	} else {
+		logger.Write.Info("Targeted entity [%s] doesn't exist in this room [%s]!", target, r.Position.ToString())
 	}
 }

@@ -55,7 +55,15 @@ func init() {
 				}
 				c.Behaviors = behaviors
 
-				// @todo translate interactions
+				interactions := []core.Interaction{}
+				for _, i := range re.Interactions {
+					interactor := reflect.New(core.InteractorRegistry[i]).Elem().Interface().(core.Interactor)
+					interactions = append(
+						interactions,
+						core.Interaction{interactor.Title(), interactor},
+					)
+				}
+				c.Interactions = interactions
 
 				e[key] = c
 			}

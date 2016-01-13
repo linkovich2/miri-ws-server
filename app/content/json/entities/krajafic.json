@@ -12,7 +12,8 @@
         "A surly, stout man says to another trader, \"<say>The fabrics Al'tur sold us will fetch double in Kel Thayis</say>\";;PAUSE;;The trader replies, \"<say>Yes, they are an excellent make. Perhaps I will create a robe from them for myself...</say>\";;The stout man responds, \"<say>Don't touch! You can't go digging into our supply like you did with the <em>mercer leaf</em>.</say>\";;The trader gasps, \"<say>Not so loud... Someone might hear you!</say>\" He looks around nervously."
       ],
       ["frequency", "3"]
-    ]
+    ],
+    "interactions": ["SPEAK_TO"]
   },
   "KRAJAFIC_SHADY_MERCHANT_CROWD": {
     "name": "",

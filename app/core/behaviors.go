@@ -1,7 +1,6 @@
 package core
 
 import (
-	"github.com/jonathonharrell/miri-ws-server/app/logger"
 	"math/rand"
 	"reflect"
 	"strconv"

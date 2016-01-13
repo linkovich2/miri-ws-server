@@ -3,6 +3,7 @@ package content
 import (
 	"encoding/json"
 	"github.com/jonathonharrell/miri-ws-server/app/core"
+	"stablelib.com/v1/uniuri"
 	"strings"
 )
 
@@ -31,9 +32,9 @@ func World() *core.World {
 		r.Rooms = make(map[string]*core.Room)
 
 		for positionString, tmp := range a {
-			entities := []core.Entity{}
+			entities := map[string]core.Entity{}
 			for _, k := range tmp.Entities {
-				entities = append(entities, e.get(k))
+				entities[uniuri.New()] = e.get(k)
 			}
 			// @todo persistance layer probably has something to say about this
 			r.Rooms[positionString] = &core.Room{
@@ -43,6 +44,7 @@ func World() *core.World {
 				Details:     tmp.Details,
 				Position:    tmp.Position,
 				Entities:    entities,
+				Characters:  make(map[string]*core.Character),
 			}
 		}
 	}

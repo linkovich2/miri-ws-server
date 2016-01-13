@@ -14,7 +14,8 @@ type Command struct {
 }
 
 var commandRegistrar = map[string]func(*Game, *Command){
-	"move": cMove,
-	"say":  cSay,
-	"yell": cYell,
+	"move":     cMove,
+	"say":      cSay,
+	"yell":     cYell,
+	"interact": cInteract,
 }

@@ -58,7 +58,7 @@ func (game *Game) handleConnection(c *Connection) {
 	logger.Write.Info("Connection [%s] started in game with Character: [%s]", c.Socket.ID, c.Character.Name)
 	game.Connections[c.Socket.ID] = c
 	room := game.World.Realms[c.Character.Realm].Rooms[c.Character.Position]
-	room.Add(c.Socket.ID)
+	room.Add(c.Socket.ID, c.Character)
 	game.World.Realms[c.Character.Realm].Rooms[c.Character.Position] = room
 	game.defaultMessage(c.Socket, c.Character, []string{"<system>Connected;</system>"})
 }
