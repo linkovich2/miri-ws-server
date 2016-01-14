@@ -10,6 +10,7 @@ import (
 	"github.com/jonathonharrell/miri-ws-server/app/util/dice"
 	// "github.com/jonathonharrell/miri-ws-server/app/util/filters"
 	"encoding/json"
+	"fmt"
 	"time"
 )
 
@@ -88,6 +89,7 @@ func (game *Game) handleInput(c *Command) {
 		f(game, c)
 	} else {
 		logger.Write.Error("Connection [%s] sent Command: [%v], but it doesn't exist.", c.Connection.ID, c.Value)
+		game.simpleMessage(c.Connection, []string{fmt.Sprintf("<system>Command [%s] not found. Type <cmd>HELP</cmd> for more information.</system>", c.Value)})
 	}
 }
 
