@@ -70,6 +70,7 @@ func (p *Position) AdjacentPositions() map[string]string {
 }
 
 func (p *Position) Move(direction string) (Position, error) {
+	direction = GetDirectionFromVariations(direction)
 	switch direction {
 	case "north":
 		return Position{p.X, p.Y + 1, p.Z}, nil
@@ -113,5 +114,24 @@ func GetOppositeDirection(direction string) (string, error) {
 		return val, nil
 	} else {
 		return "", errors.New(fmt.Sprintf("Invalid direction supplied: [%s]", direction))
+	}
+}
+
+func GetDirectionFromVariations(d string) string {
+	alts := map[string]string{
+		"n":  "north",
+		"s":  "south",
+		"e":  "east",
+		"w":  "west",
+		"nw": "northwest",
+		"ne": "northeast",
+		"se": "southeast",
+		"sw": "southwest",
+	}
+
+	if dir, exists := alts[d]; exists {
+		return dir
+	} else {
+		return d
 	}
 }

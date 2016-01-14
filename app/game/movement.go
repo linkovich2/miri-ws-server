@@ -1,7 +1,6 @@
 package game
 
 import (
-	"encoding/json"
 	"github.com/jonathonharrell/miri-ws-server/app/core"
 	"github.com/jonathonharrell/miri-ws-server/app/logger"
 	"github.com/jonathonharrell/miri-ws-server/app/util"
@@ -36,10 +35,6 @@ var (
 	}
 )
 
-type cMoveArgs struct {
-	Direction string `json:"direction"`
-}
-
 func cMove(game *Game, c *Command) {
 	if !c.Character.HasState(core.StateMoving) {
 		move(game, c)
@@ -49,12 +44,13 @@ func cMove(game *Game, c *Command) {
 }
 
 func move(game *Game, c *Command) {
-	params := cMoveArgs{}
-	err := json.Unmarshal(*c.Args, &params)
+	d, err := c.GetInput()
 	if err != nil {
 		logger.Write.Error(err.Error())
 		return
 	}
+
+	d = core.GetDirectionFromVariations(d)
 
 	position, err := core.GetPosition(c.Character.Position)
 	if err != nil {
@@ -62,7 +58,7 @@ func move(game *Game, c *Command) {
 		return
 	}
 
-	newPosition, err := position.Move(params.Direction)
+	newPosition, err := position.Move(d)
 	if err != nil {
 		logger.Write.Error(err.Error())
 		return
@@ -83,8 +79,8 @@ func move(game *Game, c *Command) {
 		game.broadcastToRoom(
 			c.Connection,
 			c.Character,
-			getMovementMessage(c.Character, room, params.Direction, "broadcastStart"),
-			getMovementMessage(c.Character, room, params.Direction, "start"),
+			getMovementMessage(c.Character, room, d, "broadcastStart"),
+			getMovementMessage(c.Character, room, d, "start"),
 			room,
 		)
 
@@ -102,8 +98,8 @@ func move(game *Game, c *Command) {
 		game.broadcastToRoom(
 			c.Connection,
 			c.Character,
-			getMovementMessage(c.Character, room, params.Direction, "broadcastArrive"),
-			getMovementMessage(c.Character, room, params.Direction, "arrive"),
+			getMovementMessage(c.Character, room, d, "broadcastArrive"),
+			getMovementMessage(c.Character, room, d, "arrive"),
 			room,
 		)
 	}()

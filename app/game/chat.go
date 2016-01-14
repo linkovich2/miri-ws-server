@@ -1,19 +1,13 @@
 package game
 
 import (
-	"encoding/json"
 	"github.com/jonathonharrell/miri-ws-server/app/core"
 	"github.com/jonathonharrell/miri-ws-server/app/logger"
 	"strings"
 )
 
-type cBasicChatArgs struct {
-	Input string `json:"input"`
-}
-
 func cSay(game *Game, c *Command) {
-	params := cBasicChatArgs{}
-	err := json.Unmarshal(*c.Args, &params)
+	input, err := c.GetInput()
 	if err != nil {
 		logger.Write.Error(err.Error())
 		return
@@ -24,15 +18,14 @@ func cSay(game *Game, c *Command) {
 	game.broadcastToRoom(
 		c.Connection,
 		c.Character,
-		strings.Join([]string{desc, " says, \"<say>", params.Input, "</say>\""}, ""),
-		strings.Join([]string{"You say, \"<say>", params.Input, "</say>\""}, ""),
+		strings.Join([]string{desc, " says, \"<say>", input, "</say>\""}, ""),
+		strings.Join([]string{"You say, \"<say>", input, "</say>\""}, ""),
 		room,
 	)
 }
 
 func cYell(game *Game, c *Command) {
-	params := cBasicChatArgs{}
-	err := json.Unmarshal(*c.Args, &params)
+	input, err := c.GetInput()
 	if err != nil {
 		logger.Write.Error(err.Error())
 		return
@@ -44,8 +37,8 @@ func cYell(game *Game, c *Command) {
 	game.broadcastToRoom(
 		c.Connection,
 		c.Character,
-		strings.Join([]string{desc, " yells, \"<yell>", params.Input, "</yell>\""}, ""),
-		strings.Join([]string{"You yell, \"<yell>", params.Input, "</yell>\""}, ""),
+		strings.Join([]string{desc, " yells, \"<yell>", input, "</yell>\""}, ""),
+		strings.Join([]string{"You yell, \"<yell>", input, "</yell>\""}, ""),
 		room,
 	)
 
@@ -58,7 +51,7 @@ func cYell(game *Game, c *Command) {
 			}
 
 			room.Broadcast(
-				strings.Join([]string{desc, " yells from the ", d, ", \"<yell>", params.Input, "</yell>\""}, ""),
+				strings.Join([]string{desc, " yells from the ", d, ", \"<yell>", input, "</yell>\""}, ""),
 				game.World.GetSendCallback(),
 			)
 		}
