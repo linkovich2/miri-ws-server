@@ -5,7 +5,7 @@ import "github.com/jonathonharrell/miri-ws-server/app/logger"
 type (
 	ComponentBag struct {
 		Name         string             `json:"name"`
-		Interactions []Interaction      `json:"interactions"`
+		Interactions []Interaction      `json:"-"`
 		Properties   PropertyCollection `json:"-"`
 		Behaviors    []Behavior         `json:"-"`
 		NotVisible   bool               `json:"not_visible"`
