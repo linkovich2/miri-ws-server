@@ -10,6 +10,7 @@ type (
 		Messages   []string        `json:"messages"`
 		Directions map[string]bool `json:"directions"`
 		State      []string        `json:"state"`
+		Targets    []string        `json:"targets"`
 	}
 
 	miniResponse struct {

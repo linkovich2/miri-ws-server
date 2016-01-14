@@ -75,3 +75,10 @@ func (r *Room) Interact(c *Character, target, action string, cb func(string, str
 		logger.Write.Info("Targeted entity [%s] doesn't exist in this room [%s]!", target, r.Position.ToString())
 	}
 }
+
+func (r *Room) ValidTarget(id string) bool {
+	if _, exists := r.Entities[id]; exists {
+		return true
+	}
+	return false
+}

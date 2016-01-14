@@ -36,6 +36,7 @@ type (
 		stats            StatBlock           `json:"-"`
 		statsCached      bool                `json:"-"`
 		State            []int               `json:"-"`
+		Targets          []string            `json:"-"`
 	}
 
 	Stat      int

@@ -94,6 +94,7 @@ func move(game *Game, c *Command) {
 		room = game.World.Realms[c.Character.Realm].Rooms[c.Character.Position]
 		room.Add(c.Connection.ID, c.Character)
 
+		c.Character.Targets = []string{}
 		c.Character.RemoveState(core.StateMoving)
 		game.broadcastToRoom(
 			c.Connection,
