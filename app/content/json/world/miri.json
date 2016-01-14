@@ -21,7 +21,7 @@
     "position": {"X": 1, "Y": 1, "Z": 1},
     "size": 4,
     "details": ["trading tents", "bazaar", "sand", "traders"],
-    "entities": ["KRAJAFIC_MERCHANT_CROWD", "KRAJAFIC_AMBIANCE", "MERCHANT_AMBIANCE"]
+    "entities": ["KRAJAFIC_MERCHANT_CROWD", "KRAJAFIC_AMBIANCE", "MERCHANT_AMBIANCE", "KRAJAFIC_WATER_WELL"]
   },
   "1:2:1": {
     "name": "Kra Jafic Traders' Outpost - Northern Edge",

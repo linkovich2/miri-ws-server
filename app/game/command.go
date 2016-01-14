@@ -29,6 +29,7 @@ var commandRegistrar = map[string]func(*Game, *Command){
 	"yell":     cYell,
 	"target":   cAddTarget,
 	"untarget": cRemoveTarget,
+	"interact": cInteract,
 }
 
 func (c *Command) GetInput() (string, error) {

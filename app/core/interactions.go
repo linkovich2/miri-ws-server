@@ -7,7 +7,7 @@ import (
 
 var (
 	InteractorRegistry = map[string]reflect.Type{
-		"SPEAK_TO": reflect.TypeOf(SpeakToInteraction{}),
+		"DRINK_FROM": reflect.TypeOf(DrinkFromInteraction{}),
 	}
 )
 
@@ -17,13 +17,15 @@ type (
 		Title() string
 	}
 
-	SpeakToInteraction struct{}
+	DrinkFromInteraction struct{}
 )
 
-func (i SpeakToInteraction) Perform(target *ComponentBag, initiator *Character, room *Room, callback func(string, string)) {
-	logger.Write.Info("Character [%s] spoke to [%s]", initiator.Name, target.Name)
+func (i DrinkFromInteraction) Perform(target *ComponentBag, initiator *Character, room *Room, callback func(string, string)) {
+	room.Message("You take a drink from the water well.", initiator, callback)
+	// @todo this needs to broadcast something else to the rest of the people in the room
+	logger.Write.Info("Character [%s] tried to drink from [%s]", initiator.Name, target.Name)
 }
 
-func (i SpeakToInteraction) Title() string {
-	return "Speak"
+func (i DrinkFromInteraction) Title() string {
+	return "Drink"
 }

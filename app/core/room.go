@@ -62,9 +62,28 @@ func (r *Room) Remove(c string) {
 	}
 }
 
+// send a message to all active connections
 func (r *Room) Broadcast(msg string, cb func(string, string)) {
 	for _, c := range r.Connections {
 		cb(c, msg)
+	}
+}
+
+// send a message to all but the specified character
+func (r *Room) BroadcastToAllButCharacter(msg string, c *Character, cb func(string, string)) {
+	for id, character := range r.Characters {
+		if character != c {
+			cb(id, msg)
+		}
+	}
+}
+
+// send a message to the specified character
+func (r *Room) Message(msg string, c *Character, cb func(string, string)) {
+	for id, character := range r.Characters {
+		if character == c {
+			cb(id, msg)
+		}
 	}
 }
 
