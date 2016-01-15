@@ -371,18 +371,18 @@ func AssetNames() []string {
 
 // _bindata is a table, holding each asset generator, mapped to its name.
 var _bindata = map[string]func() (*asset, error){
-	"json/aesthetic_traits.json":  jsonAesthetic_traitsJson,
-	"json/backgrounds.json":       jsonBackgroundsJson,
+	"json/aesthetic_traits.json": jsonAesthetic_traitsJson,
+	"json/backgrounds.json": jsonBackgroundsJson,
 	"json/entities/krajafic.json": jsonEntitiesKrajaficJson,
 	"json/functional_traits.json": jsonFunctional_traitsJson,
-	"json/genders.json":           jsonGendersJson,
-	"json/races.json":             jsonRacesJson,
-	"json/world/chaos.json":       jsonWorldChaosJson,
-	"json/world/fae.json":         jsonWorldFaeJson,
-	"json/world/light.json":       jsonWorldLightJson,
-	"json/world/miri.json":        jsonWorldMiriJson,
-	"json/world/shadow.json":      jsonWorldShadowJson,
-	"json/world/world.json":       jsonWorldWorldJson,
+	"json/genders.json": jsonGendersJson,
+	"json/races.json": jsonRacesJson,
+	"json/world/chaos.json": jsonWorldChaosJson,
+	"json/world/fae.json": jsonWorldFaeJson,
+	"json/world/light.json": jsonWorldLightJson,
+	"json/world/miri.json": jsonWorldMiriJson,
+	"json/world/shadow.json": jsonWorldShadowJson,
+	"json/world/world.json": jsonWorldWorldJson,
 }
 
 // AssetDir returns the file names below a certain
@@ -424,24 +424,23 @@ type bintree struct {
 	Func     func() (*asset, error)
 	Children map[string]*bintree
 }
-
 var _bintree = &bintree{nil, map[string]*bintree{
 	"json": &bintree{nil, map[string]*bintree{
 		"aesthetic_traits.json": &bintree{jsonAesthetic_traitsJson, map[string]*bintree{}},
-		"backgrounds.json":      &bintree{jsonBackgroundsJson, map[string]*bintree{}},
+		"backgrounds.json": &bintree{jsonBackgroundsJson, map[string]*bintree{}},
 		"entities": &bintree{nil, map[string]*bintree{
 			"krajafic.json": &bintree{jsonEntitiesKrajaficJson, map[string]*bintree{}},
 		}},
 		"functional_traits.json": &bintree{jsonFunctional_traitsJson, map[string]*bintree{}},
-		"genders.json":           &bintree{jsonGendersJson, map[string]*bintree{}},
-		"races.json":             &bintree{jsonRacesJson, map[string]*bintree{}},
+		"genders.json": &bintree{jsonGendersJson, map[string]*bintree{}},
+		"races.json": &bintree{jsonRacesJson, map[string]*bintree{}},
 		"world": &bintree{nil, map[string]*bintree{
-			"chaos.json":  &bintree{jsonWorldChaosJson, map[string]*bintree{}},
-			"fae.json":    &bintree{jsonWorldFaeJson, map[string]*bintree{}},
-			"light.json":  &bintree{jsonWorldLightJson, map[string]*bintree{}},
-			"miri.json":   &bintree{jsonWorldMiriJson, map[string]*bintree{}},
+			"chaos.json": &bintree{jsonWorldChaosJson, map[string]*bintree{}},
+			"fae.json": &bintree{jsonWorldFaeJson, map[string]*bintree{}},
+			"light.json": &bintree{jsonWorldLightJson, map[string]*bintree{}},
+			"miri.json": &bintree{jsonWorldMiriJson, map[string]*bintree{}},
 			"shadow.json": &bintree{jsonWorldShadowJson, map[string]*bintree{}},
-			"world.json":  &bintree{jsonWorldWorldJson, map[string]*bintree{}},
+			"world.json": &bintree{jsonWorldWorldJson, map[string]*bintree{}},
 		}},
 	}},
 }}
@@ -492,3 +491,4 @@ func _filePath(dir, name string) string {
 	cannonicalName := strings.Replace(name, "\\", "/", -1)
 	return filepath.Join(append([]string{dir}, strings.Split(cannonicalName, "/")...)...)
 }
+

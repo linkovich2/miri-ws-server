@@ -1,5 +1,9 @@
 package core
 
+import "encoding/json"
+
+var races map[string]Race
+
 type Race struct {
 	Name            string `json:"name"`
 	Description     string `json:"description"`
@@ -7,6 +11,30 @@ type Race struct {
 	ID              string `json:"id, omitempty"`
 	Descriptor      string `json:"descriptor"`
 	GenderHuman     bool   `json:"gender_human"`
+}
+
+// Content methods
+func GetRaces() map[string]Race {
+	if len(races) <= 0 {
+		data, err := Asset("json/races.json")
+		if err != nil {
+			panic(err)
+		}
+
+		a := map[string]Race{}
+		err = json.Unmarshal(data, &a)
+		if err != nil {
+			panic(err)
+		}
+		races = a
+	}
+
+	return races
+}
+
+func GetRace(key string) Race {
+	races := GetRaces()
+	return races[key]
 }
 
 // FUTURE RACES

@@ -1,5 +1,9 @@
 package core
 
+import "encoding/json"
+
+var backgrounds map[string]Background
+
 type (
 	Background struct {
 		Name          string                  `json:"name"`
@@ -89,4 +93,28 @@ func (b *Background) IsAllowedForCharacter(character *Character) bool {
 	}
 
 	return (matchesRace && matchesGender)
+}
+
+// Content methods
+func GetBackgrounds() map[string]Background {
+	if len(backgrounds) <= 0 {
+		data, err := Asset("json/backgrounds.json")
+		if err != nil {
+			panic(err)
+		}
+
+		a := map[string]Background{}
+		err = json.Unmarshal(data, &a)
+		if err != nil {
+			panic(err)
+		}
+		backgrounds = a
+	}
+
+	return backgrounds
+}
+
+func GetBackground(key string) Background {
+	t := GetBackgrounds()
+	return t[key]
 }

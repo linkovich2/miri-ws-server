@@ -1,5 +1,14 @@
 package core
 
+import (
+	"encoding/json"
+)
+
+var (
+	aestheticTraits  map[string]AestheticTraitCategory
+	functionalTraits map[string]FunctionalTraitCategory
+)
+
 type (
 	AestheticTraitCategory struct {
 		Name              string                    `json:"name"`
@@ -82,4 +91,51 @@ func validateCharacterAgainst(character *Character, disallowedRaces, disallowedG
 	}
 
 	return true
+}
+
+// Content methods
+func GetAestheticTraits() map[string]AestheticTraitCategory {
+	if len(aestheticTraits) <= 0 {
+		data, err := Asset("json/aesthetic_traits.json")
+		if err != nil {
+			panic(err)
+		}
+
+		a := map[string]AestheticTraitCategory{}
+		err = json.Unmarshal(data, &a)
+		if err != nil {
+			panic(err)
+		}
+		aestheticTraits = a
+	}
+
+	return aestheticTraits
+}
+
+func GetAestheticTrait(key string) AestheticTraitCategory {
+	t := GetAestheticTraits()
+	return t[key]
+}
+
+func GetFunctionalTraits() map[string]FunctionalTraitCategory {
+	if len(functionalTraits) <= 0 {
+		data, err := Asset("json/functional_traits.json")
+		if err != nil {
+			panic(err)
+		}
+
+		a := map[string]FunctionalTraitCategory{}
+		err = json.Unmarshal(data, &a)
+		if err != nil {
+			panic(err)
+		}
+		functionalTraits = a
+	}
+
+	return functionalTraits
+}
+
+func GetFunctionalTraitCategory(key string) FunctionalTraitCategory {
+	t := GetFunctionalTraits()
+	return t[key]
 }

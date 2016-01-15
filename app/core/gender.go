@@ -1,5 +1,9 @@
 package core
 
+import "encoding/json"
+
+var genders map[string]Gender
+
 type Gender struct {
 	Name            string   `json:"name"`
 	ID              string   `json:"id"`
@@ -23,4 +27,28 @@ func (g *Gender) RaceAllowed(race string) bool {
 	}
 
 	return true
+}
+
+// Content methods
+func GetGenders() map[string]Gender {
+	if len(genders) <= 0 {
+		data, err := Asset("json/genders.json")
+		if err != nil {
+			panic(err)
+		}
+
+		a := map[string]Gender{}
+		err = json.Unmarshal(data, &a)
+		if err != nil {
+			panic(err)
+		}
+		genders = a
+	}
+
+	return genders
+}
+
+func GetGender(key string) Gender {
+	genders := GetGenders()
+	return genders[key]
 }
