@@ -14,7 +14,7 @@ func cSay(game *Game, c *Command) {
 	}
 
 	room := game.World.Realms[c.Character.Realm].Rooms[c.Character.Position]
-	desc := strings.Join([]string{"<strong>", strings.ToLower(ShortDescriptionForCharacter(c.Character)), "</strong>"}, "")
+	desc := strings.Join([]string{"<strong>", strings.ToLower(c.Character.ShortDescription()), "</strong>"}, "")
 	game.broadcastToRoom(
 		c.Connection,
 		c.Character,
@@ -33,7 +33,7 @@ func cYell(game *Game, c *Command) {
 
 	pos, _ := core.GetPosition(c.Character.Position)
 	room := game.World.Realms[c.Character.Realm].Rooms[c.Character.Position]
-	desc := strings.Join([]string{"<strong>", strings.ToLower(ShortDescriptionForCharacter(c.Character)), "</strong>"}, "")
+	desc := strings.Join([]string{"<strong>", strings.ToLower(c.Character.ShortDescription()), "</strong>"}, "")
 	game.broadcastToRoom(
 		c.Connection,
 		c.Character,

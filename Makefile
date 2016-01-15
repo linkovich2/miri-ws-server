@@ -6,7 +6,7 @@ endif
 
 all: content test build run
 content:
-	cd app/content/; go-bindata -pkg 'content' json/...; cd ../../;
+	cd app/core/; go-bindata -pkg 'core' json/...; cd ../../;
 test:
 	go test ./app/test/...;
 build:

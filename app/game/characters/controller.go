@@ -2,7 +2,6 @@ package characters
 
 import (
 	"encoding/json"
-	"github.com/jonathonharrell/miri-ws-server/app/content"
 	"github.com/jonathonharrell/miri-ws-server/app/core"
 	"github.com/jonathonharrell/miri-ws-server/app/database"
 	"github.com/jonathonharrell/miri-ws-server/app/game"
@@ -49,7 +48,7 @@ func (c *characterController) List(connection *game.Connection, g *game.Game, ar
 	for _, c := range characters {
 		response = append(response, characterResponse{
 			Character:   c,
-			Description: game.DescribeCharacter(&c),
+			Description: c.Describe(),
 			Location:    g.LocationNameForCharacter(&c),
 			Realm:       g.RealmNameForCharacter(&c),
 		})
@@ -158,7 +157,7 @@ func (c *characterController) Create(connection *game.Connection, g *game.Game, 
 		return // stop execution
 	}
 
-	bg := content.Background(character.Background)
+	bg := core.GetBackground(character.Background)
 
 	character.UserID = connection.Socket.User.ID
 	character.Created = time.Now() // timestamp this bad boy
@@ -181,17 +180,17 @@ func (c *characterController) Options(connection *game.Connection, g *game.Game,
 
 	switch params.Get {
 	case "races":
-		body = content.Races()
+		body = core.GetRaces()
 	case "genders":
-		body = content.Genders()
+		body = core.GetGenders()
 	case "aesthetic_traits":
-		body = content.AestheticTraits()
+		body = core.GetAestheticTraits()
 	case "functional_traits":
-		body = content.FunctionalTraits()
+		body = core.GetFunctionalTraits()
 	case "backgrounds":
-		body = content.Backgrounds()
+		body = core.GetBackgrounds()
 	default:
-		body = content.Races()
+		body = core.GetRaces()
 	}
 
 	res, _ := json.Marshal(body)
@@ -226,7 +225,7 @@ func validateCharacter(connection *game.Connection, character *core.Character) b
 }
 
 func validateRace(connection *game.Connection, character *core.Character) bool {
-	races := content.Races()
+	races := core.GetRaces()
 	if _, raceExists := races[character.Race]; raceExists {
 		return true
 	}
@@ -236,7 +235,7 @@ func validateRace(connection *game.Connection, character *core.Character) bool {
 }
 
 func validateGender(connection *game.Connection, character *core.Character) bool {
-	genders := content.Genders()
+	genders := core.GetGenders()
 	if gender, genderExists := genders[character.Gender]; genderExists {
 		if gender.RaceAllowed(character.Race) {
 			return true
@@ -256,7 +255,7 @@ func validateGender(connection *game.Connection, character *core.Character) bool
 }
 
 func validateAestheticTraits(connection *game.Connection, character *core.Character) bool {
-	list := content.AestheticTraits()
+	list := core.GetAestheticTraits()
 	for key, traits := range character.AestheticTraits {
 		if _, categoryExists := list[key]; !categoryExists { // trait category does not exist
 			logger.Write.Error("Character Creation Error (Connection [%s]): Unknown Trait Category [%s].", connection.Socket.ID, key)
@@ -304,7 +303,7 @@ func validateAestheticTraits(connection *game.Connection, character *core.Charac
 func validateFunctionalTraits(connection *game.Connection, character *core.Character) bool {
 	var points int
 
-	list := content.FunctionalTraits()
+	list := core.GetFunctionalTraits()
 
 	for key, traits := range character.FunctionalTraits {
 		if _, categoryExists := list[key]; !categoryExists { // trait category does not exist
@@ -391,7 +390,7 @@ func validateFunctionalTraits(connection *game.Connection, character *core.Chara
 }
 
 func validateBackground(connection *game.Connection, character *core.Character) bool {
-	bgs := content.Backgrounds()
+	bgs := core.GetBackgrounds()
 	if _, backgroundExists := bgs[character.Background]; !backgroundExists {
 		logger.Write.Error("Character Creation Error (Connection [%s]): Provided Background [%s] doesn't exist.", connection.Socket.ID, character.Background)
 		return false

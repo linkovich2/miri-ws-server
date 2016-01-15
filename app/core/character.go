@@ -1,11 +1,14 @@
 package core
 
 import (
+	"bytes"
 	"errors"
 	"gopkg.in/mgo.v2/bson"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/jonathonharrell/miri-ws-server/app/util/filters"
 )
 
 const (
@@ -143,4 +146,44 @@ func (c *Character) FirstName() string {
 func (c *Character) LastName() string {
 	splitName := strings.Split(c.Name, " ")
 	return splitName[1]
+}
+
+func (c *Character) Describe() string {
+	response := bytes.NewBuffer([]byte(c.ShortDescription()))
+	response.Write([]byte("; "))
+
+	gender := GetGender(c.Gender)
+	traits := GetAestheticTraits()
+
+	for i, cat := range c.AestheticTraits {
+		for _, t := range cat {
+			response.Write([]byte(filters.GenderPronouns(traits[i].Traits[t].Description, gender.Possessive, gender.Pronoun, false)))
+			response.Write([]byte(" "))
+		}
+	}
+
+	return response.String()
+}
+
+func (c *Character) ShortDescription() string {
+	response := bytes.NewBuffer([]byte{})
+	race := GetRace(c.Race)
+	gender := GetGender(c.Gender)
+
+	if race.Descriptor[:1] == "a" || race.Descriptor[:1] == "e" || race.Descriptor[:1] == "i" || race.Descriptor[:1] == "o" || race.Descriptor[:1] == "u" {
+		response.Write([]byte("An "))
+	} else {
+		response.Write([]byte("A "))
+	}
+
+	response.Write([]byte(race.Descriptor))
+	response.Write([]byte(" "))
+
+	if race.GenderHuman {
+		response.Write([]byte(gender.Human))
+	} else {
+		response.Write([]byte(gender.Scientific))
+	}
+
+	return response.String()
 }

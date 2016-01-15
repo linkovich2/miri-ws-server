@@ -1,8 +1,8 @@
 package core
 
 import (
-	"github.com/jonathonharrell/miri-ws-server/app/logger"
 	"reflect"
+	"strings"
 )
 
 var (
@@ -21,9 +21,12 @@ type (
 )
 
 func (i DrinkFromInteraction) Perform(target *ComponentBag, initiator *Character, room *Room, callback func(string, string)) {
-	room.Message("You take a drink from the water well.", initiator, callback)
-	// @todo this needs to broadcast something else to the rest of the people in the room
-	logger.Write.Info("Character [%s] tried to drink from [%s]", initiator.Name, target.Name)
+	room.Message("<default>You take a drink from the water well.</default>", initiator, callback)
+	room.BroadcastToAllButCharacter(
+		strings.Join([]string{"<default>", initiator.ShortDescription(), " takes a drink from the water well.</default>"}, ""),
+		initiator,
+		callback,
+	)
 }
 
 func (i DrinkFromInteraction) Title() string {

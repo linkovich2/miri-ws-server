@@ -1,26 +1,25 @@
-package content
+package core
 
 import (
 	"encoding/json"
-	"github.com/jonathonharrell/miri-ws-server/app/core"
 )
 
 var (
-	backgrounds      map[string]core.Background
-	aestheticTraits  map[string]core.AestheticTraitCategory
-	functionalTraits map[string]core.FunctionalTraitCategory
-	races            map[string]core.Race
-	genders          map[string]core.Gender
+	backgrounds      map[string]Background
+	aestheticTraits  map[string]AestheticTraitCategory
+	functionalTraits map[string]FunctionalTraitCategory
+	races            map[string]Race
+	genders          map[string]Gender
 )
 
-func AestheticTraits() map[string]core.AestheticTraitCategory {
+func GetAestheticTraits() map[string]AestheticTraitCategory {
 	if len(aestheticTraits) <= 0 {
 		data, err := Asset("json/aesthetic_traits.json")
 		if err != nil {
 			panic(err)
 		}
 
-		a := map[string]core.AestheticTraitCategory{}
+		a := map[string]AestheticTraitCategory{}
 		err = json.Unmarshal(data, &a)
 		if err != nil {
 			panic(err)
@@ -31,19 +30,19 @@ func AestheticTraits() map[string]core.AestheticTraitCategory {
 	return aestheticTraits
 }
 
-func AestheticTrait(key string) core.AestheticTraitCategory {
-	t := AestheticTraits()
+func GetAestheticTrait(key string) AestheticTraitCategory {
+	t := GetAestheticTraits()
 	return t[key]
 }
 
-func Backgrounds() map[string]core.Background {
+func GetBackgrounds() map[string]Background {
 	if len(backgrounds) <= 0 {
 		data, err := Asset("json/backgrounds.json")
 		if err != nil {
 			panic(err)
 		}
 
-		a := map[string]core.Background{}
+		a := map[string]Background{}
 		err = json.Unmarshal(data, &a)
 		if err != nil {
 			panic(err)
@@ -54,19 +53,19 @@ func Backgrounds() map[string]core.Background {
 	return backgrounds
 }
 
-func Background(key string) core.Background {
-	t := Backgrounds()
+func GetBackground(key string) Background {
+	t := GetBackgrounds()
 	return t[key]
 }
 
-func FunctionalTraits() map[string]core.FunctionalTraitCategory {
+func GetFunctionalTraits() map[string]FunctionalTraitCategory {
 	if len(functionalTraits) <= 0 {
 		data, err := Asset("json/functional_traits.json")
 		if err != nil {
 			panic(err)
 		}
 
-		a := map[string]core.FunctionalTraitCategory{}
+		a := map[string]FunctionalTraitCategory{}
 		err = json.Unmarshal(data, &a)
 		if err != nil {
 			panic(err)
@@ -77,19 +76,19 @@ func FunctionalTraits() map[string]core.FunctionalTraitCategory {
 	return functionalTraits
 }
 
-func FunctionalTraitCategory(key string) core.FunctionalTraitCategory {
-	t := FunctionalTraits()
+func GetFunctionalTraitCategory(key string) FunctionalTraitCategory {
+	t := GetFunctionalTraits()
 	return t[key]
 }
 
-func Races() map[string]core.Race {
+func GetRaces() map[string]Race {
 	if len(races) <= 0 {
 		data, err := Asset("json/races.json")
 		if err != nil {
 			panic(err)
 		}
 
-		a := map[string]core.Race{}
+		a := map[string]Race{}
 		err = json.Unmarshal(data, &a)
 		if err != nil {
 			panic(err)
@@ -100,19 +99,19 @@ func Races() map[string]core.Race {
 	return races
 }
 
-func Race(key string) core.Race {
-	races := Races()
+func GetRace(key string) Race {
+	races := GetRaces()
 	return races[key]
 }
 
-func Genders() map[string]core.Gender {
+func GetGenders() map[string]Gender {
 	if len(genders) <= 0 {
 		data, err := Asset("json/genders.json")
 		if err != nil {
 			panic(err)
 		}
 
-		a := map[string]core.Gender{}
+		a := map[string]Gender{}
 		err = json.Unmarshal(data, &a)
 		if err != nil {
 			panic(err)
@@ -123,7 +122,7 @@ func Genders() map[string]core.Gender {
 	return genders
 }
 
-func Gender(key string) core.Gender {
-	genders := Genders()
+func GetGender(key string) Gender {
+	genders := GetGenders()
 	return genders[key]
 }

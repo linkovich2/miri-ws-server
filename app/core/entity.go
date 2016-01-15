@@ -1,6 +1,12 @@
 package core
 
-import "github.com/jonathonharrell/miri-ws-server/app/logger"
+import (
+	"encoding/json"
+	"github.com/jonathonharrell/miri-ws-server/app/logger"
+	"reflect"
+)
+
+var e entityContainer
 
 type (
 	ComponentBag struct {
@@ -23,6 +29,16 @@ type (
 	Entity interface {
 		Update(*Room, func(string, string))
 		Interact(string, *Character, *Room, func(string, string))
+	}
+
+	entityContainer map[string]*ComponentBag
+
+	readEntity struct {
+		Name         string     `json:"name"`
+		Behaviors    []string   `json:"behaviors"`
+		Properties   [][]string `json:"properties"`
+		NotVisible   bool       `json:"not_visible"`
+		Interactions []string   `json:"interactions"`
 	}
 )
 
@@ -91,4 +107,65 @@ func (pc PropertyCollection) Remove(key string) PropertyCollection {
 	}
 
 	return pc
+}
+
+func init() {
+	if len(e) <= 0 {
+		e = entityContainer{}
+		files, err := AssetDir("json/entities")
+		if err != nil {
+			panic(err)
+		}
+
+		for _, f := range files {
+			data, _ := Asset("json/entities/" + f)
+			a := map[string]readEntity{}
+			err := json.Unmarshal(data, &a)
+			if err != nil {
+				panic(err)
+			}
+
+			for key, re := range a {
+				c := &ComponentBag{
+					Name:       re.Name,
+					NotVisible: re.NotVisible,
+				}
+
+				properties := PropertyCollection{}
+				for _, p := range re.Properties {
+					properties = append(properties, &Property{p[0], p[1]})
+				}
+				c.Properties = properties
+
+				behaviors := []Behavior{}
+				for _, b := range re.Behaviors {
+					behaviors = append(
+						behaviors,
+						reflect.New(BehaviorRegistry[b]).Elem().Interface().(Behavior),
+					)
+				}
+				c.Behaviors = behaviors
+
+				interactions := []Interaction{}
+				for _, i := range re.Interactions {
+					interactor := reflect.New(InteractorRegistry[i]).Elem().Interface().(Interactor)
+					interactions = append(
+						interactions,
+						Interaction{interactor.Title(), interactor},
+					)
+				}
+				c.Interactions = interactions
+
+				e[key] = c
+			}
+		}
+	}
+}
+
+func (ec entityContainer) get(i string) *ComponentBag {
+	if entity, exists := ec[i]; exists {
+		return entity.Copy()
+	} else {
+		panic("Entity doesn't exist!") // @todo make this more specific
+	}
 }

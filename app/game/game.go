@@ -1,7 +1,6 @@
 package game
 
 import (
-	"github.com/jonathonharrell/miri-ws-server/app/content"
 	"github.com/jonathonharrell/miri-ws-server/app/core"
 	"github.com/jonathonharrell/miri-ws-server/app/logger"
 	db "github.com/jonathonharrell/miri-ws-server/app/persistence"
@@ -25,7 +24,7 @@ type Game struct {
 func (game *Game) Start() {
 	dice.SeedRandom() // seed rand for dice
 
-	game.World = content.World()
+	game.World = core.GetWorld()
 	game.World.SetSendCallback(func(id, message string) {
 		if connection, exists := game.Connections[id]; exists {
 			res, _ := json.Marshal(&response{Messages: []string{message}})
