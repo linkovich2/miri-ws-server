@@ -1,2 +1,2 @@
 miri-ws-server*
-app/content/bindata*
+app/core/bindata.go
