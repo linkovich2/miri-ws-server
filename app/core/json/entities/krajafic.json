@@ -1,6 +1,6 @@
 {
   "KRAJAFIC_MERCHANT_CROWD": {
-    "name": "Crowd of Merchants/Traders",
+    "name": "Crowd of Merchants and Traders",
     "behaviors": ["CROWD_CONVERSATION"],
     "properties": [
       [
@@ -11,16 +11,27 @@
         "conversation",
         "A surly, stout man says to another trader, \"<say>The fabrics Al'tur sold us will fetch double in Kel Thayis</say>\";;PAUSE;;The trader replies, \"<say>Yes, they are an excellent make. Perhaps I will create a robe from them for myself...</say>\";;The stout man responds, \"<say>Don't touch! You can't go digging into our supply like you did with the <em>mercer leaf</em>.</say>\";;The trader gasps, \"<say>Not so loud... Someone might hear you!</say>\" He looks around nervously."
       ],
-      ["frequency", "20"]
+      [
+        "conversation",
+        "A dwarven man clad in only a towel chases two women, a halfling and a human out of tent, \"<say>Wait, wait! I was only joking!</say>\""
+      ],
+      [
+        "conversation",
+        "Two elven traders haggle over the prices near a dwarven jeweler, \"<say>Surely you can come down a little?</say>\";;The elf woman chimes in, \"<say>Yes, even dwarven mines must have sensible standards...</say>\";;They laugh together while the dwarf is halfway between sneering and a polite smile."
+      ],
+      ["frequency", "25"],
+      ["descriptor", "crowd"]
     ]
   },
   "KRAJAFIC_WATER_WELL": {
     "name": "Water Pump",
-    "properties": [],
+    "properties": [
+      ["descriptor", "water well"]
+    ],
     "interactions": ["DRINK_FROM"]
   },
   "KRAJAFIC_SHADY_MERCHANT_CROWD": {
-    "name": "",
+    "name": "Crowd of Merchants and Traders",
     "behaviors": ["CROWD_CONVERSATION"],
     "properties": [
       [
@@ -35,9 +46,9 @@
     "not_visible": true,
     "behaviors": ["AMBIANCE"],
     "properties": [
-      ["ambiance", "<ambiance><em>The sands stir in the wind...</em></ambiance>"],
-      ["ambiance", "<ambiance><em>You can hear the tents flapping in the wind.</em></ambiance>"],
-      ["ambiance", "<ambiance><em>The sun beats down overhead...</em></ambiance>"],
+      ["ambiance", "<ambiance><em>The sands stir in the wind</em></ambiance>"],
+      ["ambiance", "<ambiance><em>You can hear the tents flapping in the wind, almost in a rhythm.</em></ambiance>"],
+      ["ambiance", "<ambiance><em>The sun beats down overhead</em></ambiance>"],
       ["frequency", "20"]
     ]
   },
@@ -47,7 +58,7 @@
     "behaviors": ["AMBIANCE"],
     "properties": [
       ["ambiance", "<ambiance><em>The sounds of haggling merchants surround you.</em></ambiance>"],
-      ["frequency", "30"]
+      ["frequency", "35"]
     ]
   }
 }
