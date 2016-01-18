@@ -45,9 +45,8 @@ func (c CrowdConversationBehavior) Perform(cb *ComponentBag, room *Room, callbac
 			}
 
 			// now we have conversations, let's pick one and decide whether we want to start a conversation now
-			i := getRandomConversation(len(conversations), cb.Properties.ValueOf("last_conversation_used"))
+			i := getRandomConversation(len(conversations), cb, "last_conversation_used")
 			cb.Properties = append(cb.Properties, &Property{Key: "state", Value: "conversing"})
-			cb.Properties = append(cb.Properties, &Property{Key: "last_conversation_used", Value: strconv.Itoa(i)})
 			cb.Properties = append(cb.Properties, &Property{Key: "placeholder", Value: strconv.Itoa(i) + ";1"})
 			room.Broadcast(conversations[i][0], callback)
 		}
@@ -90,7 +89,7 @@ func (a AmbianceBehavior) Perform(cb *ComponentBag, room *Room, callback func(st
 			return
 		}
 
-		i := getRandomConversation(len(ambiance), cb.Properties.ValueOf("last_ambiance_used"))
+		i := getRandomConversation(len(ambiance), cb, "last_ambiance_used")
 		cb.Properties = append(cb.Properties, &Property{Key: "last_ambiance_used", Value: strconv.Itoa(i)})
 
 		room.Broadcast(ambiance[i], callback)
@@ -107,9 +106,12 @@ func getFrequencyProp(cb *ComponentBag) int {
 	}
 }
 
-func getRandomConversation(l int, lastUsed string) int {
+func getRandomConversation(l int, cb *ComponentBag, propName string) int {
+	lastUsed := cb.Properties.ValueOf(propName)
 	if lastUsed == "" {
-		return rand.Intn(l)
+		i := rand.Intn(l)
+		cb.Properties = append(cb.Properties, &Property{Key: propName, Value: strconv.Itoa(i)})
+		return i
 	}
 
 	match, _ := strconv.Atoi(lastUsed)
@@ -117,6 +119,7 @@ func getRandomConversation(l int, lastUsed string) int {
 	for {
 		i := rand.Intn(l)
 		if i != match {
+			cb.Properties.Update(propName, strconv.Itoa(i))
 			return i
 		}
 	}
