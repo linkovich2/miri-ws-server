@@ -17,7 +17,7 @@
       ],
       [
         "conversation",
-        "Two elven traders haggle over the prices near a dwarven jeweler, \"<say>Surely you can come down a little?</say>\";;The elf woman chimes in, \"<say>Yes, even dwarven mines must have sensible standards...</say>\";;They laugh together while the dwarf is halfway between sneering and a polite smile."
+        "Two elven traders haggle over the prices near a dwarven jeweler, \"<say>Surely you can come down a little?</say>\";;The elf woman chimes in, \"<say>Yes, even dwarven mines must have sensible standards...</say>\";;They laugh together; Meanwhile the dwarven merchant is halfway between sneering and a polite smile."
       ],
       ["frequency", "25"],
       ["descriptor", "crowd"]
