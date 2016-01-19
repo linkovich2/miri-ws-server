@@ -4,6 +4,7 @@ import (
 	"errors"
 	"math/rand"
 	"reflect"
+	"strings"
 	"time"
 )
 
@@ -29,6 +30,7 @@ func InArray(value interface{}, array interface{}) (ok bool, i int) {
 	return
 }
 
+// We're not using this very often, maybe we need to make it more flexible
 func Sample(i []string) (string, error) {
 	rand.Seed(time.Now().UnixNano())
 
@@ -37,4 +39,12 @@ func Sample(i []string) (string, error) {
 	}
 
 	return i[rand.Intn(len(i))], nil
+}
+
+func Capitalize(s string) string {
+	if s == "" {
+		return s
+	}
+
+	return strings.ToUpper(s[:1]) + s[1:]
 }
