@@ -1,6 +1,11 @@
 package core
 
-import "github.com/jonathonharrell/miri-ws-server/app/logger"
+import (
+	"github.com/jonathonharrell/miri-ws-server/app/logger"
+
+	"errors"
+	"strings"
+)
 
 const (
 	RoomTiny = iota
@@ -96,8 +101,24 @@ func (r *Room) Interact(c *Character, target, action string, cb func(string, str
 }
 
 func (r *Room) ValidTarget(id string) bool {
+	// @todo it should also be a valid target if it is a character
 	if _, exists := r.Entities[id]; exists {
 		return true
 	}
 	return false
+}
+
+func (r *Room) GetTarget(id string) (string, error) {
+	// @todo this should check characters list as well, and return a "targetting" name
+	if !r.ValidTarget(id) {
+		return "", errors.New("Requested entity not available in room.")
+	}
+
+	e := r.Entities[id].(*ComponentBag)
+	descriptor := e.Properties.ValueOf("descriptor")
+	if descriptor == "" {
+		return strings.ToLower(e.Name), nil
+	}
+
+	return descriptor, nil
 }

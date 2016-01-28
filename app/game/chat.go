@@ -1,6 +1,7 @@
 package game
 
 import (
+	"bytes"
 	"github.com/jonathonharrell/miri-ws-server/app/core"
 	"github.com/jonathonharrell/miri-ws-server/app/logger"
 	"github.com/jonathonharrell/miri-ws-server/app/util"
@@ -32,11 +33,33 @@ func cSpacialChat(game *Game, c *Command) {
 	pos, _ := core.GetPosition(c.Character.Position)
 	room := game.World.Realms[c.Character.Realm].Rooms[c.Character.Position]
 	desc := strings.Join([]string{"<strong>", strings.ToLower(c.Character.ShortDescription()), "</strong>"}, "")
+	target := ""
+
+	if len(c.Character.Targets) > 0 {
+		buffer := bytes.NewBuffer([]byte{})
+		var index int
+		for _, t := range c.Character.Targets {
+			index = index + 1
+			name, err := room.GetTarget(t)
+			if err != nil {
+				continue
+			}
+
+			if index > 1 {
+				buffer.Write([]byte("and"))
+			}
+			buffer.Write([]byte(" to the "))
+			buffer.Write([]byte(name))
+			buffer.Write([]byte(" "))
+		}
+		target = buffer.String()
+	}
+
 	game.broadcastToRoom(
 		c.Connection,
 		c.Character,
-		strings.Join([]string{desc, " ", action, "s, \"<", action, ">", input, "</", action, ">\""}, ""),
-		strings.Join([]string{"You ", action, ", \"<", action, ">", input, "</", action, ">\""}, ""),
+		strings.Join([]string{desc, " ", action, "s", target, ", \"<", action, ">", input, "</", action, ">\""}, ""),
+		strings.Join([]string{"You ", action, target, ", \"<", action, ">", input, "</", action, ">\""}, ""),
 		room,
 	)
 
@@ -50,7 +73,7 @@ func cSpacialChat(game *Game, c *Command) {
 				}
 
 				room.Broadcast(
-					strings.Join([]string{desc, " ", action, "s from the ", d, ", \"<", action, ">", input, "</", action, ">\""}, ""),
+					strings.Join([]string{desc, " ", action, "s", target, "from the ", d, ", \"<", action, ">", input, "</", action, ">\""}, ""),
 					game.World.GetSendCallback(),
 				)
 			}
