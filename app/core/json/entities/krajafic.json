@@ -20,13 +20,20 @@
         "Two elven traders haggle over the prices near a dwarven jeweler, \"<say>Surely you can come down a little?</say>\";;The elf woman chimes in, \"<say>Yes, even dwarven mines must have sensible standards...</say>\";;They laugh together; Meanwhile the dwarven merchant is halfway between sneering and a polite smile."
       ],
       ["frequency", "25"],
-      ["descriptor", "crowd"]
+      ["descriptor", "crowd"],
+      ["chatResponse", "A merchant responds, \"My goods are precious and so is my time.\""],
+      ["yellResponse", "A merchant responds, \"My goods are precious and so is my time, [RACE].\""],
+      ["yellResponse", "A merchant responds, \"Do you always shout when you want attention?\""],
+      ["shoutResponse", "A merchant responds, \"Stop shouting and get in line!\""],
+      ["chatResponse", "A merchant responds, \"Money talks, [RACE].\""],
+      ["chatResponse", "A merchant responds, \"Get in line, [RACE].\""]
     ]
   },
   "KRAJAFIC_WATER_WELL": {
     "name": "Water Pump",
     "properties": [
-      ["descriptor", "water well"]
+      ["descriptor", "water well"],
+      ["chatResponse", "The well says nothing. Inanimate objects aren't generally very chatty."]
     ],
     "interactions": ["DRINK_FROM"]
   },
@@ -38,6 +45,12 @@
         "conversation",
         "A trader hovers over a small table, \"<say>Don't let anyone see the merchandise. They could be working for Kai Era.</say>\""
       ],
+      ["chatResponse", "A merchant responds, \"My goods are precious and so is my time.\""],
+      ["yellResponse", "A merchant responds, \"You'll keep quiet if you know what's good for you, [RACE].\""],
+      ["yellResponse", "A merchant responds, \"Do you always shout when you want attention?\""],
+      ["shoutResponse", "A merchant responds, \"Shhhh!\""],
+      ["chatResponse", "A merchant responds, \"Money talks, [RACE].\""],
+      ["chatResponse", "A merchant responds, \"Get in line, [RACE].\""],
       ["frequency", "30"]
     ]
   },

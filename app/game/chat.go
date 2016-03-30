@@ -6,6 +6,8 @@ import (
 	"github.com/jonathonharrell/miri-ws-server/app/logger"
 	"github.com/jonathonharrell/miri-ws-server/app/util"
 	"strings"
+	"time"
+	"math/rand"
 )
 
 func cSpacialChat(game *Game, c *Command) {
@@ -40,16 +42,34 @@ func cSpacialChat(game *Game, c *Command) {
 		var index int
 		for _, t := range c.Character.Targets {
 			index = index + 1
-			name, err := room.GetTarget(t)
+			e, err := room.GetTarget(t) // grab entity from room
 			if err != nil {
 				continue
+			}
+
+			if len(e.Properties.Matching(c.Value + "Response")) > 0 || len(e.Properties.Matching("chatResponse")) > 0 {
+				go func() {
+					rand.Seed(time.Now().UTC().UnixNano())
+					time.Sleep(time.Duration(3) * time.Second)
+
+					options   := append(e.Properties.Matching(c.Value + "Response"), e.Properties.Matching("chatResponse")...)
+					selection := options[rand.Intn(len(options))]
+
+					game.broadcastToRoom(
+						c.Connection,
+						c.Character,
+						strings.Replace(selection.Value, "[RACE]", strings.ToLower(c.Character.Race), -1),
+						strings.Replace(selection.Value, "[RACE]", strings.ToLower(c.Character.Race), -1),
+						room,
+					)
+				}()
 			}
 
 			if index > 1 {
 				buffer.Write([]byte("and"))
 			}
 			buffer.Write([]byte(" to the "))
-			buffer.Write([]byte(name))
+			buffer.Write([]byte(e.Name))
 			buffer.Write([]byte(" "))
 		}
 		target = buffer.String()

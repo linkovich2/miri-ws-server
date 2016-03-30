@@ -108,7 +108,7 @@ func (r *Room) ValidTarget(id string) bool {
 	return false
 }
 
-func (r *Room) GetTarget(id string) (string, error) {
+func (r *Room) GetTargetDescriptor(id string) (string, error) {
 	// @todo this should check characters list as well, and return a "targetting" name
 	if !r.ValidTarget(id) {
 		return "", errors.New("Requested entity not available in room.")
@@ -121,4 +121,13 @@ func (r *Room) GetTarget(id string) (string, error) {
 	}
 
 	return descriptor, nil
+}
+
+func (r *Room) GetTarget(id string) (*ComponentBag, error) {
+	// @todo this should check characters list as well
+	if !r.ValidTarget(id) {
+		return nil, errors.New("Requested entity not available in room.")
+	}
+
+	return r.Entities[id].(*ComponentBag), nil
 }
