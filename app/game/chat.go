@@ -32,7 +32,7 @@ func cSpacialChat(game *Game, c *Command) {
 	action := actions[c.Value]
 	pos, _ := core.GetPosition(c.Character.Position)
 	room := game.World.Realms[c.Character.Realm].Rooms[c.Character.Position]
-	desc := strings.Join([]string{"<strong>", strings.ToLower(c.Character.ShortDescription()), "</strong>"}, "")
+	desc := strings.Join([]string{"<strong>", strings.ToLower(c.Character.ShortDescriptionWithName()), "</strong>"}, "")
 	target := ""
 
 	if len(c.Character.Targets) > 0 {
@@ -73,7 +73,7 @@ func cSpacialChat(game *Game, c *Command) {
 				}
 
 				room.Broadcast(
-					strings.Join([]string{desc, " ", action, "s", target, "from the ", d, ", \"<", action, ">", input, "</", action, ">\""}, ""),
+					strings.Join([]string{desc, " ", action, "s", target, " from the ", d, ", \"<", action, ">", input, "</", action, ">\""}, ""),
 					game.World.GetSendCallback(),
 				)
 			}

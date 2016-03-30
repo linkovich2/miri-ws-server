@@ -191,6 +191,6 @@ func (c *Character) ShortDescription() string {
 func (c *Character) ShortDescriptionWithName() string {
 	response := bytes.NewBuffer([]byte(c.FirstName()))
 	response.Write([]byte(", "))
-	response.Write([]byte(c.ShortDescription()))
+	response.Write([]byte(strings.ToLower(c.ShortDescription())))
 	return response.String()
 }

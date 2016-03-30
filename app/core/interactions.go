@@ -23,7 +23,7 @@ type (
 func (i DrinkFromInteraction) Perform(target *ComponentBag, initiator *Character, room *Room, callback func(string, string)) {
 	room.Message("<default>You take a drink from the water well.</default>", initiator, callback)
 	room.BroadcastToAllButCharacter(
-		strings.Join([]string{"<default>", initiator.ShortDescription(), " takes a drink from the water well.</default>"}, ""),
+		strings.Join([]string{"<default>", initiator.ShortDescriptionWithName(), " takes a drink from the water well.</default>"}, ""),
 		initiator,
 		callback,
 	)
