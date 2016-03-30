@@ -109,7 +109,7 @@ func move(game *Game, c *Command) {
 func getMovementMessage(c *core.Character, room *core.Room, dir, pool string) string {
 	res, _ := util.Sample(movementMessages[pool][c.GetMovementStyle()])
 
-	desc := strings.Join([]string{"<strong>", strings.ToLower(c.ShortDescription()), "</strong>"}, "")
+	desc := strings.Join([]string{"<strong>", strings.ToLower(c.ShortDescriptionWithName()), "</strong>"}, "")
 	res = strings.Replace(res, "[Description]", desc, -1)
 
 	locale := strings.Join([]string{"<em>", room.Name, "</em>"}, "")

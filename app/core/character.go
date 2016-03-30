@@ -187,3 +187,10 @@ func (c *Character) ShortDescription() string {
 
 	return response.String()
 }
+
+func (c *Character) ShortDescriptionWithName() string {
+	response := bytes.NewBuffer([]byte(c.FirstName()))
+	response.Write([]byte(", "))
+	response.Write([]byte(c.ShortDescription()))
+	return response.String()
+}
